@@ -10,6 +10,12 @@ package sakki;
  */
 public enum Piece {
 
-    e, p, P, b, B, n, N, r, R, q, Q, k, K
+    e {
+        public String toString() {
+            return ".";
+        }
+    },
+
+    p, P, b, B, n, N, r, R, q, Q, k, K
 
 }

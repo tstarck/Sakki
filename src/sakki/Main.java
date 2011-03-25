@@ -16,7 +16,8 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Peli alkaa");
         Peli peli = new Peli();
-        peli.move("Nf6");
+        // peli.move("Nf6");
+        System.out.println(peli);
         System.out.println("Peli lopppui");
     }
 }

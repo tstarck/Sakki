@@ -30,4 +30,17 @@ class Board {
     public Board(String fen) {
         this.board = this.boardAtBeginning;
     }
+
+    public String toString() {
+        String str = "";
+
+        for (Piece[] rank : this.board) {
+            str += "\n";
+            for (Piece file : rank) {
+                str += " " + file;
+            }
+        }
+
+        return str;
+    }
 }
