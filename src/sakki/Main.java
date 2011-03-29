@@ -9,7 +9,6 @@ package sakki;
  * @author Tuomas Starck
  */
 public class Main {
-
     /**
      * @param args the command line arguments
      */

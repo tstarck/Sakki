@@ -27,10 +27,10 @@ class Board {
         board = Board.boardAtBeginning;
     }
 
-    void move(Move algebraic) {
+    public boolean move(Move algebraic) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
-    
+
     public String toFen() {
         return "fen";
     }

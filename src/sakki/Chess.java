@@ -9,12 +9,11 @@ package sakki;
  * @author Tuomas Starck
  */
 class Chess {
-
     // rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
     private Board board;
     private Turn next;
     private String castling;    // FIXME
-    private Boolean enpassant;  // FIXME
+    private boolean enpassant;  // FIXME
     private int halfmove;
     private int fullmove;
 
@@ -28,8 +27,14 @@ class Chess {
     }
 
     void move(String str) {
-        Move algebraic = new Move(str);
-        board.move(algebraic);
+        Move algebraic = new Move(str, next);
+
+        if (board.move(algebraic)) {
+            // Succéss!
+        }
+        else {
+            // Illegal move :-|
+        }
     }
 
     public String toFen() {     // FIXME
