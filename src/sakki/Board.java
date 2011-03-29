@@ -6,13 +6,13 @@ package sakki;
 
 /**
  *
- * @author tljstarc
+ * @author Tuomas Starck
  */
 class Board {
 
     private Piece[][] board;
 
-    private final Piece[][] boardAtBeginning = {
+    private static final Piece[][] boardAtBeginning = {
         {Piece.r, Piece.n, Piece.b, Piece.q, Piece.k, Piece.b, Piece.n, Piece.r},
         {Piece.p, Piece.p, Piece.p, Piece.p, Piece.p, Piece.p, Piece.p, Piece.p},
         {Piece.e, Piece.e, Piece.e, Piece.e, Piece.e, Piece.e, Piece.e, Piece.e},
@@ -24,13 +24,18 @@ class Board {
     };
 
     public Board() {
-        this.board = this.boardAtBeginning;
+        board = Board.boardAtBeginning;
     }
 
-    public Board(String fen) {
-        this.board = this.boardAtBeginning;
+    void move(Move algebraic) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+    
+    public String toFen() {
+        return "fen";
     }
 
+    @Override
     public String toString() {
         String str = "";
 

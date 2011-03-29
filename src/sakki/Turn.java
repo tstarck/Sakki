@@ -2,20 +2,25 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package sakki;
 
 /**
  *
  * @author Tuomas Starck
  */
-public enum Piece {
-
-    e {
+public enum Turn {
+    
+    white {
         public String toString() {
-            return ".";
+            return "w";
         }
     },
-
-    p, P, b, B, n, N, r, R, q, Q, k, K
+    
+    black {
+        public String toString() {
+            return "b";
+        }
+    }
 
 }
