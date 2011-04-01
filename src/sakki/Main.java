@@ -5,6 +5,7 @@
 package sakki;
 
 /**
+ * Test class for running Sakki project.
  *
  * @author Tuomas Starck
  */

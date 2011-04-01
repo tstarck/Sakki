@@ -6,6 +6,7 @@
 package sakki;
 
 /**
+ * In the game of Chess either white or black hold the next move.
  *
  * @author Tuomas Starck
  */

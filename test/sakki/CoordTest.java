@@ -8,7 +8,6 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
  * @author Tuomas Starck
  */
 public class CoordTest {

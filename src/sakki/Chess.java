@@ -5,13 +5,14 @@
 package sakki;
 
 /**
+ * An implementation of Chess for two players.
  *
  * @author Tuomas Starck
  */
 class Chess {
     // rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
     private Board board;
-    private Turn next;
+    private Turn turn;
     private String castling;    // FIXME
     private boolean enpassant;  // FIXME
     private int halfmove;
@@ -19,27 +20,31 @@ class Chess {
 
     public Chess() {
         board = new Board();
-        next = Turn.white;
+        turn = Turn.white;
         castling = "KQkq";
         enpassant = false;
         halfmove = 0;
         fullmove = 1;
     }
 
-    void move(String str) {
-        Move algebraic = new Move(str, next);
+    void move(String algebraic) {
+        Move move = new Move(algebraic, turn);
 
-        if (board.move(algebraic)) {
-            // Succéss!
+        if (board.move(move, turn)) {
+            System.out.println("Move done.");
         }
         else {
+            System.out.println(" *** Move failed *** :-(");
             // Illegal move :-|
         }
+
+        System.out.println("FEN :: " + board.toFen());
+        System.out.println(board);
     }
 
     public String toFen() {     // FIXME
         return String.format("%s %s %d %d",
-            board.toFen(), next.toString(), halfmove, fullmove);
+            board.toFen(), turn.toString(), halfmove, fullmove);
     }
 
     @Override

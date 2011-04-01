@@ -8,6 +8,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * Read and parse an useful subset of <i>Algebraic chess notation</i>.
+ *
+ * Flavor of notation:
+ *   Capture is marked with x.
+ *   Pawn promotion uses equals sign.
+ *   Castling is written with zeros!
+ *   Check (+) and mate (#) may be marked.
+ *
+ * @see <a href="http://en.wikipedia.org/wiki/Algebraic_chess_notation">Algebraic chess notation in Wikipedia</a>
  *
  * @author Tuomas Starck
  */
@@ -48,7 +57,8 @@ class Move {
             piece = resolvePiece(match.group(1), turn);
 
             // 2: From
-            System.out.println("From: " + match.group(2));
+            // System.out.println("From: " + match.group(2));
+            // -> null, e, null
 
             // 3: Capture indicator
             if (match.group(3) != null) {
@@ -63,9 +73,14 @@ class Move {
                 promote = resolvePiece(match.group(6), turn);
             }
 
-            // 7: FIXME
-            if (match.groupCount() > 6) {
-                System.out.println("Xtra: " + match.group(7));
+            // 7: Extra information
+            switch (match.group(7).charAt(0)) {
+                case '+':
+                    check = true; break;
+                case '#':
+                    mate = true; break;
+                default:
+                    System.out.println("Xtra :: " + match.group(7));
             }
         }
         else if (str.matches("0-0")) {
@@ -81,8 +96,6 @@ class Move {
 
     private Piece resolvePiece(String input, Turn turn) {
         String str = (input == null)? "p": input;
-
-        System.out.println("DEBUG::" + str);
 
         if (turn == Turn.white) {
             return Piece.valueOf(str.toUpperCase());
