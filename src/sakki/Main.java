@@ -16,7 +16,7 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Peli alkaa");
         Chess test = new Chess();
-        test.move("Nf6");
+        test.move("Nf3");
         System.out.println(test);
         System.out.println("Peli lopppui");
     }

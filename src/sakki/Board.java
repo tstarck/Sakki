@@ -4,6 +4,8 @@
  */
 package sakki;
 
+import java.util.ArrayList;
+
 /**
  * Model of a Chess board and its rules.
  *
@@ -11,69 +13,85 @@ package sakki;
  *
  * @author Tuomas Starck
  */
-class Board {
-
-    private Piece[][] board;
-
-    private static final Piece[][] boardAtBeginning = {
-        {Piece.r, Piece.n, Piece.b, Piece.q, Piece.k, Piece.b, Piece.n, Piece.r},
-        {Piece.p, Piece.p, Piece.p, Piece.p, Piece.p, Piece.p, Piece.p, Piece.p},
-        {Piece.e, Piece.e, Piece.e, Piece.e, Piece.e, Piece.e, Piece.e, Piece.e},
-        {Piece.e, Piece.e, Piece.e, Piece.e, Piece.e, Piece.e, Piece.e, Piece.e},
-        {Piece.e, Piece.e, Piece.e, Piece.e, Piece.e, Piece.e, Piece.e, Piece.e},
-        {Piece.e, Piece.e, Piece.e, Piece.e, Piece.e, Piece.e, Piece.e, Piece.e},
-        {Piece.P, Piece.P, Piece.P, Piece.P, Piece.P, Piece.P, Piece.P, Piece.P},
-        {Piece.R, Piece.N, Piece.B, Piece.Q, Piece.K, Piece.B, Piece.N, Piece.R}
-    };
+public class Board {
+    private ArrayList<Piece> board;
+    private Type[][] status;
 
     public Board() {
-        board = Board.boardAtBeginning;
+        board = new ArrayList<Piece>();
+        board.add(new WhitePawn("c2"));
+        board.add(new WhitePawn("d2"));
+
+        status = new Type[8][8];
+        update();
+    }
+
+    private void update() {
+        for (int i=0; i<8; i++) {
+            for (int j=0; j<8; j++) {
+                status[i][j] = Type.empty;
+            }
+        }
+
+        for (Piece pc : board) {
+            Coord loc = pc.where();
+            status[loc.rank][loc.file] = pc.what();
+        }
+
+        for (Piece pc : board) {
+            pc.update(status);
+        }
     }
 
     public boolean move(Move move, Turn turn) {
         if (move == null) {
             return false;
         }
-        else if (move.castlingKingside()) {
-            // FIXME return castleKingside();
-        }
-        else if (move.castlingQueenside()) {
-            // FIXME return castleQueenside();
-        }
-        else {
-            /* About move:
-             *   move.piece         Liikutettava (saatavilla)
-             *   move.getPromotion  Null tai ylennys
-             *   move.comeFrom      null
-             *   move.goTo          Kohde (saatavilla)
-             *   move.claimCapture
-             *   move.claimCheck
-             *   move.claimMate
-             */
+
+        return false; // DEBUG
+    }
+
+    private String packRank(Type[] rank) {
+        int empty = 0;
+        String str = "";
+
+        for (Type file : rank) {
+            if (file == Type.empty) {
+                empty++;
+            }
+            else if (empty != 0) {
+                str += String.valueOf(empty) + file;
+                empty = 0;
+            }
+            else {
+                str += file;
+            }
         }
 
-        return false; // FIXME
+        if (empty != 0) {
+            str += String.valueOf(empty);
+        }
+
+        return "/" + str;
     }
 
     public String toFen() {
         String fen = "";
 
-        for (Piece[] rank : board) {
-            for (Piece file : rank) {
-                fen += file;
-            }
+        for (Type[] rank : status) {
+            fen += packRank(rank);
         }
 
-        return fen;
+        return fen.substring(1);
     }
 
     @Override
     public String toString() {
         String str = "";
 
-        for (Piece[] rank : board) {
+        for (Type[] rank : status) {
             str += "\n";
-            for (Piece file : rank) {
+            for (Type file : rank) {
                 str += " " + file;
             }
         }

@@ -20,7 +20,7 @@ public class MoveTest {
         Move foo = new Move("e4", Turn.white);
         Coord bar = new Coord(4,3);
 
-        assertEquals(foo.piece(), Piece.P);
+        assertEquals(foo.piece(), Type.P);
         assertTrue(!foo.claimCapture());
         assertEquals(foo.goTo().toString(), bar.toString());
     }
@@ -30,7 +30,7 @@ public class MoveTest {
         Move foo = new Move("Nexd5", Turn.white);
         Coord bar = new Coord(3,4);
 
-        assertEquals(foo.piece(), Piece.N);
+        assertEquals(foo.piece(), Type.N);
         assertTrue(foo.claimCapture());
         assertEquals(foo.goTo().toString(), bar.toString());
     }
@@ -40,7 +40,7 @@ public class MoveTest {
         Move foo = new Move("b1=Q+", Turn.black);
         Coord bar = new Coord(1,0);
 
-        assertEquals(foo.piece(), Piece.p);
+        assertEquals(foo.piece(), Type.p);
         assertTrue(!foo.claimCapture());
         assertEquals(foo.goTo().toString(), bar.toString());
     }

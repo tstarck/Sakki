@@ -26,8 +26,8 @@ class Move {
     private Pattern ptrn;
     private Matcher match;
 
-    private Piece piece;
-    private Piece promote;
+    private Type piece;
+    private Type promote;
     private Coord from;
     private Coord to;
 
@@ -53,7 +53,7 @@ class Move {
         match = ptrn.matcher(str);
 
         if (match.matches()) {
-            // 1: Piece which is to be moved
+            // 1: Type which is to be moved
             piece = resolvePiece(match.group(1), turn);
 
             // 2: From
@@ -74,13 +74,17 @@ class Move {
             }
 
             // 7: Extra information
-            switch (match.group(7).charAt(0)) {
-                case '+':
-                    check = true; break;
-                case '#':
-                    mate = true; break;
-                default:
-                    System.out.println("Xtra :: " + match.group(7));
+            if (match.group(7) != null) {
+                switch (match.group(7).charAt(0)) {
+                    case '+':
+                        check = true;
+                        break;
+                    case '#':
+                        mate = true;
+                        break;
+                    default:
+                        System.out.println("Xtra :: " + match.group(7));
+                }
             }
         }
         else if (str.matches("0-0")) {
@@ -94,21 +98,37 @@ class Move {
         }
     }
 
-    private Piece resolvePiece(String input, Turn turn) {
+    private Type resolvePiece(String input, Turn turn) {
         String str = (input == null)? "p": input;
 
         if (turn == Turn.white) {
-            return Piece.valueOf(str.toUpperCase());
+            return Type.valueOf(str.toUpperCase());
         } else {
-            return Piece.valueOf(str.toLowerCase());
+            return Type.valueOf(str.toLowerCase());
         }
     }
 
-    public Piece piece() {
+    /*
+    public void resolveDeparture(Board board) {
+        if (kingside || queenside) {
+            return;
+        }
+
+        // TODO
+        // Meillä ei oletettavasti ole tiedossa lähtöruutua, joten
+        // se pitäisi selvittää ihan oikeasti tai ei muuten tästä
+        // tule mitään
+        // Saatavilla on: nappula, kohde, pelilauta
+
+        Legal options = new Legal(piece, board);
+    }
+     */
+
+    public Type piece() {
         return piece;
     }
 
-    public Piece getPromotion() {
+    public Type getPromotion() {
         return promote;
     }
 

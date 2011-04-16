@@ -17,24 +17,24 @@ class Coord {
     private static final String regex = "[a-h][1-8]";
     private static final String[] lookupTable = {"a", "b", "c", "d", "e", "f", "g", "h"};
 
-    public Coord(String str) {
-        if (str == null) {
+    public Coord(String loc) {
+        if (loc == null) {
             throw new NullPointerException();
         }
 
-        if (str.matches(regex)) {
-            readable = str;
+        if (loc.matches(regex)) {
+            readable = loc;
 
-            String fi = String.valueOf(str.charAt(0));
-            int ri = Character.getNumericValue(str.charAt(1));
+            String fi = String.valueOf(loc.charAt(0));
+            int ri = Character.getNumericValue(loc.charAt(1));
 
             for (int i=0; i<8; i++) {
                 if (fi.equals(lookupTable[i])) {
-                    file = i;
+                    file = verify(i);
                 }
             }
 
-            rank = verify(--ri);
+            rank = 7 - verify(--ri);
         }
         else {
             throw new IllegalArgumentException();
@@ -44,7 +44,7 @@ class Coord {
     public Coord(int f, int r) {
         file = verify(f);
         rank = verify(r);
-        readable = lookupTable[f] + String.valueOf(++r);
+        readable = lookupTable[f] + String.valueOf(8-r);
     }
 
     private int verify(int x) {
@@ -53,20 +53,6 @@ class Coord {
         }
         return x;
     }
-
-    /*
-    public boolean equals(Coord that) {
-        if (this == that) {
-            return true;
-        }
-        if (this.file == that.file &&
-            this.rank == that.rank &&
-            this.toString().equals(that.toString())) {
-            return true;
-        }
-        return false;
-    }
-    */
 
     @Override
     public String toString() {
