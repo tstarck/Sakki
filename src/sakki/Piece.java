@@ -14,6 +14,21 @@ abstract class Piece {
     protected Coord loc;
     protected Type[][] view;
 
+    public Piece(Type type, String birthplace) {
+        me = type;
+        loc = new Coord(birthplace);
+        view = new Type[8][8];
+
+        for (int i=0; i<8; i++) {
+            for (int j=0; j<8; j++) {
+                view[i][j] = Type.empty;
+            }
+        }
+
+        view[loc.rank][loc.file] = me;
+
+    }
+
     public Type what() {
         return me;
     }
@@ -22,12 +37,35 @@ abstract class Piece {
         return loc;
     }
 
-    public boolean move(Move move, Turn turn) {
+    public boolean move(Move move) {
         throw new UnsupportedOperationException("Not implemented");
     }
 
     public void update(Type[][] status) {
         throw new UnsupportedOperationException("Not implemented");
+    }
+
+    protected boolean moveable(Coord target, Type[][] status) {
+        if (target == null) return false;
+
+        System.out.println("Testing moveability at [" + target + "]");
+
+        if (status[target.rank][target.file] == Type.empty) {
+            view[target.rank][target.file] = Type.moveable;
+            return true;
+        }
+
+        return false;
+    }
+
+    protected void capturable(Coord target, Type[][] status) {
+        if (target == null) return;
+
+        System.out.println("Testing capturable at [" + target + "]");
+
+        if (me.enemy(status[target.rank][target.file])) {
+            view[target.rank][target.file] = Type.capturable;
+        }
     }
 
     @Override

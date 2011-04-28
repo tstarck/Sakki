@@ -5,6 +5,8 @@
 
 package sakki;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Tuomas Starck
@@ -52,6 +54,67 @@ class Coord {
             throw new IllegalArgumentException();
         }
         return x;
+    }
+
+    private Coord relativeCoord(int fDelta, int rDelta) {
+        Coord ret = null;
+
+        try {
+            // System.out.println("New Coords at [" +(rank+rDelta) + "," + (file+fDelta) + "]");
+            ret = new Coord(file+fDelta, rank+rDelta);
+        }
+        catch (IllegalArgumentException iCouldntBeBothered) {}
+
+        return ret;
+    }
+
+    public Coord north(int dist) {
+        return relativeCoord(0, -1*dist);
+    }
+
+    public Coord northeast(int dist) {
+        return relativeCoord(dist, -1*dist);
+    }
+
+    public Coord east(int dist) {
+        return relativeCoord(dist, 0);
+    }
+
+    public Coord southeast(int dist) {
+        return relativeCoord(dist, dist);
+    }
+
+    public Coord south(int dist) {
+        return relativeCoord(0, dist);
+    }
+
+    public Coord southwest(int dist) {
+        return relativeCoord(-1*dist, dist);
+    }
+
+    public Coord west(int dist) {
+        return relativeCoord(-1*dist, 0);
+    }
+
+    public Coord northwest(int dist) {
+        return relativeCoord(-1*dist, -1*dist);
+    }
+
+    public ArrayList<Coord> knightsCoords() {
+        int[] x = {1, 2, 2, 1, -1, -2, -2, -1};
+        int[] y = {2, 1, -1, -2, -2, -1, 1, 2};
+
+        ArrayList<Coord> coords = new ArrayList<Coord>();
+
+        for (int i=0; i<x.length; i++) {
+            Coord co = relativeCoord(x[i], y[i]);
+
+            if (co != null) {
+                coords.add(co);
+            }
+        }
+
+        return coords;
     }
 
     @Override

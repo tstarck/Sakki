@@ -5,13 +5,13 @@
 package sakki;
 
 /**
- * White knight.
+ * Black knight.
  *
  * @author Tuomas Starck
  */
-class WhiteKnight extends Piece {
-    public WhiteKnight(String birthplace) {
-        super(Type.n, birthplace);
+class BlackKnight extends Piece {
+    public BlackKnight(String birthplace) {
+        super(Type.N, birthplace);
     }
 
     @Override

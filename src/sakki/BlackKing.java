@@ -5,16 +5,15 @@
 package sakki;
 
 /**
- * White king.
+ * Black king.
  *
  * @author Tuomas Starck
  */
-class WhiteKing extends Piece {
-    public WhiteKing(String birthplace) {
-        super(Type.k, birthplace);
+class BlackKing extends Piece {
+    public BlackKing(String birthplace) {
+        super(Type.K, birthplace);
     }
 
-    @Override
     public void update(Type[][] status) {
         if (!moveable(loc.north(1), status)) {
             capturable(loc.north(1), status);

@@ -19,12 +19,17 @@ public class Board {
 
     public Board() {
         board = new ArrayList<Piece>();
+
         board.add(new WhitePawn("c2"));
         board.add(new WhitePawn("d2"));
         board.add(new WhiteRook("a1"));
         board.add(new WhiteKnight("b1"));
         board.add(new WhiteBishop("c1"));
         board.add(new WhiteKing("e1"));
+
+        board.add(new BlackPawn("e3"));
+        board.add(new BlackKnight("g8"));
+        board.add(new BlackKing("e8"));
 
         status = new Type[8][8];
         update();
@@ -47,7 +52,7 @@ public class Board {
         }
     }
 
-    public boolean move(Move move, Turn turn) {
+    public boolean move(Move move) {
         if (move == null) {
             return false;
         }

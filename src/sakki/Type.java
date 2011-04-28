@@ -17,26 +17,48 @@ public enum Type {
     /**
      * This value marks the absence of a piece.
      */
-    empty {
+    empty("") {
         @Override
         public String toString() {
             return ".";
         }
     },
 
-    moveable {
+    moveable("") {
         @Override
         public String toString() {
             return "o";
         }
     },
 
-    capturable {
+    capturable("") {
         @Override
         public String toString() {
             return "x";
         }
     },
 
-    p, P, b, B, n, N, r, R, q, Q, k, K
+    p("w"), P("b"),
+    b("w"), B("b"),
+    n("w"), N("b"),
+    r("w"), R("b"),
+    q("w"), Q("b"),
+    k("w"), K("b");
+
+    private final String side;
+
+    Type(String s) {
+        side = s;
+    }
+
+    public boolean enemy(Type that) {
+        if (this.side.equals("w") && that.side.equals("b")) {
+            return true;
+        }
+        else if (this.side.equals("b") && that.side.equals("w")) {
+            return true;
+        }
+
+        return false;
+    }
 }

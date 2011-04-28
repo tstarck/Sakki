@@ -11,21 +11,45 @@ package sakki;
  */
 class WhiteBishop extends Piece {
     public WhiteBishop(String birthplace) {
-        me = Type.b;
-        loc = new Coord(birthplace);
-        view = new Type[8][8];
-
-        for (int i=0; i<8; i++) {
-            for (int j=0; j<8; j++) {
-                view[i][j] = Type.empty;
-            }
-        }
-
-        view[loc.rank][loc.file] = me;
+        super(Type.b, birthplace);
     }
 
     @Override
     public void update(Type[][] status) {
+        int i;
+
+        for (i=1; i<8; i++) {
+            if (!moveable(loc.northeast(i), status)) {
+                break;
+            }
+        }
+
+        capturable(loc.northeast(i), status);
+
+        for (i=1; i<8; i++) {
+            if (!moveable(loc.southeast(i), status)) {
+                break;
+            }
+        }
+
+        capturable(loc.southeast(i), status);
+
+        for (i=1; i<8; i++) {
+            if (!moveable(loc.southwest(i), status)) {
+                break;
+            }
+        }
+
+        capturable(loc.southwest(i), status);
+
+        for (i=1; i<8; i++) {
+            if (!moveable(loc.northwest(i), status)) {
+                break;
+            }
+        }
+
+        capturable(loc.northwest(i), status);
+
         System.out.println(this);
     }
 }
