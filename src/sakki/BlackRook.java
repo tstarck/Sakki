@@ -16,6 +16,7 @@ class BlackRook extends Piece {
 
     @Override
     public void update(Type[][] status) {
+        reset();
         markStraight(status);
     }
 }

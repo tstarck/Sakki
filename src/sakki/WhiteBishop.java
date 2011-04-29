@@ -16,6 +16,7 @@ class WhiteBishop extends Piece {
 
     @Override
     public void update(Type[][] status) {
+        reset();
         markDiagonal(status);
     }
 }

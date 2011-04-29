@@ -16,6 +16,8 @@ class BlackKnight extends Piece {
 
     @Override
     public void update(Type[][] status) {
+        reset();
+
         for (Coord tmp : loc.knightsCoords()) {
             if (!moveable(tmp, status)) {
                 capturable(tmp, status);

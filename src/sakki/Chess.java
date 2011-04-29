@@ -24,19 +24,22 @@ class Chess {
     }
 
     void move(String algebraic) {
-        Move move = new Move(algebraic, turn);
+        Move move = null;
 
-        // TODO Pitää tarkistaa, että move on varmasti kunnossa
+        try {
+            move = new Move(algebraic, turn);
+        }
+        catch (IllegalArgumentException fixme) {}
 
-        /*
         if (board.move(move, turn)) {
-            System.out.println("Move done.");
+            if (turn == Turn.white) {
+                turn = Turn.black;
+            }
+            else {
+                turn = Turn.white;
+                fullmove++;
+            }
         }
-        else {
-            System.out.println(" *** Move failed *** :-(");
-            // Illegal move :-|
-        }
-        */
     }
 
     @Override

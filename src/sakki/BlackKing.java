@@ -16,6 +16,7 @@ class BlackKing extends Piece {
 
     @Override
     public void update(Type[][] status) {
+        reset();
         markAdjacent(status);
     }
 }

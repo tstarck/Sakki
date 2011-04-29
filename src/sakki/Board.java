@@ -21,6 +21,7 @@ public class Board {
         String[] files = new String[] {"a", "b", "c", "d", "e", "f", "g", "h"};
 
         board = new ArrayList<Piece>();
+        status = new Type[8][8];
 
         for (String f : files) {
             board.add(new WhitePawn(f + 2));
@@ -48,7 +49,6 @@ public class Board {
         board.add(new BlackKnight("g8"));
         board.add(new BlackRook("h8"));
 
-        status = new Type[8][8];
         update();
     }
 
@@ -69,12 +69,50 @@ public class Board {
         }
     }
 
-    public boolean move(Move move) {
-        if (move == null) {
+    public boolean move(Move move, Turn turn) {
+        if (move == null) return false;
+
+        ArrayList<Piece> possibles = new ArrayList<Piece>();
+
+        for (Piece pc : board) {
+            if (pc.what() == move.piece()) {
+                if (pc.canGoto(move.to())) {
+                    possibles.add(pc);
+                }
+            }
+        }
+
+        if (possibles.isEmpty()) {
+            System.out.println(" *** Cannot make move :-(");
+            return false;
+        }
+        else if (possibles.size() == 1) {
+            Piece pc = possibles.get(0);
+
+            if (move.claimCapture()) {
+                int harvest = -1;
+
+                for (int i=0; i<board.size(); i++) {
+                    if (board.get(i).where().toString().equals(move.to().toString())) {
+                        harvest = i;
+                    }
+                }
+
+                if (harvest >= 0) {
+                    board.remove(harvest);
+                }
+            }
+
+            pc.move(move);
+        }
+        else {
+            System.out.println(" *** Cannot make move :-[");
             return false;
         }
 
-        return false; // DEBUG
+        update();
+
+        return true;
     }
 
     private String packRank(Type[] rank) {

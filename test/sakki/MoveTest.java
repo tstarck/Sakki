@@ -22,7 +22,7 @@ public class MoveTest {
 
         assertEquals(foo.piece(), Type.P);
         assertTrue(!foo.claimCapture());
-        assertEquals(foo.goTo().toString(), bar.toString());
+        assertEquals(foo.to().toString(), bar.toString());
     }
 
     @Test
@@ -32,7 +32,7 @@ public class MoveTest {
 
         assertEquals(foo.piece(), Type.N);
         assertTrue(foo.claimCapture());
-        assertEquals(foo.goTo().toString(), bar.toString());
+        assertEquals(foo.to().toString(), bar.toString());
     }
 
     @Test
@@ -42,7 +42,7 @@ public class MoveTest {
 
         assertEquals(foo.piece(), Type.p);
         assertTrue(!foo.claimCapture());
-        assertEquals(foo.goTo().toString(), bar.toString());
+        assertEquals(foo.to().toString(), bar.toString());
     }
 
     @Test

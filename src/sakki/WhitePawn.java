@@ -17,12 +17,9 @@ public class WhitePawn extends Piece {
     }
 
     @Override
-    public boolean move(Move move) {
-        return false;
-    }
-
-    @Override
     public void update(Type[][] status) {
+        reset();
+
         moveable(loc.north(1), status);
 
         if (loc.rank == INITIAL_RANK) {

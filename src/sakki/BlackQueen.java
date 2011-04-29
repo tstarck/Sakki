@@ -16,6 +16,7 @@ class BlackQueen extends Piece {
 
     @Override
     public void update(Type[][] status) {
+        reset();
         markStraight(status);
         markDiagonal(status);
     }

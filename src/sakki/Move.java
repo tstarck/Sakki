@@ -102,27 +102,11 @@ class Move {
         String str = (input == null)? "p": input;
 
         if (turn == Turn.white) {
-            return Type.valueOf(str.toUpperCase());
-        } else {
             return Type.valueOf(str.toLowerCase());
+        } else {
+            return Type.valueOf(str.toUpperCase());
         }
     }
-
-    /*
-    public void resolveDeparture(Board board) {
-        if (kingside || queenside) {
-            return;
-        }
-
-        // TODO
-        // Meillä ei oletettavasti ole tiedossa lähtöruutua, joten
-        // se pitäisi selvittää ihan oikeasti tai ei muuten tästä
-        // tule mitään
-        // Saatavilla on: nappula, kohde, pelilauta
-
-        Legal options = new Legal(piece, board);
-    }
-     */
 
     public Type piece() {
         return piece;
@@ -132,11 +116,11 @@ class Move {
         return promote;
     }
 
-    public Coord comeFrom() {
+    public Coord from() {
         return from;
     }
 
-    public Coord goTo() {
+    public Coord to() {
         return to;
     }
 

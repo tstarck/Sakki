@@ -17,12 +17,9 @@ class BlackPawn extends Piece {
     }
 
     @Override
-    public boolean move(Move move) {
-        return false;
-    }
-
-    @Override
     public void update(Type[][] status) {
+        reset();
+
         moveable(loc.south(1), status);
 
         if (loc.rank == INITIAL_RANK) {
