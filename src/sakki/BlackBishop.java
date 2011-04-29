@@ -5,17 +5,17 @@
 package sakki;
 
 /**
- * White king.
+ * Black bishop.
  *
  * @author Tuomas Starck
  */
-class WhiteKing extends Piece {
-    public WhiteKing(String birthplace) {
-        super(Type.k, birthplace);
+class BlackBishop extends Piece {
+    public BlackBishop(String birthplace) {
+        super(Type.B, birthplace);
     }
 
     @Override
     public void update(Type[][] status) {
-        markAdjacent(status);
+        markDiagonal(status);
     }
 }

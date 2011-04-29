@@ -18,18 +18,35 @@ public class Board {
     private Type[][] status;
 
     public Board() {
+        String[] files = new String[] {"a", "b", "c", "d", "e", "f", "g", "h"};
+
         board = new ArrayList<Piece>();
 
-        board.add(new WhitePawn("c2"));
-        board.add(new WhitePawn("d2"));
+        for (String f : files) {
+            board.add(new WhitePawn(f + 2));
+        }
+
         board.add(new WhiteRook("a1"));
         board.add(new WhiteKnight("b1"));
         board.add(new WhiteBishop("c1"));
+        board.add(new WhiteQueen("d1"));
         board.add(new WhiteKing("e1"));
+        board.add(new WhiteBishop("f1"));
+        board.add(new WhiteKnight("g1"));
+        board.add(new WhiteRook("h1"));
 
-        board.add(new BlackPawn("e3"));
-        board.add(new BlackKnight("g8"));
+        for (String f : files) {
+            board.add(new BlackPawn(f + 7));
+        }
+
+        board.add(new BlackRook("a8"));
+        board.add(new BlackKnight("b8"));
+        board.add(new BlackBishop("c8"));
+        board.add(new BlackQueen("d8"));
         board.add(new BlackKing("e8"));
+        board.add(new BlackBishop("f8"));
+        board.add(new BlackKnight("g8"));
+        board.add(new BlackRook("h8"));
 
         status = new Type[8][8];
         update();

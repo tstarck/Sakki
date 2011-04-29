@@ -12,10 +12,6 @@ package sakki;
 public class WhitePawn extends Piece {
     private final int INITIAL_RANK = 6;
 
-    // Type me;
-    // Coord loc;
-    // Type[][] view;
-
     public WhitePawn(String birthplace) {
         super(Type.p, birthplace);
     }

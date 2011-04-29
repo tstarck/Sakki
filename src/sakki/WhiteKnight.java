@@ -21,7 +21,5 @@ class WhiteKnight extends Piece {
                 capturable(tmp, status);
             }
         }
-
-        System.out.println(this);
     }
 }
