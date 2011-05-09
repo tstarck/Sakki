@@ -7,7 +7,7 @@ package sakki;
 import java.util.ArrayList;
 
 /**
- * Model of a Chess board and its rules.
+ * Model of a Chess board and pieces on it.
  *
  * Board is standard sized with eight files and ranks.
  *
@@ -15,39 +15,61 @@ import java.util.ArrayList;
  */
 public class Board {
     private ArrayList<Piece> board;
-    private Type[][] status;
+    private Type[][] state;
 
     public Board() {
-        String[] files = new String[] {"a", "b", "c", "d", "e", "f", "g", "h"};
+        this("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+    }
 
+    public Board(String fen) {
+        int file = 0;
+        int rank = 0;
+
+        state = new Type[8][8];
         board = new ArrayList<Piece>();
-        status = new Type[8][8];
 
-        for (String f : files) {
-            board.add(new WhitePawn(f + 2));
+        for (char chr : fen.toCharArray()) {
+            Coord co = null;
+
+            try {
+                co = new Coord(file, rank);
+            }
+            catch (IllegalArgumentException e) {}
+
+            switch (chr) {
+                case '/':
+                    file = 0;
+                    rank++;
+                    break;
+                case 'P':
+                    board.add(new WhitePawn(co));   file++; break;
+                case 'p':
+                    board.add(new BlackPawn(co));   file++; break;
+                case 'B':
+                    board.add(new WhiteBishop(co)); file++; break;
+                case 'b':
+                    board.add(new BlackBishop(co)); file++; break;
+                case 'N':
+                    board.add(new WhiteKnight(co)); file++; break;
+                case 'n':
+                    board.add(new BlackKnight(co)); file++; break;
+                case 'R':
+                    board.add(new WhiteRook(co));   file++; break;
+                case 'r':
+                    board.add(new BlackRook(co));   file++; break;
+                case 'Q':
+                    board.add(new WhiteQueen(co));  file++; break;
+                case 'q':
+                    board.add(new BlackQueen(co));  file++; break;
+                case 'K':
+                    board.add(new WhiteKing(co));   file++; break;
+                case 'k':
+                    board.add(new BlackKing(co));   file++; break;
+                default:
+                    file += Character.digit(chr, 10);
+                    break;
+            }
         }
-
-        board.add(new WhiteRook("a1"));
-        board.add(new WhiteKnight("b1"));
-        board.add(new WhiteBishop("c1"));
-        board.add(new WhiteQueen("d1"));
-        board.add(new WhiteKing("e1"));
-        board.add(new WhiteBishop("f1"));
-        board.add(new WhiteKnight("g1"));
-        board.add(new WhiteRook("h1"));
-
-        for (String f : files) {
-            board.add(new BlackPawn(f + 7));
-        }
-
-        board.add(new BlackRook("a8"));
-        board.add(new BlackKnight("b8"));
-        board.add(new BlackBishop("c8"));
-        board.add(new BlackQueen("d8"));
-        board.add(new BlackKing("e8"));
-        board.add(new BlackBishop("f8"));
-        board.add(new BlackKnight("g8"));
-        board.add(new BlackRook("h8"));
 
         update();
     }
@@ -55,27 +77,27 @@ public class Board {
     private void update() {
         for (int i=0; i<8; i++) {
             for (int j=0; j<8; j++) {
-                status[i][j] = Type.empty;
+                state[i][j] = Type.empty;
             }
         }
 
         for (Piece pc : board) {
             Coord loc = pc.where();
-            status[loc.rank][loc.file] = pc.what();
+            state[loc.rank][loc.file] = pc.who();
         }
 
         for (Piece pc : board) {
-            pc.update(status);
+            pc.update(state);
         }
     }
 
-    public boolean move(Move move, Turn turn) {
-        if (move == null) return false;
+    public void move(Move move) throws MoveException {
+        if (move == null) return;
 
         ArrayList<Piece> possibles = new ArrayList<Piece>();
 
         for (Piece pc : board) {
-            if (pc.what() == move.piece()) {
+            if (pc.who() == move.piece()) {
                 if (pc.canGoto(move.to())) {
                     possibles.add(pc);
                 }
@@ -83,36 +105,43 @@ public class Board {
         }
 
         if (possibles.isEmpty()) {
-            System.out.println(" *** Cannot make move :-(");
-            return false;
+            throw new MoveException("No such move available");
         }
-        else if (possibles.size() == 1) {
-            Piece pc = possibles.get(0);
 
-            if (move.claimCapture()) {
-                int harvest = -1;
+        if (possibles.size() != 1) {
+            throw new MoveException("Unable to distinguish between moves");
+        }
 
-                for (int i=0; i<board.size(); i++) {
-                    if (board.get(i).where().toString().equals(move.to().toString())) {
-                        harvest = i;
-                    }
-                }
+        int capture = -1;
+        Piece pc = possibles.get(0);
 
-                if (harvest >= 0) {
-                    board.remove(harvest);
-                }
+        for (int i=0; i<board.size(); i++) {
+            if (board.get(i).where().toString().equals(move.to().toString())) {
+                capture = i;
             }
+        }
 
-            pc.move(move);
+        if (capture != -1) {
+            if (move.claimCapture()) {
+                board.remove(capture);
+            }
+            else {
+                throw new MoveException("Unclaimed capture detected");
+            }
         }
         else {
-            System.out.println(" *** Cannot make move :-[");
-            return false;
+            if (move.claimCapture()) {
+                throw new MoveException("Capture claimed in vain");
+            }
         }
 
-        update();
+        pc.move(move);
 
-        return true;
+        update();
+    }
+
+    public Type[][] getState() {
+        return state;
     }
 
     private String packRank(Type[] rank) {
@@ -139,27 +168,14 @@ public class Board {
         return "/" + str;
     }
 
-    public String toFen() {
+    @Override
+    public String toString() {
         String fen = "";
 
-        for (Type[] rank : status) {
+        for (Type[] rank : state) {
             fen += packRank(rank);
         }
 
         return fen.substring(1);
-    }
-
-    @Override
-    public String toString() {
-        String str = "";
-
-        for (Type[] rank : status) {
-            str += "\n";
-            for (Type file : rank) {
-                str += " " + file;
-            }
-        }
-
-        return str;
     }
 }

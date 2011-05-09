@@ -17,28 +17,8 @@ public class MoveTest {
 
     @Test
     public void simpleMove() {
-        Move foo = new Move("e4", Turn.white);
-        Coord bar = new Coord(4,3);
-
-        assertEquals(foo.piece(), Type.P);
-        assertTrue(!foo.claimCapture());
-        assertEquals(foo.to().toString(), bar.toString());
-    }
-
-    @Test
-    public void capturingMove() {
-        Move foo = new Move("Nexd5", Turn.white);
-        Coord bar = new Coord(3,4);
-
-        assertEquals(foo.piece(), Type.N);
-        assertTrue(foo.claimCapture());
-        assertEquals(foo.to().toString(), bar.toString());
-    }
-
-    @Test
-    public void nontrivialMove() {
-        Move foo = new Move("b1=Q+", Turn.black);
-        Coord bar = new Coord(1,0);
+        Move foo = new Move("e4", Turn.w);
+        Coord bar = new Coord(4,4);
 
         assertEquals(foo.piece(), Type.p);
         assertTrue(!foo.claimCapture());
@@ -46,15 +26,35 @@ public class MoveTest {
     }
 
     @Test
+    public void capturingMove() {
+        Move foo = new Move("Nexd5", Turn.w);
+        Coord bar = new Coord(3,3);
+
+        assertEquals(foo.piece(), Type.n);
+        assertTrue(foo.claimCapture());
+        assertEquals(foo.to().toString(), bar.toString());
+    }
+
+    @Test
+    public void nontrivialMove() {
+        Move foo = new Move("b1=Q+", Turn.b);
+        Coord bar = new Coord(1,7);
+
+        assertEquals(foo.piece(), Type.P);
+        assertTrue(!foo.claimCapture());
+        assertEquals(foo.to().toString(), bar.toString());
+    }
+
+    @Test
     public void castlingMove() {
-        Move kingside = new Move("0-0", Turn.black);
-        Move queenside = new Move("0-0-0", Turn.white);
+        Move kingside = new Move("0-0", Turn.b);
+        Move queenside = new Move("0-0-0", Turn.w);
         assertTrue(kingside.castlingKingside());
         assertTrue(queenside.castlingQueenside());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void invalidMove() {
-        Move fail = new Move("Nf9", Turn.white);
+        Move fail = new Move("Nf9", Turn.w);
     }
 }

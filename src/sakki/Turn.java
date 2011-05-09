@@ -6,22 +6,22 @@
 package sakki;
 
 /**
- * In the game of Chess either white or black hold the next move.
+ * In the game of Chess either White or Black holds the next move.
  *
  * @author Tuomas Starck
  */
 public enum Turn {
-    white {
+    w {
         @Override
         public String toString() {
-            return "w";
+            return "White";
         }
     },
 
-    black {
+    b {
         @Override
         public String toString() {
-            return "b";
+            return "Black";
         }
     }
 }

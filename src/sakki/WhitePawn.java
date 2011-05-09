@@ -12,8 +12,8 @@ package sakki;
 public class WhitePawn extends Piece {
     private final int INITIAL_RANK = 6;
 
-    public WhitePawn(String birthplace) {
-        super(Type.p, birthplace);
+    public WhitePawn(Coord birthplace) {
+        super(Type.P, birthplace);
     }
 
     @Override

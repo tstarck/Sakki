@@ -8,6 +8,7 @@ package sakki;
 import java.util.ArrayList;
 
 /**
+ * Coordinate translation between different notations.
  *
  * @author Tuomas Starck
  */
@@ -27,16 +28,16 @@ class Coord {
         if (loc.matches(regex)) {
             readable = loc;
 
-            String fi = String.valueOf(loc.charAt(0));
-            int ri = Character.getNumericValue(loc.charAt(1));
+            String fileIndex = String.valueOf(loc.charAt(0));
+            int rankIndex = Character.getNumericValue(loc.charAt(1));
 
             for (int i=0; i<8; i++) {
-                if (fi.equals(lookupTable[i])) {
+                if (fileIndex.equals(lookupTable[i])) {
                     file = verify(i);
                 }
             }
 
-            rank = 7 - verify(--ri);
+            rank = 7 - verify(--rankIndex);
         }
         else {
             throw new IllegalArgumentException();
@@ -60,10 +61,9 @@ class Coord {
         Coord ret = null;
 
         try {
-            // System.out.println("New Coords at [" +(rank+rDelta) + "," + (file+fDelta) + "]");
             ret = new Coord(file+fDelta, rank+rDelta);
         }
-        catch (IllegalArgumentException iCouldntBeBothered) {}
+        catch (IllegalArgumentException pass) {}
 
         return ret;
     }

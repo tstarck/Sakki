@@ -10,8 +10,8 @@ package sakki;
  * @author Tuomas Starck
  */
 class WhiteRook extends Piece {
-    public WhiteRook(String birthplace) {
-        super(Type.r, birthplace);
+    public WhiteRook(Coord birthplace) {
+        super(Type.R, birthplace);
     }
 
     @Override

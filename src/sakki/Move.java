@@ -8,36 +8,36 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Read and parse an useful subset of <i>Algebraic chess notation</i>.
+ * Read and parse a certain subset of <i>Algebraic chess notation</i>.
  *
  * Flavor of notation:
- *   Capture is marked with x.
- *   Pawn promotion uses equals sign.
- *   Castling is written with zeros!
- *   Check (+) and mate (#) may be marked.
+ *   Capture is marked with 'x'
+ *   Pawn promotion prefix is '='
+ *   Castling is written with zeros
+ *   Check (+) and mate (#) are accepted
  *
  * @see <a href="http://en.wikipedia.org/wiki/Algebraic_chess_notation">Algebraic chess notation in Wikipedia</a>
  *
  * @author Tuomas Starck
  */
 class Move {
-    //                      1:piece   2:from  3:x 4:to          6:prom    7:act
-    private String regex = "([NBRQK])?([a-h])?(x)?([a-h][1-8])(=([NBRQ]))?([#+])?";
+    private String regex =
+        "([NBRQK])?([a-h])?(x)?([a-h][1-8])(=([NBRQ]))?([#+])?";
+    //   1:piece   2:from  3:x 4:to          6:prom    7:act
+
     private Pattern ptrn;
     private Matcher match;
-
     private Type piece;
     private Type promote;
     private Coord from;
     private Coord to;
-
     private boolean kingside;
     private boolean queenside;
     private boolean capture;
     private boolean check;
     private boolean mate;
 
-    public Move(String str, Turn turn) {
+    public Move(String str, Turn turn) throws MoveException {
         piece = null;
         promote = null;
         from = null;
@@ -53,7 +53,7 @@ class Move {
         match = ptrn.matcher(str);
 
         if (match.matches()) {
-            // 1: Type which is to be moved
+            // 1: Piece which is to be moved
             piece = resolvePiece(match.group(1), turn);
 
             // 2: From
@@ -94,17 +94,18 @@ class Move {
             queenside = true;
         }
         else {
-            throw new IllegalArgumentException();
+            throw new MoveException("Incomprehensible request");
         }
     }
 
     private Type resolvePiece(String input, Turn turn) {
-        String str = (input == null)? "p": input;
+        String str = (input == null) ? "p" : input;
 
-        if (turn == Turn.white) {
-            return Type.valueOf(str.toLowerCase());
-        } else {
+        if (turn == Turn.w) {
             return Type.valueOf(str.toUpperCase());
+        }
+        else {
+            return Type.valueOf(str.toLowerCase());
         }
     }
 
@@ -142,10 +143,5 @@ class Move {
 
     public boolean claimMate() {
         return mate;
-    }
-
-    @Override
-    public String toString() {
-        return "not implemented";
     }
 }

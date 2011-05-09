@@ -14,9 +14,13 @@ abstract class Piece {
     protected Coord loc;
     protected Type[][] view;
 
-    public Piece(Type type, String birthplace) {
+    public Piece(Type type, Coord birthplace) {
+        if (type == null || birthplace == null) {
+            throw new IllegalArgumentException();
+        }
+
         me = type;
-        loc = new Coord(birthplace);
+        loc = birthplace;
         view = new Type[8][8];
 
         for (int i=0; i<8; i++) {
@@ -24,12 +28,9 @@ abstract class Piece {
                 view[i][j] = Type.empty;
             }
         }
-
-        view[loc.rank][loc.file] = me;
-
     }
 
-    public Type what() {
+    public Type who() {
         return me;
     }
 
@@ -49,17 +50,11 @@ abstract class Piece {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    public boolean move(Move move) {
-        System.out.println(me.toString() + ": " + loc + " -> " + move.to());
+    public void move(Move move) {
         loc = move.to();
-        return true;
     }
 
     public boolean canGoto(Coord target) {
-        // System.out.println("Testataan: " + target);
-        // System.out.println("Debug: " + view[target.rank][target.file]);
-        // System.out.println("<<<" + this + ">>>");
-
         if (view[target.rank][target.file] == Type.moveable ||
             view[target.rank][target.file] == Type.capturable) {
             return true;
@@ -68,20 +63,8 @@ abstract class Piece {
         return false;
     }
 
-    /*
-    public boolean canCapture(Coord target) {
-        if (view[target.rank][target.file] == Type.capturable) {
-            return true;
-        }
-
-        return false;
-    }
-    */
-
     protected boolean moveable(Coord target, Type[][] status) {
         if (target == null) return false;
-
-        // System.out.println("Testing moveability at [" + target + "]");
 
         if (status[target.rank][target.file] == Type.empty) {
             view[target.rank][target.file] = Type.moveable;
@@ -94,9 +77,7 @@ abstract class Piece {
     protected void capturable(Coord target, Type[][] status) {
         if (target == null) return;
 
-        // System.out.println("Testing capturable at [" + target + "]");
-
-        if (me.enemy(status[target.rank][target.file])) {
+        if (me.isEnemy(status[target.rank][target.file])) {
             view[target.rank][target.file] = Type.capturable;
         }
     }

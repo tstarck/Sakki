@@ -10,8 +10,8 @@ package sakki;
  * @author Tuomas Starck
  */
 class WhiteKing extends Piece {
-    public WhiteKing(String birthplace) {
-        super(Type.k, birthplace);
+    public WhiteKing(Coord birthplace) {
+        super(Type.K, birthplace);
     }
 
     @Override

@@ -18,7 +18,7 @@ public class CoordTest {
     @Test
     public void firstTest() {
         Coord foo = new Coord("c3");
-        Coord bar = new Coord(2, 2);
+        Coord bar = new Coord(2, 5);
         assertEquals(foo.toString(), bar.toString());
         assertTrue(foo.file == bar.file);
         assertTrue(foo.rank == bar.rank);
@@ -27,7 +27,7 @@ public class CoordTest {
     @Test
     public void secondTest() {
         Coord foo = new Coord("h8");
-        Coord bar = new Coord(7, 7);
+        Coord bar = new Coord(7, 0);
         assertTrue(foo.file == bar.file);
         assertTrue(foo.rank == bar.rank);
     }

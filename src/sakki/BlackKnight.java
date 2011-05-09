@@ -10,8 +10,8 @@ package sakki;
  * @author Tuomas Starck
  */
 class BlackKnight extends Piece {
-    public BlackKnight(String birthplace) {
-        super(Type.N, birthplace);
+    public BlackKnight(Coord birthplace) {
+        super(Type.n, birthplace);
     }
 
     @Override

@@ -38,12 +38,12 @@ public enum Type {
         }
     },
 
-    p("w"), P("b"),
-    b("w"), B("b"),
-    n("w"), N("b"),
-    r("w"), R("b"),
-    q("w"), Q("b"),
-    k("w"), K("b");
+    p("b"), P("w"),
+    b("b"), B("w"),
+    n("b"), N("w"),
+    r("b"), R("w"),
+    q("b"), Q("w"),
+    k("b"), K("w");
 
     private final String side;
 
@@ -51,13 +51,16 @@ public enum Type {
         side = s;
     }
 
-    public boolean enemy(Type that) {
-        if (this.side.equals("w") && that.side.equals("b")) {
-            return true;
-        }
-        else if (this.side.equals("b") && that.side.equals("w")) {
-            return true;
-        }
+    public boolean isEnemy(Type that) {
+        if (this.side.equals("w") && that.side.equals("b")) return true;
+
+        if (this.side.equals("b") && that.side.equals("w")) return true;
+
+        return false;
+    }
+
+    public boolean isPawn() {
+        if (this == Type.P || this == Type.p) return true;
 
         return false;
     }

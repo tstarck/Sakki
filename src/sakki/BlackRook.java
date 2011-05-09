@@ -10,8 +10,8 @@ package sakki;
  * @author Tuomas Starck
  */
 class BlackRook extends Piece {
-    public BlackRook(String birthplace) {
-        super(Type.R, birthplace);
+    public BlackRook(Coord birthplace) {
+        super(Type.r, birthplace);
     }
 
     @Override

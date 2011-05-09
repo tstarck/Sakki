@@ -12,8 +12,8 @@ package sakki;
 class BlackPawn extends Piece {
     private final int INITIAL_RANK = 1;
 
-    public BlackPawn(String birthplace) {
-        super(Type.P, birthplace);
+    public BlackPawn(Coord birthplace) {
+        super(Type.p, birthplace);
     }
 
     @Override
