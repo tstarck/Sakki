@@ -29,4 +29,17 @@ class BlackPawn extends Piece {
         capturable(loc.southeast(1), status);
         capturable(loc.southwest(1), status);
     }
+
+    @Override
+    public Move move(Move move) {
+        Coord target = move.to();
+
+        if (loc.rank == INITIAL_RANK && target.rank == (INITIAL_RANK + 2)) {
+            move.markEnpassant(loc.south(1));
+        }
+
+        loc = move.to();
+
+        return move;
+    }
 }

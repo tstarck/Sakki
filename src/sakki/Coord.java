@@ -117,6 +117,14 @@ class Coord {
         return coords;
     }
 
+    public boolean equals(Coord that) {
+        if (this.file == that.file && this.rank == that.rank) {
+            return true;
+        }
+
+        return false;
+    }
+
     @Override
     public String toString() {
         return readable;

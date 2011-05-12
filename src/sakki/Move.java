@@ -29,6 +29,7 @@ class Move {
     private Matcher match;
     private Type piece;
     private Type promote;
+    private Coord enpassant;
     private Coord from;
     private Coord to;
     private boolean kingside;
@@ -40,6 +41,7 @@ class Move {
     public Move(String str, Turn turn) throws MoveException {
         piece = null;
         promote = null;
+        enpassant = null;
         from = null;
         to = null;
 
@@ -89,9 +91,11 @@ class Move {
         }
         else if (str.matches("0-0")) {
             kingside = true;
+            piece = resolvePiece("k", turn);
         }
         else if (str.matches("0-0-0")) {
             queenside = true;
+            piece = resolvePiece("k", turn);
         }
         else {
             throw new MoveException("Incomprehensible request");
@@ -99,7 +103,7 @@ class Move {
     }
 
     private Type resolvePiece(String input, Turn turn) {
-        String str = (input == null) ? "p" : input;
+        String str = (input == null)? "p": input;
 
         if (turn == Turn.w) {
             return Type.valueOf(str.toUpperCase());
@@ -109,12 +113,20 @@ class Move {
         }
     }
 
+    public void markEnpassant(Coord co) {
+        enpassant = co;
+    }
+
     public Type piece() {
         return piece;
     }
 
-    public Type getPromotion() {
+    public Type promotion() {
         return promote;
+    }
+
+    public Coord enpassant() {
+        return enpassant;
     }
 
     public Coord from() {
@@ -125,23 +137,23 @@ class Move {
         return to;
     }
 
-    public boolean castlingKingside() {
+    public boolean isKingsideCastling() {
         return kingside;
     }
 
-    public boolean castlingQueenside() {
+    public boolean isQueensideCastling() {
         return queenside;
     }
 
-    public boolean claimCapture() {
+    public boolean isClaimingCapture() {
         return capture;
     }
 
-    public boolean claimCheck() {
+    public boolean isClaimingCheck() {
         return check;
     }
 
-    public boolean claimMate() {
+    public boolean isClaimingMate() {
         return mate;
     }
 }

@@ -21,7 +21,7 @@ public class MoveTest {
         Coord bar = new Coord(4,4);
 
         assertEquals(foo.piece(), Type.p);
-        assertTrue(!foo.claimCapture());
+        assertTrue(!foo.isClaimingCapture());
         assertEquals(foo.to().toString(), bar.toString());
     }
 
@@ -31,7 +31,7 @@ public class MoveTest {
         Coord bar = new Coord(3,3);
 
         assertEquals(foo.piece(), Type.n);
-        assertTrue(foo.claimCapture());
+        assertTrue(foo.isClaimingCapture());
         assertEquals(foo.to().toString(), bar.toString());
     }
 
@@ -41,7 +41,7 @@ public class MoveTest {
         Coord bar = new Coord(1,7);
 
         assertEquals(foo.piece(), Type.P);
-        assertTrue(!foo.claimCapture());
+        assertTrue(!foo.isClaimingCapture());
         assertEquals(foo.to().toString(), bar.toString());
     }
 
@@ -49,8 +49,8 @@ public class MoveTest {
     public void castlingMove() {
         Move kingside = new Move("0-0", Turn.b);
         Move queenside = new Move("0-0-0", Turn.w);
-        assertTrue(kingside.castlingKingside());
-        assertTrue(queenside.castlingQueenside());
+        assertTrue(kingside.isKingsideCastling());
+        assertTrue(queenside.isQueensideCastling());
     }
 
     @Test(expected = IllegalArgumentException.class)

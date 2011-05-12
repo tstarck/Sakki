@@ -50,8 +50,9 @@ abstract class Piece {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    public void move(Move move) {
+    public Move move(Move move) {
         loc = move.to();
+        return move;
     }
 
     public boolean canGoto(Coord target) {

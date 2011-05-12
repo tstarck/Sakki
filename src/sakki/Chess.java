@@ -14,6 +14,7 @@ import java.util.ArrayList;
 class Chess {
     private Board board;
     private Turn turn;
+    private Coord enpassant;
     private int halfmove;
     private int fullmove;
     private ArrayList<String> history;
@@ -29,16 +30,32 @@ class Chess {
     public Chess(String[] fenArray) {
         board = new Board(fenArray[0]);
         turn = Turn.valueOf(fenArray[1]);
+
+        try {
+            enpassant = new Coord(fenArray[3]);
+        }
+        catch (IllegalArgumentException pass) {
+            enpassant = null;
+        }
+
         halfmove = Integer.parseInt(fenArray[4]);
         fullmove = Integer.parseInt(fenArray[5]);
+
         history = new ArrayList<String>();
+    }
+
+    private String toFen() {
+        String ep = (enpassant == null)? "-": enpassant.toString();
+        return String.format("%s %s KQkq %s %d %d",
+            board, turn.name(), ep, halfmove, fullmove);
     }
 
     void move(String algebraic) throws MoveException {
         int prev = history.size() - 1;
+
         Move move = new Move(algebraic, turn);
 
-        board.move(move);
+        move = board.move(move);
 
         if (turn == Turn.w) {
             turn = Turn.b;
@@ -48,7 +65,11 @@ class Chess {
             fullmove++;
         }
 
-        if (move.claimCapture() || move.piece().isPawn()) {
+        // FIXME Insert castling code
+
+        enpassant = move.enpassant();
+
+        if (move.isClaimingCapture() || move.piece().isPawn()) {
             halfmove = 0;
         }
         else {
@@ -56,22 +77,35 @@ class Chess {
         }
 
         if (prev >= 0) {
-            System.out.println("Prev: " + history.get(prev));
+            System.out.println(history.get(prev));
         }
 
-        history.add(String.format("%s %s KQkq - %d %d",
-            board, turn.name(), halfmove, fullmove));
+        history.add(toFen());
+    }
+
+    private String ordinal(int n) {
+        int tmp = n % 10;
+
+        if (n % 100 - tmp == 10) return "th";
+
+        switch (tmp) {
+            case 1: return "st";
+            case 2: return "nd";
+            case 3: return "rd";
+        }
+
+        return "th";
     }
 
     public String prompt() {
         String fiftyMoveRule = "";
 
-        if (0 <= halfmove) {
-            fiftyMoveRule = "Halfmove count: " + halfmove + "\n";
+        if (42 <= halfmove) {
+            fiftyMoveRule = "Halfmoves: " + halfmove + "\n";
         }
 
-        return String.format("\n%s%s's %d. move> ",
-            fiftyMoveRule, turn, fullmove);
+        return String.format("\n%s%s's %d%s> ",
+            fiftyMoveRule, turn, fullmove, ordinal(fullmove));
     }
 
     @Override

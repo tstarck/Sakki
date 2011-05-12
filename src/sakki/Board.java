@@ -91,8 +91,16 @@ public class Board {
         }
     }
 
-    public void move(Move move) throws MoveException {
-        if (move == null) return;
+    private Move castle(Move move) throws MoveException {
+        throw new MoveException("Castling not implemented");
+    }
+
+    public Move move(Move move) throws MoveException {
+        if (move == null) return move;
+
+        if (move.isKingsideCastling() || move.isQueensideCastling()) {
+            return castle(move);
+        }
 
         ArrayList<Piece> possibles = new ArrayList<Piece>();
 
@@ -116,13 +124,13 @@ public class Board {
         Piece pc = possibles.get(0);
 
         for (int i=0; i<board.size(); i++) {
-            if (board.get(i).where().toString().equals(move.to().toString())) {
+            if (board.get(i).where().equals(move.to())) {
                 capture = i;
             }
         }
 
         if (capture != -1) {
-            if (move.claimCapture()) {
+            if (move.isClaimingCapture()) {
                 board.remove(capture);
             }
             else {
@@ -130,14 +138,16 @@ public class Board {
             }
         }
         else {
-            if (move.claimCapture()) {
+            if (move.isClaimingCapture()) {
                 throw new MoveException("Capture claimed in vain");
             }
         }
 
-        pc.move(move);
+        move = pc.move(move);
 
         update();
+
+        return move;
     }
 
     public Type[][] getState() {
