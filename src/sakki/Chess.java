@@ -110,18 +110,27 @@ class Chess {
 
     @Override
     public String toString() {
-        int rankIndex = 8;
         String boardStr = "";
         String fileIndex = "a b c d e f g h";
+        Type[][] state = board.getState();
+        int[] material = board.getMaterial();
 
-        for (Type[] rank : board.getState()) {
-            boardStr += "\n" + rankIndex-- + " ";
-            for (Type file : rank) {
+        for (int i=0; i<state.length; i++) {
+            boardStr += "\n" + (8-i) + " ";
+
+            for (Type file : state[i]) {
                 boardStr += " " + file;
+            }
+
+            if (i == 0) {
+                boardStr += "  " + material[1];
+            }
+
+            if (i == 7) {
+                boardStr += "  " + material[0];
             }
         }
 
-        return String.format("\n   %s\n%s\n",
-            fileIndex, boardStr);
+        return String.format("\n   %s\n%s\n", fileIndex, boardStr);
     }
 }

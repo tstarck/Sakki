@@ -17,51 +17,64 @@ public enum Type {
     /**
      * This value marks the absence of a piece.
      */
-    empty("") {
+    empty(0, '.') {
         @Override
         public String toString() {
             return ".";
         }
     },
 
-    moveable("") {
+    moveable(0, '.') {
         @Override
         public String toString() {
             return "o";
         }
     },
 
-    capturable("") {
+    capturable(0, '.') {
         @Override
         public String toString() {
             return "x";
         }
     },
 
-    p("b"), P("w"),
-    b("b"), B("w"),
-    n("b"), N("w"),
-    r("b"), R("w"),
-    q("b"), Q("w"),
-    k("b"), K("w");
+    p(1, 'b'), P(1, 'w'),
+    b(3, 'b'), B(3, 'w'),
+    n(3, 'b'), N(3, 'w'),
+    r(5, 'b'), R(5, 'w'),
+    q(9, 'b'), Q(9, 'w'),
+    k(0, 'b'), K(0, 'w');
 
-    private final String side;
+    private final int value;
+    private final char side;
 
-    Type(String s) {
+    Type(int v, char s) {
+        value = v;
         side = s;
     }
 
+    public int getValue() {
+        return value;
+    }
+
+    public boolean isWhite() {
+        if (side == 'w') return true;
+        return false;
+    }
+
+    public boolean isBlack() {
+        if (side == 'b') return true;
+        return false;
+    }
+
     public boolean isEnemy(Type that) {
-        if (this.side.equals("w") && that.side.equals("b")) return true;
-
-        if (this.side.equals("b") && that.side.equals("w")) return true;
-
+        if (this.isWhite() && that.isBlack()) return true;
+        if (this.isBlack() && that.isWhite()) return true;
         return false;
     }
 
     public boolean isPawn() {
         if (this == Type.P || this == Type.p) return true;
-
         return false;
     }
 }

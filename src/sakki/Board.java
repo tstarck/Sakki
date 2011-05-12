@@ -14,8 +14,9 @@ import java.util.ArrayList;
  * @author Tuomas Starck
  */
 public class Board {
-    private ArrayList<Piece> board;
+    private int[] material;
     private Type[][] state;
+    private ArrayList<Piece> board;
 
     public Board() {
         this("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
@@ -25,6 +26,7 @@ public class Board {
         int file = 0;
         int rank = 0;
 
+        material = new int[2];
         state = new Type[8][8];
         board = new ArrayList<Piece>();
 
@@ -74,7 +76,17 @@ public class Board {
         update();
     }
 
+    public int[] getMaterial() {
+        return material;
+    }
+
+    public Type[][] getState() {
+        return state;
+    }
+
     private void update() {
+        material = new int[2];
+
         for (int i=0; i<8; i++) {
             for (int j=0; j<8; j++) {
                 state[i][j] = Type.empty;
@@ -82,8 +94,18 @@ public class Board {
         }
 
         for (Piece pc : board) {
+            Type tp = pc.who();
             Coord loc = pc.where();
-            state[loc.rank][loc.file] = pc.who();
+
+            state[loc.rank][loc.file] = tp;
+
+            if (tp.isWhite()) {
+                material[0] += tp.getValue();
+            }
+
+            if (tp.isBlack()) {
+                material[1] += tp.getValue();
+            }
         }
 
         for (Piece pc : board) {
@@ -148,10 +170,6 @@ public class Board {
         update();
 
         return move;
-    }
-
-    public Type[][] getState() {
-        return state;
     }
 
     private String packRank(Type[] rank) {
