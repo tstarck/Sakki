@@ -10,4 +10,27 @@ package sakki;
  * @author Tuomas Starck
  */
 public class Rebound {
+    private String castling;
+    private Coord enpassant;
+
+    public Rebound() {
+        castling = null;
+        enpassant = null;
+    }
+
+    public void preventCastling(String str) {
+        castling = str;
+    }
+
+    public void setEnpassant(Coord co) {
+        enpassant = co;
+    }
+
+    public String preventCastling() {
+        return castling;
+    }
+
+    public Coord getEnpassant() {
+        return enpassant;
+    }
 }

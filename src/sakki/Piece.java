@@ -48,12 +48,9 @@ abstract class Piece {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    public Move move(Move move) {
-        Rebound rebound = new Rebound();
-
+    public Rebound move(Move move) {
         loc = move.to();
-
-        return move;
+        return new Rebound();
     }
 
     public boolean canGoto(Coord target) {

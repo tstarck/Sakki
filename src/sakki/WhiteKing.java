@@ -19,4 +19,15 @@ class WhiteKing extends Piece {
         reset();
         markAdjacent(status);
     }
+
+    @Override
+    public Rebound move(Move move) {
+        Rebound rebound = new Rebound();
+
+        rebound.preventCastling("KQ");
+
+        loc = move.to();
+
+        return rebound;
+    }
 }

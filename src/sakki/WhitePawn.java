@@ -31,17 +31,16 @@ public class WhitePawn extends Piece {
     }
 
     @Override
-    public Move move(Move move) {
+    public Rebound move(Move move) {
         Coord target = move.to();
+        Rebound rebound = new Rebound();
 
-        /* Pitää siirtää reboundiin tää soodi!
-        if (loc.rank == INITIAL_RANK && target.rank == (INITIAL_RANK - 2)) {
-            move.markEnpassant(loc.north(1));
+        if (loc.rank == INITIAL_RANK && target.rank == (INITIAL_RANK-2)) {
+            rebound.setEnpassant(loc.north(1));
         }
-        */
 
-        loc = move.to();
+        loc = target;
 
-        return move;
+        return rebound;
     }
 }

@@ -4,8 +4,6 @@
  */
 package sakki;
 
-import java.util.ArrayList;
-
 /**
  * An implementation of Chess for two players.
  *
@@ -18,7 +16,6 @@ class Chess {
     private Coord enpassant;
     private int halfmove;
     private int fullmove;
-    private ArrayList<String> history;
 
     public Chess() {
         this("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
@@ -42,8 +39,6 @@ class Chess {
 
         halfmove = Integer.parseInt(fenArray[4]);
         fullmove = Integer.parseInt(fenArray[5]);
-
-        history = new ArrayList<String>();
     }
 
     private String toFen() {
@@ -52,6 +47,7 @@ class Chess {
             board, turn.name(), castling, ep, halfmove, fullmove);
     }
 
+    /*
     private void castle(Move move) throws MoveException {
         boolean side = move.castlingSide();
 
@@ -69,18 +65,16 @@ class Chess {
 
         castling.done(turn);
     }
+    */
 
     void move(String algebraic) throws MoveException {
-        int prev = history.size() - 1;
+        Rebound rebound = null;
 
         Move move = new Move(algebraic, turn);
 
-        if (move.isCastling()) {
-            castle(move);
-        }
-        else {
-            move = board.move(move);
-        }
+        // move.isCastling()
+
+        rebound = board.move(move);
 
         if (turn == Turn.w) {
             turn = Turn.b;
@@ -90,9 +84,9 @@ class Chess {
             fullmove++;
         }
 
-        // castling.drop(move.preventCastling());
+        castling.disable(rebound.preventCastling());
 
-        // enpassant = move.enpassant();
+        enpassant = rebound.getEnpassant();
 
         if (move.isClaimingCapture() || move.piece().isPawn()) {
             halfmove = 0;
@@ -100,12 +94,6 @@ class Chess {
         else {
             halfmove++;
         }
-
-        if (prev >= 0) {
-            System.out.println(history.get(prev));
-        }
-
-        history.add(toFen());
     }
 
     private String ordinal(int n) {

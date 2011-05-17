@@ -121,10 +121,11 @@ public class Board {
         throw new MoveException("Not yet implemented");
     }
 
-    public Move move(Move move) throws MoveException {
-        if (move == null) return move;
-
+    public Rebound move(Move move) throws MoveException {
+        Rebound rebound = null;
         ArrayList<Piece> possibles = new ArrayList<Piece>();
+
+        if (move == null) return rebound;
 
         for (Piece pc : board) {
             if (pc.who() == move.piece()) {
@@ -165,11 +166,11 @@ public class Board {
             }
         }
 
-        move = pc.move(move);
+        rebound = pc.move(move);
 
         update();
 
-        return move;
+        return rebound;
     }
 
     private String packRank(Type[] rank) {
