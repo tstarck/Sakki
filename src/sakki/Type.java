@@ -7,9 +7,12 @@ package sakki;
 /**
  * List of pieces available in the game of chess.
  *
- * Pieces are named according to the common convention amongst English-speaking players. Capital letters indicate white pieces and vice versa (in compliance with Forsyth–Edwards Notation).
+ * Pieces are named according to the common convention amongst English-speaking
+ * players. Capital letters indicate white pieces and vice versa (in compliance
+ * with Forsyth–Edwards Notation).
  *
- * @see <a href="http://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation">Forsyth–Edwards Notation</a>
+ * @see <a href="http://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation">
+ * Forsyth–Edwards Notation</a>
  *
  * @author Tuomas Starck
  */
@@ -58,23 +61,19 @@ public enum Type {
     }
 
     public boolean isWhite() {
-        if (side == 'w') return true;
-        return false;
+        return (side == 'w');
     }
 
     public boolean isBlack() {
-        if (side == 'b') return true;
-        return false;
-    }
-
-    public boolean isEnemy(Type that) {
-        if (this.isWhite() && that.isBlack()) return true;
-        if (this.isBlack() && that.isWhite()) return true;
-        return false;
+        return (side == 'b');
     }
 
     public boolean isPawn() {
-        if (this == Type.P || this == Type.p) return true;
-        return false;
+        return (this == Type.P || this == Type.p);
+    }
+
+    public boolean isEnemy(Type that) {
+        return ((this.isWhite() && that.isBlack()) ||
+                (this.isBlack() && that.isWhite()));
     }
 }

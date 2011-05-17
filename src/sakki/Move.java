@@ -16,86 +16,76 @@ import java.util.regex.Pattern;
  *   Castling is written with zeros
  *   Check (+) and mate (#) are accepted
  *
- * @see <a href="http://en.wikipedia.org/wiki/Algebraic_chess_notation">Algebraic chess notation in Wikipedia</a>
+ * @see <a href="http://en.wikipedia.org/wiki/Algebraic_chess_notation">
+ * Algebraic chess notation in Wikipedia</a>
  *
  * @author Tuomas Starck
  */
 class Move {
-    private String regex =
-        "([NBRQK])?([a-h])?(x)?([a-h][1-8])(=([NBRQ]))?([#+])?";
-    //   1:piece   2:from  3:x 4:to          6:prom    7:act
+    private final int KINGSIDE = 1;
+    private final int QUEENSIDE = 2;
 
-    private Pattern ptrn;
-    private Matcher match;
+    private final String castleregex = "0-0(-0)?([#+])?";
+
+    private final String regex =
+    /*   1:piece   2:from  3:x 4:to          6:promo   7:act  */
+        "([NBRQK])?([a-h])?(x)?([a-h][1-8])(=([NBRQ]))?([#+])?";
+
+    private Matcher move;
+    private Matcher castlemove;
+
     private Type piece;
     private Type promote;
-    private Coord enpassant;
     private Coord from;
     private Coord to;
-    private boolean kingside;
-    private boolean queenside;
+
     private boolean capture;
     private boolean check;
     private boolean mate;
+    private int castling;
 
     public Move(String str, Turn turn) throws MoveException {
+        move = Pattern.compile(regex).matcher(str);
+        castlemove = Pattern.compile(castleregex).matcher(str);
+
         piece = null;
         promote = null;
-        enpassant = null;
         from = null;
         to = null;
 
-        kingside = false;
-        queenside = false;
         capture = false;
         check = false;
         mate = false;
+        castling = 0;
 
-        ptrn = Pattern.compile(regex);
-        match = ptrn.matcher(str);
-
-        if (match.matches()) {
+        if (move.matches()) {
             // 1: Piece which is to be moved
-            piece = resolvePiece(match.group(1), turn);
+            piece = resolvePiece(move.group(1), turn);
 
             // 2: From
             // System.out.println("From: " + match.group(2));
             // -> null, e, null
 
             // 3: Capture indicator
-            if (match.group(3) != null) {
+            if (move.group(3) != null) {
                 capture = true;
             }
 
             // 4: To
-            to = new Coord(match.group(4));
+            to = new Coord(move.group(4));
 
             // 6: Officer to which pawn is to be promoted
-            if (match.group(6) != null) {
-                promote = resolvePiece(match.group(6), turn);
+            if (move.group(6) != null) {
+                promote = resolvePiece(move.group(6), turn);
             }
 
-            // 7: Extra information
-            if (match.group(7) != null) {
-                switch (match.group(7).charAt(0)) {
-                    case '+':
-                        check = true;
-                        break;
-                    case '#':
-                        mate = true;
-                        break;
-                    default:
-                        System.out.println("Xtra :: " + match.group(7));
-                }
-            }
+            // 7: Check or Mate status
+            parseCheckMate(move.group(2));
         }
-        else if (str.matches("0-0")) {
-            kingside = true;
-            piece = resolvePiece("k", turn);
-        }
-        else if (str.matches("0-0-0")) {
-            queenside = true;
-            piece = resolvePiece("k", turn);
+        else if (castlemove.matches()) {
+            castling = (castlemove.group(1) == null)? KINGSIDE: QUEENSIDE;
+
+            parseCheckMate(castlemove.group(2));
         }
         else {
             throw new MoveException("Incomprehensible request");
@@ -113,8 +103,11 @@ class Move {
         }
     }
 
-    public void markEnpassant(Coord co) {
-        enpassant = co;
+    private void parseCheckMate(String xtra) {
+        if (xtra != null) {
+            if (xtra.equals("+")) check = true;
+            if (xtra.equals("#")) mate = true;
+        }
     }
 
     public Type piece() {
@@ -125,10 +118,6 @@ class Move {
         return promote;
     }
 
-    public Coord enpassant() {
-        return enpassant;
-    }
-
     public Coord from() {
         return from;
     }
@@ -137,12 +126,12 @@ class Move {
         return to;
     }
 
-    public boolean isKingsideCastling() {
-        return kingside;
+    public boolean isCastling() {
+        return (castling != 0);
     }
 
-    public boolean isQueensideCastling() {
-        return queenside;
+    public boolean castlingSide() {
+        return (castling == KINGSIDE);
     }
 
     public boolean isClaimingCapture() {

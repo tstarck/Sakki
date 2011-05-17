@@ -118,11 +118,11 @@ class Coord {
     }
 
     public boolean equals(Coord that) {
-        if (this.file == that.file && this.rank == that.rank) {
-            return true;
-        }
+        return (this.file == that.file && this.rank == that.rank);
+    }
 
-        return false;
+    public boolean equals(String str) {
+        return (readable.equals(str));
     }
 
     @Override

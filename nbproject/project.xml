@@ -13,7 +13,9 @@
         </data>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
             <word>Coord</word>
+            <word>Forsyth</word>
             <word>Sakki</word>
+            <word>Wikipedia</word>
         </spellchecker-wordlist>
     </configuration>
 </project>

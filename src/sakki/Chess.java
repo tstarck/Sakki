@@ -14,6 +14,7 @@ import java.util.ArrayList;
 class Chess {
     private Board board;
     private Turn turn;
+    private Castle castling;
     private Coord enpassant;
     private int halfmove;
     private int fullmove;
@@ -30,6 +31,7 @@ class Chess {
     public Chess(String[] fenArray) {
         board = new Board(fenArray[0]);
         turn = Turn.valueOf(fenArray[1]);
+        castling = new Castle(fenArray[2]);
 
         try {
             enpassant = new Coord(fenArray[3]);
@@ -46,8 +48,26 @@ class Chess {
 
     private String toFen() {
         String ep = (enpassant == null)? "-": enpassant.toString();
-        return String.format("%s %s KQkq %s %d %d",
-            board, turn.name(), ep, halfmove, fullmove);
+        return String.format("%s %s %s %s %d %d",
+            board, turn.name(), castling, ep, halfmove, fullmove);
+    }
+
+    private void castle(Move move) throws MoveException {
+        boolean side = move.castlingSide();
+
+        if (!castling.isDoable(turn, side)) {
+            throw new MoveException("Castling no longer allowed");
+        }
+
+        for (String sqr : castling.requiredFree(turn, side)) {
+            if (board.isOccupied(new Coord(sqr))) {
+                throw new MoveException("Castling blocked");
+            }
+        }
+
+        board.castle(turn, side);
+
+        castling.done(turn);
     }
 
     void move(String algebraic) throws MoveException {
@@ -55,7 +75,12 @@ class Chess {
 
         Move move = new Move(algebraic, turn);
 
-        move = board.move(move);
+        if (move.isCastling()) {
+            castle(move);
+        }
+        else {
+            move = board.move(move);
+        }
 
         if (turn == Turn.w) {
             turn = Turn.b;
@@ -65,9 +90,9 @@ class Chess {
             fullmove++;
         }
 
-        // FIXME Insert castling code
+        // castling.drop(move.preventCastling());
 
-        enpassant = move.enpassant();
+        // enpassant = move.enpassant();
 
         if (move.isClaimingCapture() || move.piece().isPawn()) {
             halfmove = 0;

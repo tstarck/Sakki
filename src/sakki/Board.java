@@ -84,6 +84,10 @@ public class Board {
         return state;
     }
 
+    public boolean isOccupied(Coord co) {
+        return (state[co.rank][co.file] != Type.empty);
+    }
+
     private void update() {
         material = new int[2];
 
@@ -113,16 +117,12 @@ public class Board {
         }
     }
 
-    private Move castle(Move move) throws MoveException {
-        throw new MoveException("Castling not implemented");
+    public void castle(Turn turn, boolean side) throws MoveException {
+        throw new MoveException("Not yet implemented");
     }
 
     public Move move(Move move) throws MoveException {
         if (move == null) return move;
-
-        if (move.isKingsideCastling() || move.isQueensideCastling()) {
-            return castle(move);
-        }
 
         ArrayList<Piece> possibles = new ArrayList<Piece>();
 

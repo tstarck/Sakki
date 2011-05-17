@@ -20,23 +20,25 @@ class BlackPawn extends Piece {
     public void update(Type[][] status) {
         reset();
 
-        moveable(loc.south(1), status);
+        markIfMoveable(loc.south(1), status);
 
         if (loc.rank == INITIAL_RANK) {
-            moveable(loc.south(2), status);
+            markIfMoveable(loc.south(2), status);
         }
 
-        capturable(loc.southeast(1), status);
-        capturable(loc.southwest(1), status);
+        markIfCapturable(loc.southeast(1), status);
+        markIfCapturable(loc.southwest(1), status);
     }
 
     @Override
     public Move move(Move move) {
         Coord target = move.to();
 
+        /* Pitää siirtää reboundiin tää soodi!
         if (loc.rank == INITIAL_RANK && target.rank == (INITIAL_RANK + 2)) {
             move.markEnpassant(loc.south(1));
         }
+        */
 
         loc = move.to();
 

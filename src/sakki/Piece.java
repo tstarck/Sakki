@@ -5,7 +5,7 @@
 package sakki;
 
 /**
- * Abstraction for various Chess pieces.
+ * Abstraction and common operations for various Chess pieces.
  *
  * @author Tuomas Starck
  */
@@ -23,11 +23,17 @@ abstract class Piece {
         loc = birthplace;
         view = new Type[8][8];
 
+        reset();
+    }
+
+    protected final void reset() {
         for (int i=0; i<8; i++) {
             for (int j=0; j<8; j++) {
                 view[i][j] = Type.empty;
             }
         }
+
+        view[loc.rank][loc.file] = me;
     }
 
     public Type who() {
@@ -38,33 +44,24 @@ abstract class Piece {
         return loc;
     }
 
-    protected void reset() {
-        for (int i=0; i<8; i++) {
-            for (int j=0; j<8; j++) {
-                view[i][j] = Type.empty;
-            }
-        }
-    }
-
     public void update(Type[][] status) {
         throw new UnsupportedOperationException("Not implemented");
     }
 
     public Move move(Move move) {
+        Rebound rebound = new Rebound();
+
         loc = move.to();
+
         return move;
     }
 
     public boolean canGoto(Coord target) {
-        if (view[target.rank][target.file] == Type.moveable ||
-            view[target.rank][target.file] == Type.capturable) {
-            return true;
-        }
-
-        return false;
+        return (view[target.rank][target.file] == Type.moveable ||
+                view[target.rank][target.file] == Type.capturable);
     }
 
-    protected boolean moveable(Coord target, Type[][] status) {
+    protected boolean markIfMoveable(Coord target, Type[][] status) {
         if (target == null) return false;
 
         if (status[target.rank][target.file] == Type.empty) {
@@ -75,7 +72,7 @@ abstract class Piece {
         return false;
     }
 
-    protected void capturable(Coord target, Type[][] status) {
+    protected void markIfCapturable(Coord target, Type[][] status) {
         if (target == null) return;
 
         if (me.isEnemy(status[target.rank][target.file])) {
@@ -84,36 +81,36 @@ abstract class Piece {
     }
 
     protected void markAdjacent(Type[][] status) {
-        if (!moveable(loc.north(1), status)) {
-            capturable(loc.north(1), status);
+        if (!markIfMoveable(loc.north(1), status)) {
+            markIfCapturable(loc.north(1), status);
         }
 
-        if (!moveable(loc.northeast(1), status)) {
-            capturable(loc.northeast(1), status);
+        if (!markIfMoveable(loc.northeast(1), status)) {
+            markIfCapturable(loc.northeast(1), status);
         }
 
-        if (!moveable(loc.east(1), status)) {
-            capturable(loc.east(1), status);
+        if (!markIfMoveable(loc.east(1), status)) {
+            markIfCapturable(loc.east(1), status);
         }
 
-        if (!moveable(loc.southeast(1), status)) {
-            capturable(loc.southeast(1), status);
+        if (!markIfMoveable(loc.southeast(1), status)) {
+            markIfCapturable(loc.southeast(1), status);
         }
 
-        if (!moveable(loc.south(1), status)) {
-            capturable(loc.south(1), status);
+        if (!markIfMoveable(loc.south(1), status)) {
+            markIfCapturable(loc.south(1), status);
         }
 
-        if (!moveable(loc.southwest(1), status)) {
-            capturable(loc.southwest(1), status);
+        if (!markIfMoveable(loc.southwest(1), status)) {
+            markIfCapturable(loc.southwest(1), status);
         }
 
-        if (!moveable(loc.west(1), status)) {
-            capturable(loc.west(1), status);
+        if (!markIfMoveable(loc.west(1), status)) {
+            markIfCapturable(loc.west(1), status);
         }
 
-        if (!moveable(loc.northwest(1), status)) {
-            capturable(loc.northwest(1), status);
+        if (!markIfMoveable(loc.northwest(1), status)) {
+            markIfCapturable(loc.northwest(1), status);
         }
     }
 
@@ -121,72 +118,72 @@ abstract class Piece {
         int i;
 
         for (i=1; i<8; i++) {
-            if (!moveable(loc.north(i), status)) {
+            if (!markIfMoveable(loc.north(i), status)) {
                 break;
             }
         }
 
-        capturable(loc.north(i), status);
+        markIfCapturable(loc.north(i), status);
 
         for (i=1; i<8; i++) {
-            if (!moveable(loc.east(i), status)) {
+            if (!markIfMoveable(loc.east(i), status)) {
                 break;
             }
         }
 
-        capturable(loc.east(i), status);
+        markIfCapturable(loc.east(i), status);
 
         for (i=1; i<8; i++) {
-            if (!moveable(loc.south(i), status)) {
+            if (!markIfMoveable(loc.south(i), status)) {
                 break;
             }
         }
 
-        capturable(loc.south(i), status);
+        markIfCapturable(loc.south(i), status);
 
         for (i=1; i<8; i++) {
-            if (!moveable(loc.west(i), status)) {
+            if (!markIfMoveable(loc.west(i), status)) {
                 break;
             }
         }
 
-        capturable(loc.west(i), status);
+        markIfCapturable(loc.west(i), status);
     }
 
     protected void markDiagonal(Type[][] status) {
         int i;
 
         for (i=1; i<8; i++) {
-            if (!moveable(loc.northeast(i), status)) {
+            if (!markIfMoveable(loc.northeast(i), status)) {
                 break;
             }
         }
 
-        capturable(loc.northeast(i), status);
+        markIfCapturable(loc.northeast(i), status);
 
         for (i=1; i<8; i++) {
-            if (!moveable(loc.southeast(i), status)) {
+            if (!markIfMoveable(loc.southeast(i), status)) {
                 break;
             }
         }
 
-        capturable(loc.southeast(i), status);
+        markIfCapturable(loc.southeast(i), status);
 
         for (i=1; i<8; i++) {
-            if (!moveable(loc.southwest(i), status)) {
+            if (!markIfMoveable(loc.southwest(i), status)) {
                 break;
             }
         }
 
-        capturable(loc.southwest(i), status);
+        markIfCapturable(loc.southwest(i), status);
 
         for (i=1; i<8; i++) {
-            if (!moveable(loc.northwest(i), status)) {
+            if (!markIfMoveable(loc.northwest(i), status)) {
                 break;
             }
         }
 
-        capturable(loc.northwest(i), status);
+        markIfCapturable(loc.northwest(i), status);
     }
 
     @Override

@@ -19,8 +19,8 @@ class BlackKnight extends Piece {
         reset();
 
         for (Coord tmp : loc.knightsCoords()) {
-            if (!moveable(tmp, status)) {
-                capturable(tmp, status);
+            if (!markIfMoveable(tmp, status)) {
+                markIfCapturable(tmp, status);
             }
         }
     }

@@ -20,23 +20,25 @@ public class WhitePawn extends Piece {
     public void update(Type[][] status) {
         reset();
 
-        moveable(loc.north(1), status);
+        markIfMoveable(loc.north(1), status);
 
         if (loc.rank == INITIAL_RANK) {
-            moveable(loc.north(2), status);
+            markIfMoveable(loc.north(2), status);
         }
 
-        capturable(loc.northeast(1), status);
-        capturable(loc.northwest(1), status);
+        markIfCapturable(loc.northeast(1), status);
+        markIfCapturable(loc.northwest(1), status);
     }
 
     @Override
     public Move move(Move move) {
         Coord target = move.to();
 
+        /* Pitää siirtää reboundiin tää soodi!
         if (loc.rank == INITIAL_RANK && target.rank == (INITIAL_RANK - 2)) {
             move.markEnpassant(loc.north(1));
         }
+        */
 
         loc = move.to();
 
