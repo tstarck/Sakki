@@ -41,12 +41,6 @@ class Chess {
         fullmove = Integer.parseInt(fenArray[5]);
     }
 
-    private String toFen() {
-        String ep = (enpassant == null)? "-": enpassant.toString();
-        return String.format("%s %s %s %s %d %d",
-            board, turn.name(), castling, ep, halfmove, fullmove);
-    }
-
     /*
     private void castle(Move move) throws MoveException {
         boolean side = move.castlingSide();
@@ -119,6 +113,12 @@ class Chess {
 
         return String.format("\n%s%s's %d%s> ",
             fiftyMoveRule, turn, fullmove, ordinal(fullmove));
+    }
+
+    public String toFen() {
+        String ep = (enpassant == null)? "-": enpassant.toString();
+        return String.format("%s %s %s %s %d %d",
+            board, turn.name(), castling, ep, halfmove, fullmove);
     }
 
     @Override

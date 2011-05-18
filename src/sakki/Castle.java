@@ -45,6 +45,8 @@ public class Castle {
     }
 
     public void disable(String str) {
+        if (str == null) return;
+
         for (Character c : str.toCharArray()) {
             castling.remove(c);
         }

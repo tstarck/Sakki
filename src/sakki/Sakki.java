@@ -4,6 +4,7 @@
  */
 package sakki;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -16,6 +17,10 @@ public class Sakki {
      * @param args the command line arguments
      */
     private static Scanner lukija = new Scanner(System.in);
+
+    private static void help() {
+        System.out.println("Usage: h[elp], new, u[ndo], q[uit]");
+    }
 
     private static boolean validateFen(String[] fenArray) {
         if (fenArray.length != 6) return false;
@@ -40,14 +45,9 @@ public class Sakki {
     public static void main(String[] args) {
         Chess game = null;
         String input = null;
-        boolean loop = true;
+        ArrayList<String> history = new ArrayList<String>();
 
-        if (validateFen(args)) {
-            game = new Chess(args);
-        }
-        else {
-            game = new Chess();
-        }
+        game = new Chess();
 
         System.out.print(game + game.prompt());
 
@@ -60,27 +60,45 @@ public class Sakki {
             }
 
             if (input.equals("h") || input.equals("help")) {
-                // print usage
+                help();
+                System.out.print(game.prompt());
+                continue;
+            }
+
+            if (input.equals("new")) {
+                game = new Chess();
+                System.out.print(game + game.prompt());
+                continue;
             }
 
             if (input.equals("u") || input.equals("undo")) {
-                // game.undo();
+                int index = history.size()-2;
+
+                if (index < 0) {
+                    System.out.println("\nNo available history");
+                }
+                else {
+                    game = new Chess(history.remove(index));
+                    System.out.print(game + game.prompt());
+                }
+
+                continue;
             }
 
             if (input.equals("q") || input.equals("quit")) {
-                loop = false;
                 break;
             }
 
             try {
                 game.move(input);
+                history.add(game.toFen());
                 System.out.print(game + game.prompt());
             }
             catch (MoveException me) {
                 System.out.println("\n" + me);
                 System.out.print(game.prompt());
             }
-        } while (loop);
+        } while (true);
 
         System.out.println();
     }
