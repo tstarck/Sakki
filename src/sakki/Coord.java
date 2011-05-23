@@ -20,6 +20,12 @@ class Coord {
     private static final String regex = "[a-h][1-8]";
     private static final String[] lookupTable = {"a", "b", "c", "d", "e", "f", "g", "h"};
 
+    public Coord(int f, int r) {
+        file = verify(f);
+        rank = verify(r);
+        readable = lookupTable[f] + String.valueOf(8-r);
+    }
+
     public Coord(String loc) {
         if (loc == null) {
             throw new NullPointerException();
@@ -42,12 +48,6 @@ class Coord {
         else {
             throw new IllegalArgumentException();
         }
-    }
-
-    public Coord(int f, int r) {
-        file = verify(f);
-        rank = verify(r);
-        readable = lookupTable[f] + String.valueOf(8-r);
     }
 
     private int verify(int x) {

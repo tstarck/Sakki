@@ -11,6 +11,7 @@ package sakki;
  */
 public class WhitePawn extends Piece {
     private final int INITIAL_RANK = 6;
+    private final int PROMOTION_RANK = 0;
 
     public WhitePawn(Coord birthplace) {
         super(Type.P, birthplace);
@@ -34,6 +35,10 @@ public class WhitePawn extends Piece {
     public Rebound move(Move move) {
         Coord target = move.to();
         Rebound rebound = new Rebound();
+
+        if (target.rank == PROMOTION_RANK) {
+            rebound.promotionAvailable();
+        }
 
         if (loc.rank == INITIAL_RANK && target.rank == (INITIAL_RANK-2)) {
             rebound.setEnpassant(loc.north(1));

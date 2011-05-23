@@ -34,10 +34,10 @@ class Move {
     private Matcher move;
     private Matcher castlemove;
 
+    private String from;
+    private Coord to;
     private Type piece;
     private Type promote;
-    private Coord from;
-    private Coord to;
 
     private boolean capture;
     private boolean check;
@@ -48,10 +48,10 @@ class Move {
         move = Pattern.compile(regex).matcher(str);
         castlemove = Pattern.compile(castleregex).matcher(str);
 
+        from = "";
+        to = null;
         piece = null;
         promote = null;
-        from = null;
-        to = null;
 
         capture = false;
         check = false;
@@ -62,16 +62,17 @@ class Move {
             // 1: Piece which is to be moved
             piece = resolvePiece(move.group(1), turn);
 
-            // 2: From
-            // System.out.println("From: " + match.group(2));
-            // -> null, e, null
+            // 2: From (square hint)
+            if (move.group(2) != null) {
+                from = move.group(2);
+            }
 
             // 3: Capture indicator
             if (move.group(3) != null) {
                 capture = true;
             }
 
-            // 4: To
+            // 4: To (target square)
             to = new Coord(move.group(4));
 
             // 6: Officer to which pawn is to be promoted
@@ -84,11 +85,10 @@ class Move {
         }
         else if (castlemove.matches()) {
             castling = (castlemove.group(1) == null)? KINGSIDE: QUEENSIDE;
-
             parseCheckMate(castlemove.group(2));
         }
         else {
-            throw new MoveException("Incomprehensible request");
+            throw new MoveException("Incomprehensible command");
         }
     }
 
@@ -110,6 +110,16 @@ class Move {
         }
     }
 
+    public int odds(Piece pc) {
+        String loc = pc.toString();
+
+        if (loc.equals(from)) return 2;
+
+        if (loc.indexOf(from) != -1) return 1;
+
+        return 0;
+    }
+
     public Type piece() {
         return piece;
     }
@@ -118,7 +128,7 @@ class Move {
         return promote;
     }
 
-    public Coord from() {
+    public String from() {
         return from;
     }
 
