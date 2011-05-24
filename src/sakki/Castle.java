@@ -9,7 +9,7 @@ import java.util.HashSet;
 /**
  * Tracking conditions for castling.
  *
- * @author tuomas
+ * @author Tuomas Starck
  */
 public class Castle {
     private final String valid = "KQkq";
@@ -51,6 +51,8 @@ public class Castle {
             castling.remove(c);
         }
     }
+
+
 
     /*
     private int index(Turn turn, boolean side) {

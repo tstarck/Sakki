@@ -15,7 +15,7 @@ class BlackKnight extends Piece {
     }
 
     @Override
-    public void update(Type[][] status) {
+    public void update(Type[][] status, Coord ep) {
         reset();
 
         for (Coord tmp : loc.knightsCoords()) {

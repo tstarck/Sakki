@@ -44,7 +44,7 @@ abstract class Piece {
         return loc;
     }
 
-    public void update(Type[][] status) {
+    public void update(Type[][] status, Coord enpassant) {
         throw new UnsupportedOperationException("Not implemented");
     }
 
@@ -53,9 +53,12 @@ abstract class Piece {
         return new Rebound();
     }
 
-    public boolean canGoto(Coord target) {
-        return (view[target.rank][target.file] == Type.moveable ||
-                view[target.rank][target.file] == Type.capturable);
+    public boolean canMove(Coord target) {
+        return (view[target.rank][target.file] == Type.moveable);
+    }
+
+    public boolean canCapture(Coord target) {
+        return (view[target.rank][target.file] == Type.capturable);
     }
 
     protected boolean markIfMoveable(Coord target, Type[][] status) {
@@ -72,8 +75,15 @@ abstract class Piece {
     protected void markIfCapturable(Coord target, Type[][] status) {
         if (target == null) return;
 
-        if (me.isEnemy(status[target.rank][target.file])) {
-            view[target.rank][target.file] = Type.capturable;
+        Type sqr = status[target.rank][target.file];
+
+        if (me.isEnemy(sqr)) {
+            if (sqr.name().toLowerCase().equals("k")) {
+                view[target.rank][target.file] = Type.checked;
+            }
+            else {
+                view[target.rank][target.file] = Type.capturable;
+            }
         }
     }
 

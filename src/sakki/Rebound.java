@@ -9,9 +9,9 @@ package sakki;
  *
  * @author Tuomas Starck
  */
-public class Rebound {
-    private String castling;
+class Rebound {
     private boolean promotion;
+    private String castling;
     private Coord enpassant;
 
     public Rebound() {
@@ -20,24 +20,24 @@ public class Rebound {
         enpassant = null;
     }
 
-    public void preventCastling(String str) {
-        castling = str;
-    }
-
     public void promotionAvailable() {
         promotion = true;
+    }
+
+    public void preventCastling(String str) {
+        castling = str;
     }
 
     public void setEnpassant(Coord co) {
         enpassant = co;
     }
 
-    public String preventCastling() {
-        return castling;
-    }
-
     public boolean canPromote() {
         return promotion;
+    }
+
+    public String preventCastling() {
+        return castling;
     }
 
     public Coord getEnpassant() {

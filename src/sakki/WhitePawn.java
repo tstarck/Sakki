@@ -9,7 +9,7 @@ package sakki;
  *
  * @author Tuomas Starck
  */
-public class WhitePawn extends Piece {
+class WhitePawn extends Piece {
     private final int INITIAL_RANK = 6;
     private final int PROMOTION_RANK = 0;
 
@@ -18,7 +18,7 @@ public class WhitePawn extends Piece {
     }
 
     @Override
-    public void update(Type[][] status) {
+    public void update(Type[][] status, Coord enpassant) {
         reset();
 
         markIfMoveable(loc.north(1), status);
@@ -27,8 +27,20 @@ public class WhitePawn extends Piece {
             markIfMoveable(loc.north(2), status);
         }
 
-        markIfCapturable(loc.northeast(1), status);
-        markIfCapturable(loc.northwest(1), status);
+        Coord ne = loc.northeast(1);
+        Coord nw = loc.northwest(1);
+
+        markIfCapturable(ne, status);
+        markIfCapturable(nw, status);
+
+        if (enpassant == null) return;
+
+        if (enpassant.equals(ne)) {
+            view[ne.rank][ne.file] = Type.capturable;
+        }
+        if (enpassant.equals(nw)) {
+            view[nw.rank][nw.file] = Type.capturable;
+        }
     }
 
     @Override

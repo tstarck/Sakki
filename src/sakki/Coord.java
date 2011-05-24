@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author Tuomas Starck
  */
-class Coord {
+public class Coord {
     public int file;
     public int rank;
     private String readable;
@@ -118,10 +118,12 @@ class Coord {
     }
 
     public boolean equals(Coord that) {
+        if (that == null) return false;
         return (this.file == that.file && this.rank == that.rank);
     }
 
     public boolean equals(String str) {
+        if (str == null) return false;
         return (readable.equals(str));
     }
 

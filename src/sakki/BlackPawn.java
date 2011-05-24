@@ -18,7 +18,7 @@ class BlackPawn extends Piece {
     }
 
     @Override
-    public void update(Type[][] status) {
+    public void update(Type[][] status, Coord enpassant) {
         reset();
 
         markIfMoveable(loc.south(1), status);
@@ -27,8 +27,20 @@ class BlackPawn extends Piece {
             markIfMoveable(loc.south(2), status);
         }
 
-        markIfCapturable(loc.southeast(1), status);
-        markIfCapturable(loc.southwest(1), status);
+        Coord se = loc.southeast(1);
+        Coord sw = loc.southwest(1);
+
+        markIfCapturable(se, status);
+        markIfCapturable(sw, status);
+
+        if (enpassant == null) return;
+
+        if (enpassant.equals(se)) {
+            view[se.rank][se.file] = Type.capturable;
+        }
+        if (enpassant.equals(sw)) {
+            view[sw.rank][sw.file] = Type.capturable;
+        }
     }
 
     @Override

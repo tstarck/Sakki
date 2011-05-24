@@ -16,21 +16,21 @@ package sakki;
  *
  * @author Tuomas Starck
  */
-public enum Type {
+enum Type {
     /**
      * This value marks the absence of a piece.
      */
     empty(0, '.') {
         @Override
         public String toString() {
-            return ".";
+            return "-";
         }
     },
 
     moveable(0, '.') {
         @Override
         public String toString() {
-            return "o";
+            return "*";
         }
     },
 
@@ -38,6 +38,13 @@ public enum Type {
         @Override
         public String toString() {
             return "x";
+        }
+    },
+
+    checked(0, '.') {
+        @Override
+        public String toString() {
+            return "#";
         }
     },
 
@@ -66,10 +73,6 @@ public enum Type {
 
     public boolean isBlack() {
         return (side == 'b');
-    }
-
-    public boolean isPawn() {
-        return (this == Type.P || this == Type.p);
     }
 
     public boolean isEnemy(Type that) {

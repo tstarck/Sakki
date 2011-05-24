@@ -9,7 +9,7 @@ package sakki;
  *
  * @author Tuomas Starck
  */
-class Chess {
+public class Chess {
     private Board board;
     private Turn turn;
     private Castle castling;
@@ -26,16 +26,18 @@ class Chess {
     }
 
     public Chess(String[] fenArray) {
-        board = new Board(fenArray[0]);
-        turn = Turn.valueOf(fenArray[1]);
-        castling = new Castle(fenArray[2]);
-
         try {
             enpassant = new Coord(fenArray[3]);
         }
         catch (IllegalArgumentException pass) {
             enpassant = null;
         }
+
+        board = new Board(fenArray[0], enpassant);
+
+        turn = Turn.valueOf(fenArray[1]);
+
+        castling = new Castle(fenArray[2]);
 
         halfmove = Integer.parseInt(fenArray[4]);
         fullmove = Integer.parseInt(fenArray[5]);
@@ -82,7 +84,8 @@ class Chess {
 
         enpassant = rebound.getEnpassant();
 
-        if (move.isClaimingCapture() || move.piece().isPawn()) {
+        if (move.isClaimingCapture() ||
+            move.piece().name().toLowerCase().equals("p")) {
             halfmove = 0;
         }
         else {

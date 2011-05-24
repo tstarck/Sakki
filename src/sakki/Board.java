@@ -13,16 +13,16 @@ import java.util.ArrayList;
  *
  * @author Tuomas Starck
  */
-public class Board {
+class Board {
     private int[] material;
     private Type[][] state;
     private ArrayList<Piece> board;
 
     public Board() {
-        this("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+        this("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", null);
     }
 
-    public Board(String fen) {
+    public Board(String fen, Coord enpassant) {
         int file = 0;
         int rank = 0;
 
@@ -31,7 +31,12 @@ public class Board {
         board = new ArrayList<Piece>();
 
         for (char chr : fen.toCharArray()) {
-            Coord co = new Coord(file, rank);
+            Coord co = null;
+
+            try {
+                co = new Coord(file, rank);
+            }
+            catch (IllegalArgumentException pass) {}
 
             if (chr == '/') {
                 file = 0;
@@ -46,7 +51,7 @@ public class Board {
             }
         }
 
-        update();
+        update(enpassant);
     }
 
     private Piece pieceByType(Type type, Coord co) {
@@ -84,7 +89,7 @@ public class Board {
         return (state[co.rank][co.file] != Type.empty);
     }
 
-    private void update() {
+    private void update(Coord enpassant) {
         material = new int[2];
 
         for (int i=0; i<8; i++) {
@@ -93,9 +98,9 @@ public class Board {
             }
         }
 
-        for (Piece pc : board) {
-            Type tp = pc.who();
-            Coord loc = pc.where();
+        for (Piece piece : board) {
+            Type tp = piece.who();
+            Coord loc = piece.where();
 
             state[loc.rank][loc.file] = tp;
 
@@ -108,8 +113,8 @@ public class Board {
             }
         }
 
-        for (Piece pc : board) {
-            pc.update(state);
+        for (Piece piece : board) {
+            piece.update(state, enpassant);
         }
     }
 
@@ -117,10 +122,17 @@ public class Board {
         int index = 0;
         ArrayList<Piece> alt = new ArrayList<Piece>();
 
-        for (Piece pc : board) {
-            if (pc.who() == move.piece()) {
-                if (pc.canGoto(move.to())) {
-                    alt.add(pc);
+        for (Piece piece : board) {
+            if (piece.who() == move.piece()) {
+                if (move.isClaimingCapture()) {
+                    if (piece.canCapture(move.to())) {
+                        alt.add(piece);
+                    }
+                }
+                else {
+                    if (piece.canMove(move.to())) {
+                        alt.add(piece);
+                    }
                 }
             }
         }
@@ -161,12 +173,12 @@ public class Board {
         Piece capture = null;
         Rebound rebound = null;
 
-        System.out.println(piece);
+        System.out.println(piece); /* * * DEBUG * * */
 
         for (Piece pc : board) {
             if (pc.where().equals(move.to())) {
                 capture = pc;
-                System.out.println("Capturing " + pc.toString() + "!");
+                System.out.println(pc);
                 break;
             }
         }
@@ -194,7 +206,7 @@ public class Board {
             }
         }
 
-        update();
+        update(rebound.getEnpassant());
 
         return rebound;
     }

@@ -22,26 +22,6 @@ public class Sakki {
         System.out.println("Usage: h[elp], new, u[ndo], q[uit]");
     }
 
-    private static boolean validateFen(String[] fenArray) {
-        if (fenArray.length != 6) return false;
-
-        if (!fenArray[0].matches("[1-8/pPrRnNbBqQkK]+")) return false;
-
-        if (!fenArray[1].matches("[wb]")) return false;
-
-        try {
-            Integer.parseInt(fenArray[4]);
-            Integer.parseInt(fenArray[5]);
-        }
-        catch (NumberFormatException e) {
-            return false;
-        }
-
-        System.out.println("ArgFen on tosi :-o");
-
-        return true;
-    }
-
     public static void main(String[] args) {
         Chess game = null;
         String input = null;
