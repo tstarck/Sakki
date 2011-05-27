@@ -1,0 +1,39 @@
+
+Black's 13th> c5
+
+ - - - - - - - -
+ - - p - - - - -
+ - - o - - - - -
+ - - o - - - - -
+ - - - - - - - -
+ - - - - - - - -
+ - - - - - - - -
+ - - - - - - - -
+
+   a b c d e f g h
+
+8  - k - r - b - r  25
+7  p p - - - p p p
+6  - - - - - - - -
+5  - P p - n - - -
+4  - - - - - - n -
+3  - - - B - N - -
+2  N - P P - P P P
+1  - - B - - R K -  23
+
+White's 14th> xc5
+
+No such move available
+
+White's 14th> xc6
+
+ - - - - - - - -
+ - - - - - - - -
+ - o * - - - - -
+ - P - - - - - -
+ - - - - - - - -
+ - - - - - - - -
+ - - - - - - - -
+ - - - - - - - -
+
+Capture claimed in vain
