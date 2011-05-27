@@ -99,17 +99,16 @@ class Board {
         }
 
         for (Piece piece : board) {
-            Type tp = piece.who();
-            Coord loc = piece.where();
+            Type tp = piece.type();
+            Coord loc = piece.location();
 
             state[loc.rank][loc.file] = tp;
 
             if (tp.isWhite()) {
-                material[0] += tp.getValue();
+                material[Side.w.index] += tp.getValue();
             }
-
-            if (tp.isBlack()) {
-                material[1] += tp.getValue();
+            else if (tp.isBlack()) {
+                material[Side.b.index] += tp.getValue();
             }
         }
 
@@ -118,13 +117,24 @@ class Board {
         }
     }
 
+    private Piece pieceAt(Coord target) {
+        for (Piece piece : board) {
+            if (piece.location().equals(target)) {
+                System.out.println(piece); /* * * DEBUG * * */
+                return piece;
+            }
+        }
+
+        return null;
+    }
+
     private Piece whichPiece(Move move) throws MoveException {
         int index = 0;
         ArrayList<Piece> alt = new ArrayList<Piece>();
 
         for (Piece piece : board) {
-            if (piece.who() == move.piece()) {
-                if (move.isClaimingCapture()) {
+            if (piece.type() == move.piece()) {
+                if (move.isCapturing()) {
                     if (piece.canCapture(move.to())) {
                         alt.add(piece);
                     }
@@ -149,6 +159,7 @@ class Board {
             throw new MoveException("Ambiguous move - hint required");
         }
 
+        /* FIXME Älä valitse sopivaa siirtoa - vaadi yksiselitteisyyttä! */
         for (int i=1; i<alt.size(); i++) {
             if (move.odds(alt.get(index)) < move.odds(alt.get(i))) {
                 index = i;
@@ -165,35 +176,48 @@ class Board {
         return alt.get(index);
     }
 
-    public Rebound move(Move move) throws MoveException {
-        if (move == null) return null;
+    private boolean capture(Move move, Coord target) throws MoveException {
+        boolean done = false;
 
-        Piece piece = whichPiece(move);
+        Piece capturable = pieceAt(target);
 
-        Piece capture = null;
-        Rebound rebound = null;
-
-        System.out.println(piece); /* * * DEBUG * * */
-
-        for (Piece pc : board) {
-            if (pc.where().equals(move.to())) {
-                capture = pc;
-                System.out.println(pc);
-                break;
-            }
-        }
-
-        if (capture != null) {
-            if (move.isClaimingCapture()) {
-                board.remove(capture);
+        if (capturable != null) {
+            if (move.isCapturing()) {
+                board.remove(capturable);
+                done = true;
             }
             else {
                 throw new MoveException("Unclaimed capture");
             }
         }
-        else if (move.isClaimingCapture()) {
+        else if (move.isCapturing()) {
             throw new MoveException("Capture claimed in vain");
         }
+
+        return done;
+    }
+
+    public Rebound move(Move move, Coord enpassant) throws MoveException {
+        Rebound rebound = null;
+        Coord capturable = null;
+
+        Piece piece = whichPiece(move);
+
+        System.out.println(piece); /* * * DEBUG * * */
+
+        if (move.piece().isPawn() && move.to().equals(enpassant)) {
+            if (move.piece().isWhite()) {
+                capturable = enpassant.north(1);
+            }
+            else /* move.piece().isBlack() */ {
+                capturable = enpassant.south(1);
+            }
+        }
+        else {
+            capturable = move.to();
+        }
+
+        capture(move, capturable);
 
         rebound = piece.move(move);
 
@@ -207,6 +231,33 @@ class Board {
         }
 
         update(rebound.getEnpassant());
+
+        return rebound;
+    }
+
+    public Rebound castling(Move move, Castle castling) throws MoveException {
+        Rebound rebound = null;
+
+        if (!castling.isAllowed(move)) {
+            throw new MoveException("Castling no longer possible");
+        }
+
+        for (Coord co : castling.getFreeSqrs(move)) {
+            if (isOccupied(co)) {
+                throw new MoveException("Castling requires vacant squares");
+            }
+        }
+
+        /* FIXME
+         * Tarkista, ettei kuninkaan ruutuja uhata!
+         * castling.getSafeSqrs
+         */
+
+        Piece king = pieceAt(castling.getKingsSqr(move));
+        Piece rook = pieceAt(castling.getRooksSqr(move));
+
+        rebound = king.move(castling.getKingsTarget(move));
+        rook.move(castling.getRooksTarget(move));
 
         return rebound;
     }

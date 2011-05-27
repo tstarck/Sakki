@@ -10,18 +10,24 @@ package sakki;
  *
  * @author Tuomas Starck
  */
-public enum Turn {
-    w {
+enum Side {
+    w(0) {
         @Override
         public String toString() {
             return "White";
         }
     },
 
-    b {
+    b(1) {
         @Override
         public String toString() {
             return "Black";
         }
+    };
+
+    public final int index;
+
+    Side(int i) {
+        index = i;
     }
 }

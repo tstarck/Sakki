@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author Tuomas Starck
  */
-public class Coord {
+class Coord {
     public int file;
     public int rank;
     private String readable;

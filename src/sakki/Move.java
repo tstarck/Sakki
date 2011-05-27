@@ -22,45 +22,45 @@ import java.util.regex.Pattern;
  * @author Tuomas Starck
  */
 class Move {
-    private final int KINGSIDE = 1;
-    private final int QUEENSIDE = 2;
+    public final int
+            KINGSIDE = 1,
+            QUEENSIDE = 2;
 
-    private final String castleregex = "0-0(-0)?([#+])?";
-
-    private final String regex =
-    /*   1:piece   2:from  3:x 4:to          6:promo   7:act  */
-        "([NBRQK])?([a-h])?(x)?([a-h][1-8])(=([NBRQ]))?([#+])?";
+    private final String
+        castlingre = "0-0(-0)?([#+])?",
+        re = "([NBRQK])?([a-h])?(x)?([a-h][1-8])(=([NBRQ]))?([#+])?";
+            /*  1:piece  2:from  3:x 4:to        6:promo     7:act */
 
     private Matcher move;
     private Matcher castlemove;
 
-    private String from;
+    private Side side;
     private Coord to;
     private Type piece;
     private Type promote;
-
+    private String from;
+    private int castling;
     private boolean capture;
     private boolean check;
     private boolean mate;
-    private int castling;
 
-    public Move(String str, Turn turn) throws MoveException {
-        move = Pattern.compile(regex).matcher(str);
-        castlemove = Pattern.compile(castleregex).matcher(str);
+    public Move(String str, Side turn) throws MoveException {
+        move = Pattern.compile(re).matcher(str);
+        castlemove = Pattern.compile(castlingre).matcher(str);
 
-        from = "";
+        side = turn;
         to = null;
         piece = null;
         promote = null;
-
+        from = "";
+        castling = 0;
         capture = false;
         check = false;
         mate = false;
-        castling = 0;
 
         if (move.matches()) {
             // 1: Piece which is to be moved
-            piece = resolvePiece(move.group(1), turn);
+            piece = resolvePiece(move.group(1), side);
 
             // 2: From (square hint)
             if (move.group(2) != null) {
@@ -77,14 +77,20 @@ class Move {
 
             // 6: Officer to which pawn is to be promoted
             if (move.group(6) != null) {
-                promote = resolvePiece(move.group(6), turn);
+                promote = resolvePiece(move.group(6), side);
             }
 
-            // 7: Check or Mate status
+            // 7: Check or mate status
             parseCheckMate(move.group(2));
         }
         else if (castlemove.matches()) {
+            // Not strictly required, but helps to avoid NPE's
+            piece = resolvePiece("k", side);
+
+            // To which side to castle
             castling = (castlemove.group(1) == null)? KINGSIDE: QUEENSIDE;
+
+            // Check or mate status
             parseCheckMate(castlemove.group(2));
         }
         else {
@@ -92,13 +98,13 @@ class Move {
         }
     }
 
-    private Type resolvePiece(String input, Turn turn) {
+    private Type resolvePiece(String input, Side side) {
         String str = (input == null)? "p": input;
 
-        if (turn == Turn.w) {
+        if (side == Side.w) {
             return Type.valueOf(str.toUpperCase());
         }
-        else {
+        else /* side == Side.b */ {
             return Type.valueOf(str.toLowerCase());
         }
     }
@@ -110,14 +116,22 @@ class Move {
         }
     }
 
-    public int odds(Piece pc) {
-        String loc = pc.toString();
+    public int odds(Piece piece) {
+        String loc = piece.toString();
 
         if (loc.equals(from)) return 2;
 
         if (loc.indexOf(from) != -1) return 1;
 
         return 0;
+    }
+
+    public Side side() {
+        return side;
+    }
+
+    public Coord to() {
+        return to;
     }
 
     public Type piece() {
@@ -132,27 +146,23 @@ class Move {
         return from;
     }
 
-    public Coord to() {
-        return to;
+    public int castling() {
+        return castling;
     }
 
     public boolean isCastling() {
         return (castling != 0);
     }
 
-    public boolean castlingSide() {
-        return (castling == KINGSIDE);
-    }
-
-    public boolean isClaimingCapture() {
+    public boolean isCapturing() {
         return capture;
     }
 
-    public boolean isClaimingCheck() {
+    public boolean isChecking() {
         return check;
     }
 
-    public boolean isClaimingMate() {
+    public boolean isMating() {
         return mate;
     }
 }

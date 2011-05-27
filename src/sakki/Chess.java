@@ -11,7 +11,7 @@ package sakki;
  */
 public class Chess {
     private Board board;
-    private Turn turn;
+    private Side turn;
     private Castle castling;
     private Coord enpassant;
     private int halfmove;
@@ -35,7 +35,7 @@ public class Chess {
 
         board = new Board(fenArray[0], enpassant);
 
-        turn = Turn.valueOf(fenArray[1]);
+        turn = Side.valueOf(fenArray[1]);
 
         castling = new Castle(fenArray[2]);
 
@@ -43,40 +43,23 @@ public class Chess {
         fullmove = Integer.parseInt(fenArray[5]);
     }
 
-    /*
-    private void castle(Move move) throws MoveException {
-        boolean side = move.castlingSide();
-
-        if (!castling.isDoable(turn, side)) {
-            throw new MoveException("Castling no longer allowed");
-        }
-
-        for (String sqr : castling.requiredFree(turn, side)) {
-            if (board.isOccupied(new Coord(sqr))) {
-                throw new MoveException("Castling blocked");
-            }
-        }
-
-        board.castle(turn, side);
-
-        castling.done(turn);
-    }
-    */
-
     void move(String algebraic) throws MoveException {
         Rebound rebound = null;
 
         Move move = new Move(algebraic, turn);
 
-        // move.isCastling()
-
-        rebound = board.move(move);
-
-        if (turn == Turn.w) {
-            turn = Turn.b;
+        if (move.isCastling()) {
+            rebound = board.castling(move, castling);
         }
         else {
-            turn = Turn.w;
+            rebound = board.move(move, enpassant);
+        }
+
+        if (turn == Side.w) {
+            turn = Side.b;
+        }
+        else {
+            turn = Side.w;
             fullmove++;
         }
 
@@ -84,8 +67,7 @@ public class Chess {
 
         enpassant = rebound.getEnpassant();
 
-        if (move.isClaimingCapture() ||
-            move.piece().name().toLowerCase().equals("p")) {
+        if (move.isCapturing() || move.piece().isPawn()) {
             halfmove = 0;
         }
         else {
@@ -126,7 +108,8 @@ public class Chess {
 
     @Override
     public String toString() {
-        String boardStr = "";
+        // String boardStr = "";
+        String boardStr = castling.toString();
         String fileIndex = "a b c d e f g h";
         Type[][] state = board.getState();
         int[] material = board.getMaterial();

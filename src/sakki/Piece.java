@@ -36,11 +36,11 @@ abstract class Piece {
         view[loc.rank][loc.file] = me;
     }
 
-    public Type who() {
+    public Type type() {
         return me;
     }
 
-    public Coord where() {
+    public Coord location() {
         return loc;
     }
 
@@ -51,6 +51,11 @@ abstract class Piece {
     public Rebound move(Move move) {
         loc = move.to();
         return new Rebound();
+    }
+
+    public Rebound move(Coord target) {
+        loc = target;
+        return null;
     }
 
     public boolean canMove(Coord target) {
@@ -72,17 +77,17 @@ abstract class Piece {
         return false;
     }
 
-    protected void markIfCapturable(Coord target, Type[][] status) {
-        if (target == null) return;
+    protected void markIfCapturable(Coord sqr, Type[][] status) {
+        if (sqr == null) return;
 
-        Type sqr = status[target.rank][target.file];
+        Type target = status[sqr.rank][sqr.file];
 
-        if (me.isEnemy(sqr)) {
-            if (sqr.name().toLowerCase().equals("k")) {
-                view[target.rank][target.file] = Type.checked;
+        if (me.isEnemy(target)) {
+            if (target.name().toLowerCase().equals("k")) {
+                view[sqr.rank][sqr.file] = Type.checked;
             }
             else {
-                view[target.rank][target.file] = Type.capturable;
+                view[sqr.rank][sqr.file] = Type.capturable;
             }
         }
     }

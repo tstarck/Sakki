@@ -11,17 +11,43 @@ import java.util.HashSet;
  *
  * @author Tuomas Starck
  */
-public class Castle {
+class Castle {
     private final String valid = "KQkq";
 
-    private HashSet<Character> castling;
-
-    /*
-    private final String[][] freeSquares = {
-        {"f1", "g1"}, {"b1", "c1", "d1"},
-        {"f8", "g8"}, {"b8", "c8", "d8"}
+    private final Coord[] kingsSquares = {
+        new Coord("e1"), new Coord("e8")
     };
-    */
+
+    private final Coord[] kingsTargets = {
+        new Coord("g1"), new Coord("c1"),
+        new Coord("g8"), new Coord("c8")
+    };
+
+    private final Coord[] rooksSquares = {
+        new Coord("h1"), new Coord("a1"),
+        new Coord("h8"), new Coord("a8")
+    };
+
+    private final Coord[] rooksTargets = {
+        new Coord("f1"), new Coord("d1"),
+        new Coord("f8"), new Coord("d8")
+    };
+
+    private final Coord[][] freeSquares = {
+        {new Coord("f1"), new Coord("g1")},
+        {new Coord("b1"), new Coord("c1"), new Coord("d1")},
+        {new Coord("f8"), new Coord("g8")},
+        {new Coord("b8"), new Coord("c8"), new Coord("d8")}
+    };
+
+    private final Coord[][] safeSquares = {
+        {new Coord("e1"), new Coord("f1"), new Coord("g1")},
+        {new Coord("c1"), new Coord("d1"), new Coord("e1")},
+        {new Coord("e8"), new Coord("f8"), new Coord("g8")},
+        {new Coord("c8"), new Coord("d8"), new Coord("e8")}
+    };
+
+    private HashSet<Character> castling;
 
     public Castle() {
         this("KQkq");
@@ -52,24 +78,43 @@ public class Castle {
         }
     }
 
-
-
-    /*
-    private int index(Turn turn, boolean side) {
-        int index = 0;
-        if (!side) index++;
-        if (Turn.b == turn) index += 2;
-        return index;
+    public int index(Move move) {
+        if (move.side() == Side.w) {
+            return (move.castling() == move.KINGSIDE)? 0: 1;
+        }
+        else /* Side.b */ {
+            return (move.castling() == move.KINGSIDE)? 2: 3;
+        }
     }
 
-    public boolean isDoable(Turn turn, boolean side) {
-        return canCastle[index(turn, side)];
+    public boolean isAllowed(Move move) {
+        return castling.contains(valid.charAt(index(move)));
     }
 
-    public String[] requiredFree(Turn turn, boolean side) {
-        return freeSquares[index(turn, side)];
+    public Coord getKingsSqr(Move move) {
+        int index = (move.side() == Side.w)? 0: 1;
+        return kingsSquares[index];
     }
-    */
+
+    public Coord getKingsTarget(Move move) {
+        return kingsTargets[index(move)];
+    }
+
+    public Coord getRooksSqr(Move move) {
+        return rooksSquares[index(move)];
+    }
+
+    public Coord getRooksTarget(Move move) {
+        return rooksTargets[index(move)];
+    }
+
+    public Coord[] getFreeSqrs(Move move) {
+        return freeSquares[index(move)];
+    }
+
+    public Coord[] getSafeSqrs(Move move) {
+        return safeSquares[index(move)];
+    }
 
     @Override
     public String toString() {

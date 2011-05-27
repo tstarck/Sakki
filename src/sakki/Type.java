@@ -20,45 +20,45 @@ enum Type {
     /**
      * This value marks the absence of a piece.
      */
-    empty(0, '.') {
+    empty(0, null) {
         @Override
         public String toString() {
             return "-";
         }
     },
 
-    moveable(0, '.') {
+    moveable(0, null) {
+        @Override
+        public String toString() {
+            return "o";
+        }
+    },
+
+    capturable(0, null) {
         @Override
         public String toString() {
             return "*";
         }
     },
 
-    capturable(0, '.') {
-        @Override
-        public String toString() {
-            return "x";
-        }
-    },
-
-    checked(0, '.') {
+    checked(0, null) {
         @Override
         public String toString() {
             return "#";
         }
     },
 
-    p(1, 'b'), P(1, 'w'),
-    b(3, 'b'), B(3, 'w'),
-    n(3, 'b'), N(3, 'w'),
-    r(5, 'b'), R(5, 'w'),
-    q(9, 'b'), Q(9, 'w'),
-    k(0, 'b'), K(0, 'w');
+    p(1, Side.b), P(1, Side.w),
+    b(3, Side.b), B(3, Side.w),
+    n(3, Side.b), N(3, Side.w),
+    r(5, Side.b), R(5, Side.w),
+    q(9, Side.b), Q(9, Side.w),
+    k(0, Side.b), K(0, Side.w);
 
     private final int value;
-    private final char side;
+    private final Side side;
 
-    Type(int v, char s) {
+    Type(int v, Side s) {
         value = v;
         side = s;
     }
@@ -67,12 +67,16 @@ enum Type {
         return value;
     }
 
+    public boolean isPawn() {
+        return (value == 1);
+    }
+
     public boolean isWhite() {
-        return (side == 'w');
+        return (side == Side.w);
     }
 
     public boolean isBlack() {
-        return (side == 'b');
+        return (side == Side.b);
     }
 
     public boolean isEnemy(Type that) {
