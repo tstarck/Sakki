@@ -21,14 +21,9 @@ class WhiteKing extends Piece {
     }
 
     @Override
-    public Rebound move(Move move) {
-        return move(move.to());
-    }
-
-    @Override
     public Rebound move(Coord target) {
         Rebound rebound = new Rebound();
-        rebound.preventCastling("KQ");
+        rebound.disableCastling(castleffect);
         loc = target;
         return rebound;
     }

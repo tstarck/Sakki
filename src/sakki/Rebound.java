@@ -24,7 +24,7 @@ class Rebound {
         promotion = true;
     }
 
-    public void preventCastling(String str) {
+    public void disableCastling(String str) {
         castling = str;
     }
 
@@ -36,7 +36,7 @@ class Rebound {
         return promotion;
     }
 
-    public String preventCastling() {
+    public String castlingObstacle() {
         return castling;
     }
 

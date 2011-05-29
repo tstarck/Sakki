@@ -19,16 +19,4 @@ class BlackRook extends Piece {
         reset();
         markStraight(status);
     }
-
-    @Override
-    public Rebound move(Move move) {
-        Rebound rebound = new Rebound();
-
-        if (loc.equals("a8")) rebound.preventCastling("q");
-        if (loc.equals("h8")) rebound.preventCastling("k");
-
-        loc = move.to();
-
-        return rebound;
-    }
 }

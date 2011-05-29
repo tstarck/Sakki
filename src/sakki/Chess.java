@@ -63,7 +63,7 @@ public class Chess {
             fullmove++;
         }
 
-        castling.disable(rebound.preventCastling());
+        castling.disable(rebound.castlingObstacle());
 
         enpassant = rebound.getEnpassant();
 

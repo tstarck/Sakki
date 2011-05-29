@@ -13,6 +13,7 @@ abstract class Piece {
     protected Type me;
     protected Coord loc;
     protected Type[][] view;
+    protected String castleffect;
 
     public Piece(Type type, Coord birthplace) {
         if (type == null || birthplace == null) {
@@ -22,6 +23,24 @@ abstract class Piece {
         me = type;
         loc = birthplace;
         view = new Type[8][8];
+
+        if (me == Type.K) {
+            castleffect = "KQ";
+        }
+        else if (me == Type.k) {
+            castleffect = "kq";
+        }
+        else if (me == Type.R) {
+            if (loc.equals("h1")) castleffect = "K";
+            if (loc.equals("a1")) castleffect = "Q";
+        }
+        else if (me == Type.r) {
+            if (loc.equals("h8")) castleffect = "k";
+            if (loc.equals("a8")) castleffect = "q";
+        }
+        else {
+            castleffect = null;
+        }
 
         reset();
     }
@@ -48,14 +67,16 @@ abstract class Piece {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    public Rebound move(Move move) {
-        loc = move.to();
-        return new Rebound();
-    }
-
     public Rebound move(Coord target) {
         loc = target;
         return null;
+    }
+
+    public Rebound move(Move move) {
+        Rebound rebound = new Rebound();
+        rebound.disableCastling(castleffect);
+        move(move.to());
+        return rebound;
     }
 
     public boolean canMove(Coord target) {

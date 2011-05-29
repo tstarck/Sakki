@@ -19,16 +19,4 @@ class WhiteRook extends Piece {
         reset();
         markStraight(status);
     }
-
-    @Override
-    public Rebound move(Move move) {
-        Rebound rebound = new Rebound();
-
-        if (loc.equals("a1")) rebound.preventCastling("Q");
-        if (loc.equals("h1")) rebound.preventCastling("K");
-
-        loc = move.to();
-
-        return rebound;
-    }
 }

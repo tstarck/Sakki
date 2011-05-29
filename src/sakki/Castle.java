@@ -126,6 +126,6 @@ class Castle {
             }
         }
 
-        return str;
+        return (str.equals(""))? "-": str;
     }
 }
