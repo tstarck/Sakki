@@ -77,18 +77,6 @@ class Board {
         return null;
     }
 
-    public int[] getMaterial() {
-        return material;
-    }
-
-    public Type[][] getState() {
-        return state;
-    }
-
-    public boolean isOccupied(Coord co) {
-        return (state[co.rank][co.file] != Type.empty);
-    }
-
     private void update(Coord enpassant) {
         material = new int[2];
 
@@ -115,6 +103,10 @@ class Board {
         for (Piece piece : board) {
             piece.update(state, enpassant);
         }
+    }
+
+    public boolean isOccupied(Coord co) {
+        return (state[co.rank][co.file] != Type.empty);
     }
 
     private Piece pieceAt(Coord target) {
@@ -176,30 +168,29 @@ class Board {
         return alt.get(index);
     }
 
-    private boolean capture(Move move, Coord target) throws MoveException {
-        boolean done = false;
+    private String capture(Coord target, boolean capturable) throws MoveException {
+        String effect = "";
+        Piece piece = pieceAt(target);
 
-        Piece capturable = pieceAt(target);
-
-        if (capturable != null) {
-            if (move.isCapturing()) {
-                board.remove(capturable);
-                done = true;
+        if (piece != null) {
+            if (capturable) {
+                effect = piece.castlingEffect;
+                board.remove(piece);
             }
             else {
                 throw new MoveException("Unclaimed capture");
             }
         }
-        else if (move.isCapturing()) {
+        else if (capturable) {
             throw new MoveException("Capture claimed in vain");
         }
 
-        return done;
+        return effect;
     }
 
     public Rebound move(Move move, Coord enpassant) throws MoveException {
+        String castling = "";
         Rebound rebound = null;
-        Coord capturable = null;
 
         Piece piece = whichPiece(move);
 
@@ -207,19 +198,18 @@ class Board {
 
         if (move.piece().isPawn() && move.to().equals(enpassant)) {
             if (move.piece().isWhite()) {
-                capturable = enpassant.north(1);
+                capture(enpassant.north(1), move.isCapturing());
             }
             else /* move.piece().isBlack() */ {
-                capturable = enpassant.south(1);
+                capture(enpassant.south(1), move.isCapturing());
             }
         }
-        else {
-            capturable = move.to();
-        }
 
-        capture(move, capturable);
+        castling = capture(move.to(), move.isCapturing());
 
         rebound = piece.move(move);
+
+        rebound.disableCastling(castling);
 
         if (rebound.canPromote()) {
             Type officer = move.promotion();
@@ -259,6 +249,8 @@ class Board {
         rebound = king.move(castling.getKingsTarget(move));
         rook.move(castling.getRooksTarget(move));
 
+        update(null);
+
         return rebound;
     }
 
@@ -284,6 +276,14 @@ class Board {
         }
 
         return "/" + str;
+    }
+
+    public Type[][] getState() {
+        return state;
+    }
+
+    public int[] getMaterial() {
+        return material;
     }
 
     @Override

@@ -13,8 +13,8 @@ import java.util.ArrayList;
  * @author Tuomas Starck
  */
 class Coord {
-    public int file;
-    public int rank;
+    int file;
+    int rank;
     private String readable;
 
     private static final String regex = "[a-h][1-8]";

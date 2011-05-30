@@ -72,6 +72,9 @@ public class Sakki {
             try {
                 game.move(input);
                 history.add(game.toFen());
+                for (String tmp : history) {
+                    System.out.println(tmp);
+                } System.out.println("");
                 System.out.print(game + game.prompt());
             }
             catch (MoveException me) {

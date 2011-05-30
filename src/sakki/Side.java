@@ -25,7 +25,7 @@ enum Side {
         }
     };
 
-    public final int index;
+    final int index;
 
     Side(int i) {
         index = i;

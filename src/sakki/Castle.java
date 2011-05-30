@@ -73,6 +73,8 @@ class Castle {
     public void disable(String str) {
         if (str == null) return;
 
+        System.out.println("D C disable :: " + str);
+
         for (Character c : str.toCharArray()) {
             castling.remove(c);
         }
@@ -92,8 +94,7 @@ class Castle {
     }
 
     public Coord getKingsSqr(Move move) {
-        int index = (move.side() == Side.w)? 0: 1;
-        return kingsSquares[index];
+        return kingsSquares[(move.side() == Side.w)? 0: 1];
     }
 
     public Coord getKingsTarget(Move move) {

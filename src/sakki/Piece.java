@@ -13,7 +13,7 @@ abstract class Piece {
     protected Type me;
     protected Coord loc;
     protected Type[][] view;
-    protected String castleffect;
+    protected String castlingEffect;
 
     public Piece(Type type, Coord birthplace) {
         if (type == null || birthplace == null) {
@@ -25,21 +25,21 @@ abstract class Piece {
         view = new Type[8][8];
 
         if (me == Type.K) {
-            castleffect = "KQ";
+            castlingEffect = "KQ";
         }
         else if (me == Type.k) {
-            castleffect = "kq";
+            castlingEffect = "kq";
         }
         else if (me == Type.R) {
-            if (loc.equals("h1")) castleffect = "K";
-            if (loc.equals("a1")) castleffect = "Q";
+            if (loc.equals("h1")) castlingEffect = "K";
+            if (loc.equals("a1")) castlingEffect = "Q";
         }
         else if (me == Type.r) {
-            if (loc.equals("h8")) castleffect = "k";
-            if (loc.equals("a8")) castleffect = "q";
+            if (loc.equals("h8")) castlingEffect = "k";
+            if (loc.equals("a8")) castlingEffect = "q";
         }
         else {
-            castleffect = null;
+            castlingEffect = "";
         }
 
         reset();
@@ -63,6 +63,10 @@ abstract class Piece {
         return loc;
     }
 
+    public String castlingEffect() {
+        return castlingEffect;
+    }
+
     public void update(Type[][] status, Coord enpassant) {
         throw new UnsupportedOperationException("Not implemented");
     }
@@ -74,7 +78,7 @@ abstract class Piece {
 
     public Rebound move(Move move) {
         Rebound rebound = new Rebound();
-        rebound.disableCastling(castleffect);
+        rebound.disableCastling(castlingEffect);
         move(move.to());
         return rebound;
     }

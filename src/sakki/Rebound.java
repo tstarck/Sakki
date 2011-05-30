@@ -11,12 +11,12 @@ package sakki;
  */
 class Rebound {
     private boolean promotion;
-    private String castling;
+    private String castlings;
     private Coord enpassant;
 
     public Rebound() {
-        castling = null;
         promotion = false;
+        castlings = "";
         enpassant = null;
     }
 
@@ -25,7 +25,7 @@ class Rebound {
     }
 
     public void disableCastling(String str) {
-        castling = str;
+        castlings += str;
     }
 
     public void setEnpassant(Coord co) {
@@ -37,7 +37,7 @@ class Rebound {
     }
 
     public String castlingObstacle() {
-        return castling;
+        return castlings;
     }
 
     public Coord getEnpassant() {

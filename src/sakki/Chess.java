@@ -108,9 +108,8 @@ public class Chess {
 
     @Override
     public String toString() {
-        // String boardStr = "";
-        String boardStr = castling.toString();
-        String fileIndex = "a b c d e f g h";
+        String boardStr = "";
+        String fileIndex = "a b c d e f g h  " + castling.toString();
         Type[][] state = board.getState();
         int[] material = board.getMaterial();
 
@@ -122,11 +121,11 @@ public class Chess {
             }
 
             if (i == 0) {
-                boardStr += "  " + material[1];
+                boardStr += "  " + material[Side.b.index];
             }
 
             if (i == 7) {
-                boardStr += "  " + material[0];
+                boardStr += "  " + material[Side.w.index];
             }
         }
 

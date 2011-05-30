@@ -23,7 +23,7 @@ class WhiteKing extends Piece {
     @Override
     public Rebound move(Coord target) {
         Rebound rebound = new Rebound();
-        rebound.disableCastling(castleffect);
+        rebound.disableCastling(castlingEffect);
         loc = target;
         return rebound;
     }
