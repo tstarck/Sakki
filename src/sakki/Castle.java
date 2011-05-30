@@ -73,8 +73,6 @@ class Castle {
     public void disable(String str) {
         if (str == null) return;
 
-        System.out.println("D C disable :: " + str);
-
         for (Character c : str.toCharArray()) {
             castling.remove(c);
         }

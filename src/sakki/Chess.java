@@ -109,7 +109,8 @@ public class Chess {
     @Override
     public String toString() {
         String boardStr = "";
-        String fileIndex = "a b c d e f g h  " + castling.toString();
+        String fileLegend = "a b c d e f g h";
+        String enpassantStr = (enpassant == null)? "-": enpassant.toString();
         Type[][] state = board.getState();
         int[] material = board.getMaterial();
 
@@ -129,6 +130,7 @@ public class Chess {
             }
         }
 
-        return String.format("\n   %s\n%s\n", fileIndex, boardStr);
+        return String.format("\n   %s  %s %s\n%s\n", fileLegend,
+            castling.toString(), enpassantStr, boardStr);
     }
 }

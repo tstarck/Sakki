@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sakki;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Test class for running Sakki project.
+ * Simple and effective UI class for Sakki chess model.
  *
  * @author Tuomas Starck
  */
@@ -18,20 +14,27 @@ public class Sakki {
      */
     private static Scanner lukija = new Scanner(System.in);
 
-    private static void help() {
-        System.out.println("Usage: h[elp], new, u[ndo], q[uit]");
+    private static void help(boolean longform) {
+        if (longform) {
+            System.out.println("FIXME Pitkä heleppi pitäis puukottaa tähän");
+        }
+        else {
+            System.out.println("Usage: h[elp], fen, new, u[ndo], q[uit]");
+            System.out.println("Type help for more information!");
+        }
     }
 
     public static void main(String[] args) {
+        boolean tryFen = false;
         Chess game = null;
         String input = null;
         ArrayList<String> history = new ArrayList<String>();
 
-        game = new Chess();
+        game = new Chess(args);
 
         System.out.print(game + game.prompt());
 
-        do {
+        while (true) {
             input = lukija.nextLine().trim();
 
             if (input.isEmpty()) {
@@ -39,9 +42,28 @@ public class Sakki {
                 continue;
             }
 
-            if (input.equals("h") || input.equals("help")) {
-                help();
+            if (tryFen) {
+                tryFen = false;
+                game = new Chess(input);
+                System.out.println(game + game.prompt());
+                continue;
+            }
+
+            if (input.equals("h")) {
+                help(false);
                 System.out.print(game.prompt());
+                continue;
+            }
+
+            if (input.equals("help")) {
+                help(true);
+                System.out.println(game.prompt());
+                continue;
+            }
+
+            if (input.equals("fen")) {
+                tryFen = true;
+                System.out.println("FEN>");
                 continue;
             }
 
@@ -71,17 +93,22 @@ public class Sakki {
 
             try {
                 game.move(input);
-                history.add(game.toFen());
-                for (String tmp : history) {
-                    System.out.println(tmp);
-                } System.out.println("");
-                System.out.print(game + game.prompt());
             }
             catch (MoveException me) {
                 System.out.println("\n" + me);
                 System.out.print(game.prompt());
+                continue;
             }
-        } while (true);
+
+            history.add(game.toFen());
+
+            /* * * DEBUG * * */
+            for (String tmp : history) {
+                System.out.println(tmp);
+            } System.out.println("");
+
+            System.out.print(game + game.prompt());
+        }
 
         System.out.println();
     }
