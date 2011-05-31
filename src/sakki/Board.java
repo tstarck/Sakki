@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sakki;
 
 import java.util.ArrayList;
@@ -112,7 +108,6 @@ class Board {
     private Piece pieceAt(Coord target) {
         for (Piece piece : board) {
             if (piece.location().equals(target)) {
-                System.out.println(piece); /* * * DEBUG * * */
                 return piece;
             }
         }
@@ -155,13 +150,6 @@ class Board {
         for (int i=1; i<alt.size(); i++) {
             if (move.odds(alt.get(index)) < move.odds(alt.get(i))) {
                 index = i;
-                System.out.println("D choose " + alt.get(index).toString() +
-                        " < " + alt.get(i).toString());
-            }
-            else {
-                System.out.println("D choose " + alt.get(index).toString() +
-                        " >= " + alt.get(i).toString());
-
             }
         }
 
@@ -194,18 +182,19 @@ class Board {
 
         Piece piece = whichPiece(move);
 
-        System.out.println(piece); /* * * DEBUG * * */
+        /* * DEBUG * */ System.out.println(piece); /* * DEBUG * */
 
         if (move.piece().isPawn() && move.to().equals(enpassant)) {
             if (move.piece().isWhite()) {
-                capture(enpassant.north(1), move.isCapturing());
-            }
-            else /* move.piece().isBlack() */ {
                 capture(enpassant.south(1), move.isCapturing());
             }
+            else /* move.piece().isBlack() */ {
+                capture(enpassant.north(1), move.isCapturing());
+            }
         }
-
-        castling = capture(move.to(), move.isCapturing());
+        else {
+            castling = capture(move.to(), move.isCapturing());
+        }
 
         rebound = piece.move(move);
 

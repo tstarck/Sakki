@@ -1,13 +1,12 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sakki;
 
 import java.util.HashSet;
 
 /**
- * Tracking conditions for castling.
+ * Castle class provides support for castling. It has two primary
+ * functions; it tracks the availability of castling and provides
+ * support needed to execute castling move (which logic differs
+ * greatly from other moves).
  *
  * @author Tuomas Starck
  */
@@ -82,7 +81,7 @@ class Castle {
         if (move.side() == Side.w) {
             return (move.castling() == move.KINGSIDE)? 0: 1;
         }
-        else /* Side.b */ {
+        else /* move.side() == Side.b */ {
             return (move.castling() == move.KINGSIDE)? 2: 3;
         }
     }

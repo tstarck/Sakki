@@ -14,9 +14,11 @@ public class Sakki {
      */
     private static Scanner lukija = new Scanner(System.in);
 
+	private static final String help = "FIXME\n  new   Initiates an new game";
+
     private static void help(boolean longform) {
         if (longform) {
-            System.out.println("FIXME Pitkä heleppi pitäis puukottaa tähän");
+            System.out.println(help);
         }
         else {
             System.out.println("Usage: h[elp], fen, new, u[ndo], q[uit]");
@@ -102,10 +104,11 @@ public class Sakki {
 
             history.add(game.toFen());
 
-            /* * * DEBUG * * */
+            /* * * * DEBUG * * * */
             for (String tmp : history) {
                 System.out.println(tmp);
             } System.out.println("");
+            /* * * * DEBUG * * * */
 
             System.out.print(game + game.prompt());
         }

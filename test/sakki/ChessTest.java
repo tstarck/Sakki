@@ -15,7 +15,7 @@ public class ChessTest {
     }
 
     /**
-     * Test of move method, of class Chess.
+     * Test of move() method, of class Chess.
      */
     @Test
     public void disableQueensCastlings() throws Exception {
@@ -42,8 +42,21 @@ public class ChessTest {
 
         for (String fen : fence) {
             Chess game = new Chess(fen);
-            String result = game.toFen();
-            assertEquals(fen, result);
+            String res = game.toFen();
+            assertEquals(fen, res);
         }
+    }
+
+    /**
+     * Test using en passant move.
+     */
+    @Test
+    public void enPassant() throws MoveException {
+        String fen = "1k1r3r/pp3ppp/8/1Pp1n3/8/3B4/N1PP1PPP/5RK1 w - c6 0 14";
+        String exp = "1k1r3r/pp3ppp/2P5/4n3/8/3B4/N1PP1PPP/5RK1 b - - 0 14";
+        Chess game = new Chess(fen);
+        game.move("xc6");
+        String res = game.toFen();
+        assertEquals(exp, res);
     }
 }

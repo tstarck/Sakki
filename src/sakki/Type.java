@@ -1,11 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sakki;
 
 /**
- * List of pieces available in the game of chess.
+ * List of pieces available in the Game of Chess. Also a few other values
+ * useful to indicate status of a square on Chess board.
  *
  * Pieces are named according to the common convention amongst English-speaking
  * players. Capital letters indicate white pieces and vice versa (in compliance

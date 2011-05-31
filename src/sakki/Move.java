@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sakki;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Read and parse a certain subset of <i>Algebraic chess notation</i>.
+ * Reads and parses a certain subset of <i>Algebraic chess notation</i>.
  *
  * Flavor of notation:
  *   Capture is marked with 'x'

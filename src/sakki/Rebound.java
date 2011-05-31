@@ -1,11 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sakki;
 
 /**
- * Class to convey feedback information about executed move.
+ * Class to convey feedback about executed move.
  *
  * @author Tuomas Starck
  */
