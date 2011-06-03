@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sakki;
 
 import org.junit.Test;
@@ -15,7 +11,7 @@ public class ReboundTest {
     }
 
     /**
-     * Class Castle is really too simple to be tested seriously.
+     * Rebound class is really too simple to be tested seriously.
      */
     @Test
     public void trivialTests() {
