@@ -25,4 +25,10 @@ enum Side {
     Side(int i) {
         index = i;
     }
+
+    public Side valid(String input) {
+        if (input == null) return Side.w;
+        if (input.equals("b")) return Side.b;
+        return Side.w;
+    }
 }

@@ -45,9 +45,17 @@ class Board {
                 board.add(pieceByName(chr, co));
                 file++;
             }
+            else {
+                throw new IllegalArgumentException();
+            }
         }
 
-        update(enpassant);
+        try {
+            update(enpassant);
+        }
+        catch (NullPointerException npe) {
+            throw new IllegalArgumentException();
+        }
     }
 
     private Piece pieceByType(Type type, Coord co) {
@@ -83,6 +91,8 @@ class Board {
         }
 
         for (Piece piece : board) {
+            if (piece == null) throw new NullPointerException();
+
             Type tp = piece.type();
             Coord loc = piece.location();
 

@@ -26,13 +26,29 @@ public class Sakki {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] argv) {
         boolean tryFen = false;
         Chess game = null;
+        String args = "";
         String input = null;
         ArrayList<String> history = new ArrayList<String>();
 
-        game = new Chess(args);
+        try {
+            game = new Chess(argv);
+        }
+        catch (IllegalArgumentException e) {
+            game = new Chess();
+        }
+
+        for (int i=0; i<argv.length; i++) {
+            args += " " + argv[i];
+            if (i >= 5) break;
+        }
+
+        if (argv.length > 0) {
+            System.out.format("\nInput:\n %s\n", args.substring(1));
+            System.out.format("Interpretation:\n %s\n", game.toFen());
+        }
 
         System.out.print(game + game.prompt());
 
@@ -41,13 +57,23 @@ public class Sakki {
 
             if (input.isEmpty()) {
                 System.out.print(game.prompt());
+                tryFen = false;
                 continue;
             }
 
             if (tryFen) {
-                tryFen = false;
-                game = new Chess(input);
+                Chess reset;
+
+                try {
+                    reset = new Chess(input);
+                    game = reset;
+                }
+                catch (IllegalArgumentException e) {
+                    System.out.println("");
+                }
+
                 System.out.println(game + game.prompt());
+                tryFen = false;
                 continue;
             }
 
@@ -64,8 +90,9 @@ public class Sakki {
             }
 
             if (input.equals("fen")) {
+                System.out.format("Current FEN:\n %s\n", game.toFen());
+                System.out.format("Set new FEN?\n >");
                 tryFen = true;
-                System.out.println("FEN>");
                 continue;
             }
 

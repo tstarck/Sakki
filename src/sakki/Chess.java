@@ -22,21 +22,45 @@ public class Chess {
     }
 
     public Chess(String[] fenArray) {
-        try {
-            enpassant = new Coord(fenArray[3]);
+        turn = Side.w;
+        enpassant = null;
+        halfmove = 0;
+        fullmove = 1;
+
+        if (fenArray.length >= 4) {
+            try {
+                enpassant = new Coord(fenArray[3]);
+            }
+            catch (IllegalArgumentException pass) {}
         }
-        catch (IllegalArgumentException pass) {
-            enpassant = null;
+
+        if (fenArray.length >= 1) {
+            board = new Board(fenArray[0], enpassant);
+        }
+        else {
+            board = new Board();
         }
 
-        board = new Board(fenArray[0], enpassant);
+        if (fenArray.length >= 2) {
+            if (fenArray[1].equals("b")) {
+                turn = Side.b;
+            }
+        }
 
-        turn = Side.valueOf(fenArray[1]);
+        if (fenArray.length >= 3) {
+            castling = new Castle(fenArray[2]);
+        }
+        else {
+            castling = new Castle("");
+        }
 
-        castling = new Castle(fenArray[2]);
-
-        halfmove = Integer.parseInt(fenArray[4]);
-        fullmove = Integer.parseInt(fenArray[5]);
+        if (fenArray.length >= 6) {
+            try {
+                halfmove = Integer.parseInt(fenArray[4]);
+                fullmove = Integer.parseInt(fenArray[5]);
+            }
+            catch (NumberFormatException pass) {}
+        }
     }
 
     void move(String algebraic) throws MoveException {

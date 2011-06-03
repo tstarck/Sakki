@@ -1,5 +1,0 @@
-
-$ java -jar dist/Sakki.jar
-Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: 3
-        at sakki.Chess.<init>(Chess.java:30)
-        at sakki.Sakki.main(Sakki.java:33)
