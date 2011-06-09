@@ -4,7 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Reads and parses a certain subset of <i>Algebraic chess notation</i>.
+ * Reads and parses <i>Algebraic chess notation</i>.
  *
  * Flavor of notation:
  *   Capture is marked with 'x'

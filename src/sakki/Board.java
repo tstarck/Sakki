@@ -192,8 +192,6 @@ class Board {
 
         Piece piece = whichPiece(move);
 
-        /* * DEBUG * */ System.out.println(piece); /* * DEBUG * */
-
         if (move.piece().isPawn() && move.to().equals(enpassant)) {
             if (move.piece().isWhite()) {
                 capture(enpassant.south(1), move.isCapturing());

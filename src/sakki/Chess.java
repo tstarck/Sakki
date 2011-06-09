@@ -51,7 +51,7 @@ public class Chess {
             castling = new Castle(fenArray[2]);
         }
         else {
-            castling = new Castle("");
+            castling = new Castle();
         }
 
         if (fenArray.length >= 6) {
