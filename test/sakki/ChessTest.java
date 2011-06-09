@@ -63,7 +63,7 @@ public class ChessTest {
     @Test
     public void initThomasTaverner() {
         String[] init = {"3brrb1/2N4B/8/2p4Q/2p2k2/5P2/4P1KR/2N2RB1"};
-        String expect = "3brrb1/2N4B/8/2p4Q/2p2k2/5P2/4P1KR/2N2RB1 w - - 0 1";
+        String expect = "3brrb1/2N4B/8/2p4Q/2p2k2/5P2/4P1KR/2N2RB1 w KQkq - 0 1";
 
         Chess game = new Chess(init);
         assertEquals(expect, game.toFen());
@@ -75,7 +75,7 @@ public class ChessTest {
     @Test
     public void initGodfreyHeathcote() {
         String[] init = {"6K1/pN2R1PQ/p7/r2k3r/N2n4/1P2p3/BB5p/2Rb2bQ"};
-        String expect = "6K1/pN2R1PQ/p7/r2k3r/N2n4/1P2p3/BB5p/2Rb2bQ w - - 0 1";
+        String expect = "6K1/pN2R1PQ/p7/r2k3r/N2n4/1P2p3/BB5p/2Rb2bQ w KQkq - 0 1";
 
         Chess game = new Chess(init);
         assertEquals(expect, game.toFen());
