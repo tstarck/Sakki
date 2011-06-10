@@ -11,13 +11,19 @@ class WhiteKnight extends Piece {
     }
 
     @Override
-    public void update(Type[][] status, Coord ep) {
+    public boolean update(Type[][] status, Coord ep) {
         reset();
+
+        boolean checked = false;
 
         for (Coord tmp : loc.knightsCoords()) {
             if (!markIfMoveable(tmp, status)) {
-                markIfCapturable(tmp, status);
+                if (markIfCapturable(tmp, status)) {
+                    checked = true;
+                }
             }
         }
+
+        return checked;
     }
 }

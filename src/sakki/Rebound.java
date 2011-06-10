@@ -6,37 +6,47 @@ package sakki;
  * @author Tuomas Starck
  */
 class Rebound {
+    private boolean checked;
     private boolean promotion;
     private String castlings;
     private Coord enpassant;
 
-    public Rebound() {
+    Rebound() {
+        checked = false;
         promotion = false;
         castlings = "";
         enpassant = null;
     }
 
-    public void promotionAvailable() {
+    void kingChecked(boolean bool) {
+        checked = bool;
+    }
+
+    void promotionAvailable() {
         promotion = true;
     }
 
-    public void disableCastling(String str) {
+    void disableCastling(String str) {
         castlings += str;
     }
 
-    public void setEnpassant(Coord co) {
+    void setEnpassant(Coord co) {
         enpassant = co;
     }
 
-    public boolean canPromote() {
+    boolean isKingChecked() {
+        return checked;
+    }
+
+    boolean canPromote() {
         return promotion;
     }
 
-    public String castlingObstacle() {
+    String castlingObstacle() {
         return castlings;
     }
 
-    public Coord getEnpassant() {
+    Coord getEnpassant() {
         return enpassant;
     }
 }

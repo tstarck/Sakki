@@ -51,6 +51,7 @@ class Board {
         }
 
         try {
+            /* FIXME kingIsChecked tarkistus? */
             update(enpassant);
         }
         catch (NullPointerException npe) {
@@ -81,7 +82,9 @@ class Board {
         return null;
     }
 
-    private void update(Coord enpassant) {
+    private boolean update(Coord enpassant) {
+        boolean checked = false;
+
         material = new int[2];
 
         for (int i=0; i<8; i++) {
@@ -107,8 +110,12 @@ class Board {
         }
 
         for (Piece piece : board) {
-            piece.update(state, enpassant);
+            if (piece.update(state, enpassant)) {
+                checked = true;
+            }
         }
+
+        return checked;
     }
 
     public boolean isOccupied(Coord co) {
@@ -189,6 +196,7 @@ class Board {
     public Rebound move(Move move, Coord enpassant) throws MoveException {
         String castling = "";
         Rebound rebound = null;
+        boolean checked = false;
 
         Piece piece = whichPiece(move);
 
@@ -217,7 +225,16 @@ class Board {
             }
         }
 
-        update(rebound.getEnpassant());
+        if (update(rebound.getEnpassant())) {
+            if (move.isChecking()) {
+                throw new MoveException("FIXME");
+            }
+        }
+        else {
+            if (move.isChecking()) {
+                throw new MoveException("Check claimed in vain");
+            }
+        }
 
         return rebound;
     }
