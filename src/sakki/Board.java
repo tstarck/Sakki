@@ -110,8 +110,10 @@ class Board {
         }
 
         for (Piece piece : board) {
-            if (piece.update(state, enpassant)) {
-                checked = true;
+            piece.update(state, enpassant);
+
+            if (piece.isChecking()) {
+                // FIXME do something
             }
         }
 

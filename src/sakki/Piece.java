@@ -10,6 +10,7 @@ abstract class Piece {
     protected Coord loc;
     protected Type[][] view;
     protected String castlingEffect;
+    private boolean isChecking;
 
     public Piece(Type type, Coord birthplace) {
         if (type == null || birthplace == null) {
@@ -19,6 +20,7 @@ abstract class Piece {
         me = type;
         loc = birthplace;
         view = new Type[8][8];
+        isChecking = false;
 
         if (me == Type.K) {
             castlingEffect = "KQ";
@@ -63,7 +65,11 @@ abstract class Piece {
         return castlingEffect;
     }
 
-    public boolean update(Type[][] status, Coord enpassant) {
+    public boolean isChecking() {
+        return isChecking;
+    }
+
+    public void update(Type[][] status, Coord enpassant) {
         throw new UnsupportedOperationException("Not implemented");
     }
 
@@ -98,27 +104,24 @@ abstract class Piece {
         return false;
     }
 
-    protected boolean markIfCapturable(Coord sqr, Type[][] status) {
-        boolean checked = false;
-
-        if (sqr == null) return checked;
+    protected void markIfCapturable(Coord sqr, Type[][] status) {
+        if (sqr == null) return;
 
         Type target = status[sqr.rank][sqr.file];
 
         if (me.isEnemy(target)) {
             if (target.name().toLowerCase().equals("k")) {
-                checked = true;
+                isChecking = true;
                 view[sqr.rank][sqr.file] = Type.checked;
 
                 /*** * * * DEBUG * * * ***/
-                System.out.println("Deep shit at [" + sqr + "] by " + me);
+                System.out.println("D # at [" + sqr + "] by " + me);
+                /*** * * * DEBUG * * * ***/
             }
             else {
                 view[sqr.rank][sqr.file] = Type.capturable;
             }
         }
-
-        return checked;
     }
 
     protected void markAdjacent(Type[][] status) {
