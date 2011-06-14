@@ -8,9 +8,9 @@ package sakki;
 abstract class Piece {
     protected Type me;
     protected Coord loc;
+    protected Side checked;
     protected Type[][] view;
     protected String castlingEffect;
-    private boolean isChecking;
 
     public Piece(Type type, Coord birthplace) {
         if (type == null || birthplace == null) {
@@ -20,7 +20,7 @@ abstract class Piece {
         me = type;
         loc = birthplace;
         view = new Type[8][8];
-        isChecking = false;
+        checked = null;
 
         if (me == Type.K) {
             castlingEffect = "KQ";
@@ -65,8 +65,8 @@ abstract class Piece {
         return castlingEffect;
     }
 
-    public boolean isChecking() {
-        return isChecking;
+    public Side isChecking() {
+        return checked;
     }
 
     public void update(Type[][] status, Coord enpassant) {
@@ -110,13 +110,13 @@ abstract class Piece {
         Type target = status[sqr.rank][sqr.file];
 
         if (me.isEnemy(target)) {
-            if (target.name().toLowerCase().equals("k")) {
-                isChecking = true;
+            if (target == Type.K) {
+                checked = Side.w;
                 view[sqr.rank][sqr.file] = Type.checked;
-
-                /*** * * * DEBUG * * * ***/
-                System.out.println("D # at [" + sqr + "] by " + me);
-                /*** * * * DEBUG * * * ***/
+            }
+            else if (target == Type.k) {
+                checked = Side.b;
+                view[sqr.rank][sqr.file] = Type.checked;
             }
             else {
                 view[sqr.rank][sqr.file] = Type.capturable;

@@ -11,6 +11,7 @@ import java.util.ArrayList;
  */
 class Board {
     private int[] material;
+    private boolean[] checked;
     private Type[][] state;
     private ArrayList<Piece> board;
 
@@ -23,6 +24,7 @@ class Board {
         int rank = 0;
 
         material = new int[2];
+        checked = new boolean[2];
         state = new Type[8][8];
         board = new ArrayList<Piece>();
 
@@ -82,10 +84,9 @@ class Board {
         return null;
     }
 
-    private boolean update(Coord enpassant) {
-        boolean checked = false;
-
+    private void update(Coord enpassant) {
         material = new int[2];
+        checked = new boolean[2];
 
         for (int i=0; i<8; i++) {
             for (int j=0; j<8; j++) {
@@ -112,12 +113,12 @@ class Board {
         for (Piece piece : board) {
             piece.update(state, enpassant);
 
-            if (piece.isChecking()) {
-                // FIXME do something
+            Side target = piece.isChecking();
+
+            if (target != null) {
+                checked[target.index] = true;
             }
         }
-
-        return checked;
     }
 
     public boolean isOccupied(Coord co) {
@@ -198,15 +199,15 @@ class Board {
     public Rebound move(Move move, Coord enpassant) throws MoveException {
         String castling = "";
         Rebound rebound = null;
-        boolean checked = false;
+        Side turn = move.side();
 
         Piece piece = whichPiece(move);
 
         if (move.piece().isPawn() && move.to().equals(enpassant)) {
-            if (move.piece().isWhite()) {
+            if (turn == Side.w) {
                 capture(enpassant.south(1), move.isCapturing());
             }
-            else /* move.piece().isBlack() */ {
+            else /* turn == Side.b */ {
                 capture(enpassant.north(1), move.isCapturing());
             }
         }
@@ -227,14 +228,17 @@ class Board {
             }
         }
 
-        if (update(rebound.getEnpassant())) {
-            if (move.isChecking()) {
-                throw new MoveException("FIXME");
-            }
+        update(rebound.getEnpassant());
+
+        int other = (turn.index == 0)? 1: 0;
+
+        if (checked[turn.index]) {
+            throw new MoveException("");
         }
-        else {
-            if (move.isChecking()) {
-                throw new MoveException("Check claimed in vain");
+
+        if (checked[other]) {
+            if (!move.isChecking()) {
+                throw new MoveException("Check without notice");
             }
         }
 
