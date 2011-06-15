@@ -8,8 +8,8 @@ package sakki;
 abstract class Piece {
     protected Type me;
     protected Coord loc;
-    protected Side checked;
     protected Type[][] view;
+    protected Side checked;
     protected String castlingEffect;
 
     public Piece(Type type, Coord birthplace) {
@@ -21,24 +21,7 @@ abstract class Piece {
         loc = birthplace;
         view = new Type[8][8];
         checked = null;
-
-        if (me == Type.K) {
-            castlingEffect = "KQ";
-        }
-        else if (me == Type.k) {
-            castlingEffect = "kq";
-        }
-        else if (me == Type.R) {
-            if (loc.equals("h1")) castlingEffect = "K";
-            if (loc.equals("a1")) castlingEffect = "Q";
-        }
-        else if (me == Type.r) {
-            if (loc.equals("h8")) castlingEffect = "k";
-            if (loc.equals("a8")) castlingEffect = "q";
-        }
-        else {
-            castlingEffect = "";
-        }
+        castlingEffect = null;
 
         reset();
     }
@@ -51,6 +34,8 @@ abstract class Piece {
         }
 
         view[loc.rank][loc.file] = me;
+
+        checked = null;
     }
 
     public Type type() {

@@ -8,6 +8,8 @@ package sakki;
 class BlackRook extends Piece {
     public BlackRook(Coord birthplace) {
         super(Type.r, birthplace);
+        if (birthplace.equals("h8")) castlingEffect = "k";
+        if (birthplace.equals("a8")) castlingEffect = "q";
     }
 
     @Override

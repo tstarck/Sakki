@@ -8,6 +8,7 @@ package sakki;
 class BlackKing extends Piece {
     public BlackKing(Coord birthplace) {
         super(Type.k, birthplace);
+        castlingEffect = "kq";
     }
 
     @Override

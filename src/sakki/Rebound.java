@@ -27,6 +27,7 @@ class Rebound {
     }
 
     void disableCastling(String str) {
+        if (str == null) return;
         castlings += str;
     }
 

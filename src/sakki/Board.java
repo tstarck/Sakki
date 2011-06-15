@@ -196,6 +196,26 @@ class Board {
         return effect;
     }
 
+    private void checkCheck(Move move) throws MoveException {
+        int side = move.side().index;
+        int otherside = (side == 0)? 1: 0;
+
+        if (checked[side]) {
+            throw new MoveException("Illegal move", true);
+        }
+
+        if (checked[otherside]) {
+            if (!move.isChecking()) {
+                throw new MoveException("Check without notice", true);
+            }
+        }
+        else {
+            if (move.isChecking()) {
+                throw new MoveException("Lame check claim", true);
+            }
+        }
+    }
+
     public Rebound move(Move move, Coord enpassant) throws MoveException {
         String castling = "";
         Rebound rebound = null;
@@ -230,17 +250,7 @@ class Board {
 
         update(rebound.getEnpassant());
 
-        int other = (turn.index == 0)? 1: 0;
-
-        if (checked[turn.index]) {
-            throw new MoveException("");
-        }
-
-        if (checked[other]) {
-            if (!move.isChecking()) {
-                throw new MoveException("Check without notice");
-            }
-        }
+        checkCheck(move);
 
         return rebound;
     }
@@ -270,6 +280,8 @@ class Board {
         rook.move(castling.getRooksTarget(move));
 
         update(null);
+
+        checkCheck(move);
 
         return rebound;
     }

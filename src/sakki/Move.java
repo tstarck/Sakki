@@ -77,7 +77,7 @@ class Move {
             }
 
             // 7: Check or mate status
-            parseCheckMate(move.group(2));
+            parseCheckMate(move.group(7));
         }
         else if (castlemove.matches()) {
             // Not strictly required, but helps to avoid NPE's
@@ -107,8 +107,13 @@ class Move {
 
     private void parseCheckMate(String xtra) {
         if (xtra != null) {
-            if (xtra.equals("+")) check = true;
-            if (xtra.equals("#")) mate = true;
+            if (xtra.equals("+")) {
+                check = true;
+            }
+            if (xtra.equals("#")) {
+                check = true;
+                mate = true;
+            }
         }
     }
 

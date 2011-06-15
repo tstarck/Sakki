@@ -148,9 +148,14 @@ public class Sakki {
                 game.move(input);
                 history.add(0, current);
             }
-            catch (MoveException me) {
-                System.out.println("\n" + me);
+            catch (MoveException state) {
+                System.out.println("\n" + state);
                 System.out.print(game.prompt());
+
+                if (state.isDirty()) {
+                    game = new Chess(current);
+                }
+
                 continue;
             }
 
