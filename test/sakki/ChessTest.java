@@ -11,22 +11,6 @@ public class ChessTest {
     }
 
     /**
-     * Test of move() method, of class Chess.
-     */
-    @Test
-    public void disableQueensCastlings() throws Exception {
-        String
-            alg = "Rxa1",
-            fen = "rnbqkbnr/1ppppppp/8/8/8/8/1PPPPPPP/RNBQKBNR b KQkq - 0 2",
-            exp = "1nbqkbnr/1ppppppp/8/8/8/8/1PPPPPPP/rNBQKBNR w Kk - 0 3";
-
-        Chess game = new Chess(fen);
-        game.move(alg);
-        String res = game.toFen();
-        assertEquals(exp, res);
-    }
-
-    /**
      * Test to see if FEN parsing and formatting works.
      */
     @Test
@@ -44,6 +28,52 @@ public class ChessTest {
     }
 
     /**
+     * Thomas Taverner problem initialization test.
+     */
+    @Test
+    public void initThomasTaverner() {
+        String[] init = {"3brrb1/2N4B/8/2p4Q/2p2k2/5P2/4P1KR/2N2RB1"};
+        String exp = "3brrb1/2N4B/8/2p4Q/2p2k2/5P2/4P1KR/2N2RB1 w - - 0 1";
+
+        Chess game = new Chess(init);
+        assertEquals(exp, game.toFen());
+    }
+
+    /**
+     * Godfrey Heathcote problem initialization test.
+     */
+    @Test
+    public void initGodfreyHeathcote() {
+        String[] init = {"6K1/pN2R1PQ/p7/r2k3r/N2n4/1P2p3/BB5p/2Rb2bQ"};
+        String exp = "6K1/pN2R1PQ/p7/r2k3r/N2n4/1P2p3/BB5p/2Rb2bQ w - - 0 1";
+
+        Chess game = new Chess(init);
+        assertEquals(exp, game.toFen());
+    }
+
+    /**
+     * Test some simple moves.
+     */
+    @Test
+    public void disableQueensCastlings() throws Exception {
+        String[] moves = {
+            "Rxa1"
+            // FIXME More cowbell!
+        };
+
+        String fen = "rnbqkbnr/1ppppppp/8/8/8/8/1PPPPPPP/RNBQKBNR b KQkq - 0 2";
+        String exp = "1nbqkbnr/1ppppppp/8/8/8/8/1PPPPPPP/rNBQKBNR w Kk - 0 3";
+
+        Chess game = new Chess(fen);
+
+        for (String mv : moves) {
+            game.move(mv);
+        }
+
+        assertEquals(exp, game.toFen());
+    }
+
+    /**
      * Test using en passant move.
      */
     @Test
@@ -53,8 +83,7 @@ public class ChessTest {
 
         Chess game = new Chess(fen);
         game.move("xc6");
-        String res = game.toFen();
-        assertEquals(exp, res);
+        assertEquals(exp, game.toFen());
     }
 
     /**
@@ -88,7 +117,7 @@ public class ChessTest {
     }
 
     /**
-     * Castling with checking test
+     * Combined castling and checking test.
      */
     @Test
     public void checkCastling() throws MoveException {
@@ -98,29 +127,5 @@ public class ChessTest {
         Chess game = new Chess(fen);
         game.move("0-0+");
         assertEquals(exp, game.toFen());
-    }
-
-    /**
-     * Thomas Taverner problem initialization test.
-     */
-    @Test
-    public void initThomasTaverner() {
-        String[] init = {"3brrb1/2N4B/8/2p4Q/2p2k2/5P2/4P1KR/2N2RB1"};
-        String expect = "3brrb1/2N4B/8/2p4Q/2p2k2/5P2/4P1KR/2N2RB1 w KQkq - 0 1";
-
-        Chess game = new Chess(init);
-        assertEquals(expect, game.toFen());
-    }
-
-    /**
-     * Godfrey Heathcote problem initialization test.
-     */
-    @Test
-    public void initGodfreyHeathcote() {
-        String[] init = {"6K1/pN2R1PQ/p7/r2k3r/N2n4/1P2p3/BB5p/2Rb2bQ"};
-        String expect = "6K1/pN2R1PQ/p7/r2k3r/N2n4/1P2p3/BB5p/2Rb2bQ w KQkq - 0 1";
-
-        Chess game = new Chess(init);
-        assertEquals(expect, game.toFen());
     }
 }
