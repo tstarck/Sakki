@@ -54,6 +54,8 @@ public class Chess {
             castling = new Castle();
         }
 
+        castling.crop(board.getState());
+
         if (fenArray.length >= 6) {
             try {
                 halfmove = Integer.parseInt(fenArray[4]);

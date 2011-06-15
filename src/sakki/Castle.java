@@ -77,6 +77,24 @@ class Castle {
         }
     }
 
+    void crop(Type[][] state) {
+        Coord K = kingsSquares[0];
+        Coord k = kingsSquares[1];
+
+        Coord hR = rooksSquares[0];
+        Coord aR = rooksSquares[1];
+        Coord hr = rooksSquares[2];
+        Coord ar = rooksSquares[3];
+
+        if (state[K.rank][K.file] != Type.K) disable("KQ");
+        if (state[k.rank][k.file] != Type.k) disable("kq");
+
+        if (state[hR.rank][hR.file] != Type.R) disable("K");
+        if (state[aR.rank][aR.file] != Type.R) disable("Q");
+        if (state[hr.rank][hr.file] != Type.r) disable("k");
+        if (state[ar.rank][ar.file] != Type.r) disable("q");
+    }
+
     public int index(Move move) {
         if (move.side() == Side.w) {
             return (move.castling() == move.KINGSIDE)? 0: 1;

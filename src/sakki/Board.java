@@ -259,7 +259,7 @@ class Board {
         Rebound rebound = null;
 
         if (!castling.isAllowed(move)) {
-            throw new MoveException("Castling no longer possible");
+            throw new MoveException("Castling not possible");
         }
 
         for (Coord co : castling.getFreeSqrs(move)) {
@@ -269,12 +269,16 @@ class Board {
         }
 
         /* FIXME
-         * Tarkista, ettei kuninkaan ruutuja uhata!
-         * castling.getSafeSqrs
+         * King must have safe passage,
+         * see castling.getSafeSqrs
          */
 
         Piece king = pieceAt(castling.getKingsSqr(move));
         Piece rook = pieceAt(castling.getRooksSqr(move));
+
+        if (king == null || rook == null) {
+            throw new MoveException("Unable to castle");
+        }
 
         rebound = king.move(castling.getKingsTarget(move));
         rook.move(castling.getRooksTarget(move));
