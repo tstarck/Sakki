@@ -58,6 +58,49 @@ public class ChessTest {
     }
 
     /**
+     * Testing check and mate recognition.
+     */
+    @Test
+    public void checkAndMate() throws MoveException {
+        String exception = null;
+        String expectation = "Illegal move";
+        String fen = "8/KN6/8/8/1k6/4B3/8/3Q4 w - -";
+
+        Chess game = new Chess(fen);
+        game.move("Qd6+");
+        game.move("Kc3");
+        game.move("Qd4+");
+        game.move("Kb3");
+        game.move("Nc5+");
+        game.move("Ka3");
+        game.move("Bc1+");
+        game.move("Ka2");
+        game.move("Qb2#");
+
+        try {
+            game.move("Ka1");
+        }
+        catch (MoveException me) {
+            exception = me.toString();
+        }
+
+        assertEquals(expectation, exception);
+    }
+
+    /**
+     * Castling with checking test
+     */
+    @Test
+    public void checkCastling() throws MoveException {
+        String fen = "5k2/3p2pp/4p3/8/8/P5P1/1PP4P/3QK2R w K - 0 1";
+        String exp = "5k2/3p2pp/4p3/8/8/P5P1/1PP4P/3Q1RK1 b - - 1 1";
+
+        Chess game = new Chess(fen);
+        game.move("0-0+");
+        assertEquals(exp, game.toFen());
+    }
+
+    /**
      * Thomas Taverner problem initialization test.
      */
     @Test
