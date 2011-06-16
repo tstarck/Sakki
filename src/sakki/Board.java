@@ -53,7 +53,6 @@ class Board {
         }
 
         try {
-            /* FIXME kingIsChecked tarkistus? */
             update(enpassant);
         }
         catch (NullPointerException npe) {
@@ -97,27 +96,23 @@ class Board {
         for (Piece piece : board) {
             if (piece == null) throw new NullPointerException();
 
-            Type tp = piece.type();
             Coord loc = piece.location();
 
-            state[loc.rank][loc.file] = tp;
-
-            if (tp.isWhite()) {
-                material[Side.w.index] += tp.getValue();
-            }
-            else if (tp.isBlack()) {
-                material[Side.b.index] += tp.getValue();
-            }
+            state[loc.rank][loc.file] = piece.type();
         }
 
         for (Piece piece : board) {
             piece.update(state, enpassant);
 
+            Type type = piece.type();
+            Side side = type.getSide();
             Side target = piece.isChecking();
 
             if (target != null) {
                 checked[target.index] = true;
             }
+
+            material[side.index] += type.getValue();
         }
     }
 
@@ -135,45 +130,49 @@ class Board {
         return null;
     }
 
+    private ArrayList<Piece> crop(ArrayList<Piece> alt, String from) {
+        if (from.isEmpty()) return alt;
+
+        ArrayList<Piece> cropd = new ArrayList<Piece>();
+
+        for (Piece piece : alt) {
+            if (piece.location().toString().indexOf(from) != -1) {
+                cropd.add(piece);
+            }
+        }
+
+        return cropd;
+    }
+
     private Piece whichPiece(Move move) throws MoveException {
-        int index = 0;
         ArrayList<Piece> alt = new ArrayList<Piece>();
 
         for (Piece piece : board) {
             if (piece.type() == move.piece()) {
                 if (move.isCapturing()) {
-                    if (piece.canCapture(move.to())) {
+                    if (piece.viewAt(move.to()) == Type.capturable) {
                         alt.add(piece);
                     }
                 }
                 else {
-                    if (piece.canMove(move.to())) {
+                    if (piece.viewAt(move.to()) == Type.moveable) {
                         alt.add(piece);
                     }
                 }
             }
         }
+
+        alt = crop(alt, move.from());
 
         if (alt.isEmpty()) {
             throw new MoveException("No such move available");
         }
 
-        if (alt.size() == 1) {
-            return alt.get(index);
+        if (alt.size() != 1) {
+            throw new MoveException("Ambiguous move");
         }
 
-        if (move.from() == null) {
-            throw new MoveException("Ambiguous move - hint required");
-        }
-
-        /* FIXME Älä valitse sopivaa siirtoa - vaadi yksiselitteisyyttä! */
-        for (int i=1; i<alt.size(); i++) {
-            if (move.odds(alt.get(index)) < move.odds(alt.get(i))) {
-                index = i;
-            }
-        }
-
-        return alt.get(index);
+        return alt.get(0);
     }
 
     private String capture(Coord target, boolean capturable) throws MoveException {

@@ -64,6 +64,10 @@ enum Type {
         return value;
     }
 
+    public Side getSide() {
+        return side;
+    }
+
     public boolean isPawn() {
         return (value == 1);
     }

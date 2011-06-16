@@ -24,8 +24,8 @@ class Move {
 
     private final String
         castlingre = "0-0(-0)?([#+])?",
-        re = "([NBRQK])?([a-h])?(x)?([a-h][1-8])(=([NBRQ]))?([#+])?";
-            /*  1:piece  2:from  3:x 4:to        6:promo     7:act */
+        re = "([NBRQK])?([1-8a-h]{1,2})?(x)?([a-h][1-8])(=([NBRQ]))?([#+])?[!?]*";
+            /*  1:piece  2:from          3:x 4:to        6:promo     7:act */
 
     private Matcher move;
     private Matcher castlemove;

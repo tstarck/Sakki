@@ -46,12 +46,16 @@ abstract class Piece {
         return loc;
     }
 
+    public Side isChecking() {
+        return checked;
+    }
+
     public String castlingEffect() {
         return castlingEffect;
     }
 
-    public Side isChecking() {
-        return checked;
+    public Type viewAt(Coord co) {
+        return view[co.rank][co.file];
     }
 
     public void update(Type[][] status, Coord enpassant) {
@@ -68,14 +72,6 @@ abstract class Piece {
         rebound.disableCastling(castlingEffect);
         move(move.to());
         return rebound;
-    }
-
-    public boolean canMove(Coord target) {
-        return (view[target.rank][target.file] == Type.moveable);
-    }
-
-    public boolean canCapture(Coord target) {
-        return (view[target.rank][target.file] == Type.capturable);
     }
 
     protected boolean markIfMoveable(Coord target, Type[][] status) {
