@@ -12,9 +12,13 @@
             </test-roots>
         </data>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+            <word>castlings</word>
             <word>Coord</word>
             <word>Forsyth</word>
+            <word>fullmove</word>
+            <word>halfmove</word>
             <word>Heathcote</word>
+            <word>queenside</word>
             <word>Sakki</word>
             <word>Wikipedia</word>
         </spellchecker-wordlist>

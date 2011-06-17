@@ -1,7 +1,37 @@
 package sakki;
 
 /**
- * An implementation of Chess for two players.
+ * An implementation of The Game of Chess for two players.
+ *
+ * Standard Algebraic Notation (SAN) a.k.a. Algebraic chess notation
+ * is used to describe the moves in a game of chess. Besides the
+ * moves, this program uses SAN coordinate system for game board
+ * ranks (1-8) and files (a-h).
+ *
+ * {@link http://en.wikipedia.org/wiki/Algebraic_chess_notation}
+ *
+ * Forsyth-Edwards Notation (FEN) is a standard notation for
+ * describing any particular position of a chess game. FEN is
+ * used extensively throughout this program and it can be used
+ * to initialize a new game with arbitrary position.
+ *
+ * FEN has six parts:
+ * 1) Piece placement from 8th rank to 1st and from a file to h with
+ *    '/' separating ranks. Pieces are marked following SAN (white
+ *    pieces capitalized and black pieces lower case) and digits (1-8)
+ *    mark the number of consecutive empty squares.
+ * 2) Letter w (white) or b (black) depending on which side moves next.
+ * 3) Letters K, Q (white), k and q (black) mark if castling is
+ *    available to kingside or queenside. Character '-' marks the
+ *    absence of any possibility.
+ * 4) En passant target square or '-' if en passant is not available.
+ * 5) Halfmove counter. Required for compliance with fifty-move rule.
+ * 6) Fullmove counter.
+ *
+ * {@link http://en.wikipedia.org/wiki/Forsyth-Edwards_Notation}
+ * {@link http://en.wikipedia.org/wiki/Fifty-move_rule}
+ *
+ * @see Move
  *
  * @author Tuomas Starck
  */
@@ -13,14 +43,36 @@ public class Chess {
     private int halfmove;
     private int fullmove;
 
+    /**
+     * Constructs the initial position. Pieces and game settings
+     * are created and set to their standard start-of-game values.
+     */
     public Chess() {
         this("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
     }
 
+    /**
+     * Constructs a new game by parsing given string as FEN.
+     *
+     * @param fenString FEN to be used to initialize a game.
+     */
     public Chess(String fenString) {
         this(fenString.split(" "));
     }
 
+    /**
+     * Constructs a new game by parsing given array of string as
+     * an array of FEN primitives.
+     *
+     * FEN parsing is permissive and uses best-effort approach
+     * i.e. anything, that is salvaged of given input, is used
+     * as best as possible, and for the rest, reasonable default
+     * values are assumed.
+     *
+     * @param fenArray An array of FEN primitives used to initialize
+     * a game. Only the six first array elements are used and the
+     * are discarded if provided.
+     */
     public Chess(String[] fenArray) {
         turn = Side.w;
         enpassant = null;
@@ -65,15 +117,24 @@ public class Chess {
         }
     }
 
+    /**
+     * Make a move.
+     *
+     * @param algebraic Move in Algebraic chess notation.
+     *
+     * @throws MoveException If move cannot be executed.
+     */
     void move(String algebraic) throws MoveException {
         Rebound rebound = null;
 
         Move move = new Move(algebraic, turn);
 
         if (move.isCastling()) {
+            /* Castlings are tricky and handled separately */
             rebound = board.castling(move, castling);
         }
         else {
+            /* If no need to castle, then a regular move */
             rebound = board.move(move, enpassant);
         }
 
@@ -89,6 +150,13 @@ public class Chess {
 
         enpassant = rebound.getEnpassant();
 
+        /* The fifty-move rule: a player can claim a draw if no capture
+         * has been made and no pawn has been moved in the last 50
+         * consecutive moves.
+         *
+         * So, if halfmove counter hits 100, aforementioned condition
+         * becomes true.
+         */
         if (move.isCapturing() || move.piece().isPawn()) {
             halfmove = 0;
         }
@@ -111,23 +179,38 @@ public class Chess {
         return "th";
     }
 
-    public String prompt() {
-        String fiftyMoveRule = "";
-
-        if (42 <= halfmove) {
-            fiftyMoveRule = "Halfmoves: " + halfmove + "\n";
-        }
-
-        return String.format("\n%s%s's %d%s> ",
-            fiftyMoveRule, turn, fullmove, ordinal(fullmove));
-    }
-
+    /**
+     * @return Current complete game situation in one string.
+     */
     public String toFen() {
         String ep = (enpassant == null)? "-": enpassant.toString();
         return String.format("%s %s %s %s %d %d",
             board, turn.name(), castling, ep, halfmove, fullmove);
     }
 
+    /**
+     * @return Command query prompt.
+     *
+     * @fixme This functionality really should be refactored
+     * out of here and implemented again in user interface.
+     */
+    public String prompt() {
+        String fiftyMoveRule = "";
+
+        if (100 <= halfmove) {
+            fiftyMoveRule = "Fifty-move rule is active\n";
+        }
+
+        return String.format("\n%s%s's %d%s> ",
+            fiftyMoveRule, turn, fullmove, ordinal(fullmove));
+    }
+
+    /**
+     * @return Game board and situation in a pretty string.
+     *
+     * @fixme This functionality really should be refactored
+     * out of here and implemented again in user interface.
+     */
     @Override
     public String toString() {
         String boardStr = "";

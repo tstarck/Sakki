@@ -4,16 +4,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Simple and effective UI class for Sakki chess model.
+ * Simple but effective UI for Sakki chess model.
  *
  * @author Tuomas Starck
  */
 public class Sakki {
-    /**
-     * @param args the command line arguments
-     */
-
-    private static Scanner lukija = new Scanner(System.in);
+    private static Scanner read = new Scanner(System.in);
 
     private static final String[]
         H_MSG = {
@@ -26,13 +22,16 @@ public class Sakki {
             "  help    More verbose usage",
             "  fen     Initiate a new game with FEN",
             "  new     Reset game to initial position",
-            "  s[how]  Display FEN of the current status",
-            "  u[ndo]  Undoes the last halfmove",
+            "  s[how]  Display FEN of the current game",
+            "  u[ndo]  Undo the last halfmove",
             "  q[uit]  Quits the program",
             "",
             "If input does not match any commands above, it is",
             "  interpreted as standard english Algebraic chess",
-            "  notation and applied to current game."
+            "  notation and applied to current game.",
+            "",
+            "FEN stands for Forsyth-Edwards Notation which is used",
+            "  in chess for describing a particular game position."
         };
 
     private static void help(String[] msg) {
@@ -41,29 +40,37 @@ public class Sakki {
         }
     }
 
+    /**
+     * @param argv An array of FEN primitives. Up to 6 array element
+     * are handled even if more are given.
+     *
+     * @see Chess
+     */
     public static void main(String[] argv) {
-        boolean fen = false;
+        boolean tryParsingFen = false;
         Chess game = null;
-        String args = "";
+        String fen = "";
         String input = null;
         String current = null;
         ArrayList<String> history = new ArrayList<String>();
 
         try {
             game = new Chess(argv);
-        } catch (IllegalArgumentException e) {
+        }
+        catch (IllegalArgumentException iae) {
+            /* If given arguments were rubbish,
+             * start with initial position.
+             */
             game = new Chess();
         }
 
-        for (int i = 0; i < argv.length; i++) {
-            args += " " + argv[i];
-            if (i >= 5) {
-                break;
-            }
+        for (int i=0; i<argv.length; i++) {
+            fen += " " + argv[i];
+            if (i >= 5) break;
         }
 
         if (argv.length > 0) {
-            System.out.format("\nInput:\n %s\n", args.substring(1));
+            System.out.format("\nInput:\n %s\n", fen.substring(1));
             System.out.format("Interpretation:\n %s\n", game.toFen());
         }
 
@@ -71,30 +78,30 @@ public class Sakki {
 
         while (true) {
             current = game.toFen();
-            input = lukija.nextLine().trim();
+            input = read.nextLine().trim();
 
             if (input.isEmpty()) {
                 System.out.print(game.prompt());
-                fen = false;
+                tryParsingFen = false;
                 continue;
             }
 
-            if (fen) {
+            if (tryParsingFen) {
                 Chess reset;
+                tryParsingFen = false;
 
                 try {
                     reset = new Chess(input);
                     game = reset;
                     history.clear();
                 }
-                catch (IllegalArgumentException e) {
+                catch (IllegalArgumentException iae) {
                     System.out.println("\nUnable to parse given FEN!");
                 }
 
                 System.out.format("\nInput:\n %s\n", input);
                 System.out.format("Interpretation:\n %s\n", game.toFen());
                 System.out.print(game + game.prompt());
-                fen = false;
                 continue;
             }
 
@@ -112,7 +119,7 @@ public class Sakki {
 
             if (input.equals("fen")) {
                 System.out.print("FEN> ");
-                fen = true;
+                tryParsingFen = true;
                 continue;
             }
 
@@ -132,7 +139,8 @@ public class Sakki {
                 if (!history.isEmpty()) {
                     game = new Chess(history.remove(0));
                     System.out.print(game + game.prompt());
-                } else {
+                }
+                else {
                     System.out.println("\nNo available history");
                     System.out.print(game.prompt());
                 }
@@ -148,11 +156,14 @@ public class Sakki {
                 game.move(input);
                 history.add(0, current);
             }
-            catch (MoveException state) {
-                System.out.println("\n" + state);
+            catch (MoveException me) {
+                System.out.println("\n" + me);
                 System.out.print(game.prompt());
 
-                if (state.isDirty()) {
+                /* If move went too far before failing, game is left
+                 * in an inconsistent state and must be restored.
+                 */
+                if (me.isDirty()) {
                     game = new Chess(current);
                 }
 

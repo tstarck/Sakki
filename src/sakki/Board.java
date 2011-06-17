@@ -3,9 +3,12 @@ package sakki;
 import java.util.ArrayList;
 
 /**
- * Model of a Chess board and pieces on it.
+ * Model of a chess board and pieces on it.
  *
- * Board is standard sized with eight files and ranks.
+ * This program uses standard chess board with 64 squares
+ * in eight files and ranks.
+ *
+ * {@link http://en.wikipedia.org/wiki/Chessboard}
  *
  * @author Tuomas Starck
  */
@@ -15,10 +18,20 @@ class Board {
     private Type[][] state;
     private ArrayList<Piece> board;
 
+    /**
+     * Constructs the initial position. Pieces are placed to their
+     * standard start-of-game positions.
+     */
     public Board() {
         this("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", null);
     }
 
+    /**
+     * Constructs a game board with piece positions parsed from given FEN.
+     *
+     * @param fen First part of FEN string containing board outlook.
+     * @param enpassant En passant square if any.
+     */
     public Board(String fen, Coord enpassant) {
         int file = 0;
         int rank = 0;

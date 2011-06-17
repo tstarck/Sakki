@@ -4,16 +4,33 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Reads and parses <i>Algebraic chess notation</i>.
+ * Reads and parses Algebraic chess notation.
  *
- * Flavor of notation:
- *   Capture is marked with 'x'
- *   Pawn promotion prefix is '='
- *   Castling is written with zeros
- *   Check (+) and mate (#) are accepted
+ * Algebraic chess notation (SAN) is used to describe the moves in
+ * a game of chess. This program uses following flavor of SAN:
  *
- * @see <a href="http://en.wikipedia.org/wiki/Algebraic_chess_notation">
- * Algebraic chess notation in Wikipedia</a>
+ * (1) Capitalized character of the piece to be moved. None if
+ *     piece is pawn. Following common character set is used:
+ *       K - king
+ *       Q - queen
+ *       R - rook
+ *       B - bishop
+ *       N - knight
+ * (2) Optional hint of the square of departure (file, rank or
+ *     both). Required only if move would be ambiguous otherwise.
+ * (3) Character x if and only if this is capturing move.
+ * (4) Target square.
+ * (5) Used only if pawn is to be promoted. Character = followed
+ *     by character of an officer.
+ * (6) Character + or # used to claim check or mate accordingly.
+ * (7) Optional ! or ? characters are silently discarded.
+ *
+ * Castlings 0-0 (kingside) and 0-0-0 (queenside) are written
+ * with zeros.
+ *
+ * {@link http://en.wikipedia.org/wiki/Algebraic_chess_notation}
+ *
+ * @see Chess
  *
  * @author Tuomas Starck
  */
