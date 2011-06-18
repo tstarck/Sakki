@@ -4,48 +4,52 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Reads and parses Algebraic chess notation.
+ * <p>Reads and parses Algebraic chess notation.</p>
  *
- * Algebraic chess notation (SAN) is used to describe the moves in
- * a game of chess. This program uses following flavor of SAN:
+ * <p>Algebraic chess notation (SAN) is used to describe the moves in
+ * a game of chess. This program uses following flavor of SAN:</p>
  *
- * (1) Capitalized character of the piece to be moved. None if
+ * <p>
+ * <ol>
+ * <li>Capitalized character of the piece to be moved. None if
  *     piece is pawn. Following common character set is used:
- *       K - king
- *       Q - queen
- *       R - rook
- *       B - bishop
- *       N - knight
- * (2) Optional hint of the square of departure (file, rank or
- *     both). Required only if move would be ambiguous otherwise.
- * (3) Character x if and only if this is capturing move.
- * (4) Target square.
- * (5) Used only if pawn is to be promoted. Character = followed
- *     by character of an officer.
- * (6) Character + or # used to claim check or mate accordingly.
- * (7) Optional ! or ? characters are silently discarded.
+ *       K - king,
+ *       Q - queen,
+ *       R - rook,
+ *       B - bishop,
+ *       N - knight</li>
+ * <li>Optional hint of the square of departure (file, rank or
+ *     both). Required only if move would be ambiguous otherwise.</li>
+ * <li>Character x if and only if this is capturing move.</li>
+ * <li>Target square.</li>
+ * <li>Used only if pawn is to be promoted. Character = followed
+ *     by character of an officer.</li>
+ * <li>Character + or # used to claim check or mate accordingly.</li>
+ * <li>Optional ! or ? characters are silently discarded.</li>
+ * </ol>
+ * </p>
  *
- * Castlings 0-0 (kingside) and 0-0-0 (queenside) are written
- * with zeros.
+ * <p>Castlings 0-0 (kingside) and 0-0-0 (queenside) are written
+ * with zeros.</p>
  *
- * {@link http://en.wikipedia.org/wiki/Algebraic_chess_notation}
+ * <p>{@link http://en.wikipedia.org/wiki/Algebraic_chess_notation}</p>
  *
  * @see Chess
  *
  * @author Tuomas Starck
  */
 class Move {
-    public final int
-            KINGSIDE = 1,
-            QUEENSIDE = 2;
+    public final int KINGSIDE = 1;
+    public final int QUEENSIDE = 2;
 
-    private final String
-        castlingre = "0-0(-0)?([#+])?",
-        re = "([NBRQK])?([1-8a-h]{1,2})?(x)?([a-h][1-8])(=([NBRQ]))?([#+])?[!?]*";
-            /*  1:piece  2:from          3:x 4:to        6:promo     7:act */
+    private final String castlingregex ="0-0(-0)?([#+])?";
+
+    private final String regularregex =
+    "([NBRQK])?([1-8a-h]{1,2})?(x)?([a-h][1-8])(=([NBRQ]))?([#+])?[!?]*";
+    /*1:piece   2:from         3:x  4:to         6:promo   7:act */
 
     private Matcher move;
-    private Matcher castlemove;
+    private Matcher castle;
 
     private Side side;
     private Coord to;
@@ -57,9 +61,17 @@ class Move {
     private boolean check;
     private boolean mate;
 
+    /**
+     * Parse SAN.
+     *
+     * @param str SAN string.
+     * @param turn Which side hold move.
+     *
+     * @throws MoveException If SAN cannot be parsed.
+     */
     public Move(String str, Side turn) throws MoveException {
-        move = Pattern.compile(re).matcher(str);
-        castlemove = Pattern.compile(castlingre).matcher(str);
+        move = Pattern.compile(regularregex).matcher(str);
+        castle = Pattern.compile(castlingregex).matcher(str);
 
         side = turn;
         to = null;
@@ -72,45 +84,53 @@ class Move {
         mate = false;
 
         if (move.matches()) {
-            // 1: Piece which is to be moved
+            /* 1: Piece which is to be moved */
             piece = resolvePiece(move.group(1), side);
 
-            // 2: From (square hint)
+            /* 2: From (square hint) */
             if (move.group(2) != null) {
                 from = move.group(2);
             }
 
-            // 3: Capture indicator
+            /* 3: Capture indicator */
             if (move.group(3) != null) {
                 capture = true;
             }
 
-            // 4: To (target square)
+            /* 4: To (target square) */
             to = new Coord(move.group(4));
 
-            // 6: Officer to which pawn is to be promoted
+            /* 6: Officer to which pawn is to be promoted */
             if (move.group(6) != null) {
                 promote = resolvePiece(move.group(6), side);
             }
 
-            // 7: Check or mate status
+            /* 7: Check or mate status */
             parseCheckMate(move.group(7));
         }
-        else if (castlemove.matches()) {
-            // Not strictly required, but helps to avoid NPE's
+        else if (castle.matches()) {
+            /* Not strictly required, but helps to avoid NPE's */
             piece = resolvePiece("k", side);
 
-            // To which side to castle
-            castling = (castlemove.group(1) == null)? KINGSIDE: QUEENSIDE;
+            /* To which side to castle */
+            castling = (castle.group(1) == null)? KINGSIDE: QUEENSIDE;
 
-            // Check or mate status
-            parseCheckMate(castlemove.group(2));
+            /* Check or mate status */
+            parseCheckMate(castle.group(2));
         }
         else {
             throw new MoveException("Incomprehensible command");
         }
     }
 
+    /**
+     * Resolve input to a type of piece.
+     *
+     * @param input Character of the piece.
+     * @param side Side of piece.
+     *
+     * @return Piece type.
+     */
     private Type resolvePiece(String input, Side side) {
         String str = (input == null)? "p": input;
 
@@ -122,6 +142,9 @@ class Move {
         }
     }
 
+    /**
+     * @param xtra Plus or hash character.
+     */
     private void parseCheckMate(String xtra) {
         if (xtra != null) {
             if (xtra.equals("+")) {
@@ -134,52 +157,72 @@ class Move {
         }
     }
 
-    public int odds(Piece piece) {
-        String loc = piece.toString();
-
-        if (loc.equals(from)) return 2;
-
-        if (loc.indexOf(from) != -1) return 1;
-
-        return 0;
-    }
-
+    /**
+     * @return Side of piece.
+     */
     public Side side() {
         return side;
     }
 
+    /**
+     * @return Target coordinate.
+     */
     public Coord to() {
         return to;
     }
 
+    /**
+     * @return Type of piece.
+     */
     public Type piece() {
         return piece;
     }
 
+    /**
+     * @return Type of piece to be promoted to.
+     */
     public Type promotion() {
         return promote;
     }
 
+    /**
+     * @return Hint of the square of departure.
+     */
     public String from() {
         return from;
     }
 
+    /**
+     * @return Castling option.
+     */
     public int castling() {
         return castling;
     }
 
+    /**
+     * @return True if this is castling move.
+     */
     public boolean isCastling() {
         return (castling != 0);
     }
 
+    /**
+     * @return True if this should be capturing move.
+     */
     public boolean isCapturing() {
         return capture;
     }
 
+    /**
+     * @return True if this should be checking move.
+     */
     public boolean isChecking() {
         return check;
     }
 
+    /**
+     * @return True if this should be mating move.
+     */
     public boolean isMating() {
         return mate;
     }

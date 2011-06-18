@@ -1,21 +1,23 @@
 package sakki;
 
 /**
- * List of pieces available in the Game of Chess. Also a few other values
- * useful to indicate status of a square on Chess board.
+ * <p>List of pieces available in the Game of Chess. Also a few other
+ * values useful to indicate status of a square on Chess board.</p>
  *
- * Pieces are named according to the common convention amongst English-speaking
- * players. Capital letters indicate white pieces and vice versa (in compliance
- * with Forsyth–Edwards Notation).
+ * <p>Pieces are named according to the Standard Algebraic Notation
+ * common amongst English-speaking players. Capital letters indicate
+ * white pieces and lower case letters black pieces.</p>
  *
- * @see <a href="http://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation">
- * Forsyth–Edwards Notation</a>
+ * @see Chess
  *
  * @author Tuomas Starck
  */
 enum Type {
     /**
      * This value marks the absence of a piece.
+     *
+     * @fixme Might be smart (performance wise) to
+     * replace this with null.
      */
     empty(0, null) {
         @Override
@@ -24,7 +26,7 @@ enum Type {
         }
     },
 
-    moveable(0, null) {
+    movable(0, null) {
         @Override
         public String toString() {
             return "o";
@@ -55,6 +57,10 @@ enum Type {
     private final int value;
     private final Side side;
 
+    /**
+     * @param v Value of this type of piece.
+     * @param s Side of this type of piece.
+     */
     Type(int v, Side s) {
         value = v;
         side = s;

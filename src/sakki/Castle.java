@@ -48,19 +48,35 @@ class Castle {
 
     private HashSet<Character> castling;
 
+    /**
+     * Default constructor allows all castings.
+     */
     public Castle() {
         this("KQkq");
     }
 
+    /**
+     * Constructor for custom castling configuration.
+     *
+     * @param str Castling choices available.
+     */
     public Castle(String str) {
         castling = new HashSet<Character>();
         enable(str);
     }
 
+    /**
+     * @param c Character of castling options.
+     *
+     * @return True if character is valid.
+     */
     private boolean isValid(Character c) {
         return (valid.indexOf(c) != -1);
     }
 
+    /**
+     * @param str String of castling options.
+     */
     public final void enable(String str) {
         for (Character c : str.toCharArray()) {
             if (isValid(c)) {
@@ -69,6 +85,9 @@ class Castle {
         }
     }
 
+    /**
+     * @param str String of castling options to be disabled.
+     */
     public void disable(String str) {
         if (str == null) return;
 
@@ -77,7 +96,21 @@ class Castle {
         }
     }
 
-    void crop(Type[][] state) {
+    /**
+     * @param move Move object.
+     *
+     * @return True if castling is allowed.
+     */
+    public boolean isAllowed(Move move) {
+        return castling.contains(valid.charAt(index(move)));
+    }
+
+    /**
+     * Disable castling options based on status of the game board.
+     *
+     * @param status Status of the board.
+     */
+    void crop(Type[][] status) {
         Coord K = kingsSquares[0];
         Coord k = kingsSquares[1];
 
@@ -86,15 +119,22 @@ class Castle {
         Coord hr = rooksSquares[2];
         Coord ar = rooksSquares[3];
 
-        if (state[K.rank][K.file] != Type.K) disable("KQ");
-        if (state[k.rank][k.file] != Type.k) disable("kq");
+        if (status[K.rank][K.file] != Type.K) disable("KQ");
+        if (status[k.rank][k.file] != Type.k) disable("kq");
 
-        if (state[hR.rank][hR.file] != Type.R) disable("K");
-        if (state[aR.rank][aR.file] != Type.R) disable("Q");
-        if (state[hr.rank][hr.file] != Type.r) disable("k");
-        if (state[ar.rank][ar.file] != Type.r) disable("q");
+        if (status[hR.rank][hR.file] != Type.R) disable("K");
+        if (status[aR.rank][aR.file] != Type.R) disable("Q");
+        if (status[hr.rank][hr.file] != Type.r) disable("k");
+        if (status[ar.rank][ar.file] != Type.r) disable("q");
     }
 
+    /**
+     * Return correct index for the literal data arrays above.
+     *
+     * @param move Move object.
+     *
+     * @return Index number.
+     */
     public int index(Move move) {
         if (move.side() == Side.w) {
             return (move.castling() == move.KINGSIDE)? 0: 1;
@@ -104,34 +144,63 @@ class Castle {
         }
     }
 
-    public boolean isAllowed(Move move) {
-        return castling.contains(valid.charAt(index(move)));
-    }
-
+    /**
+     * @param move Move object.
+     *
+     * @return Square where king ought to be.
+     */
     public Coord getKingsSqr(Move move) {
         return kingsSquares[(move.side() == Side.w)? 0: 1];
     }
 
+    /**
+     * @param move Move object.
+     *
+     * @return Square to which king should move when castled.
+     */
     public Coord getKingsTarget(Move move) {
         return kingsTargets[index(move)];
     }
 
+    /**
+     * @param move Move object.
+     *
+     * @return Square where rook ought to be.
+     */
     public Coord getRooksSqr(Move move) {
         return rooksSquares[index(move)];
     }
 
+    /**
+     * @param move Move object.
+     *
+     * @return Square to which rook moves at castling.
+     */
     public Coord getRooksTarget(Move move) {
         return rooksTargets[index(move)];
     }
 
+    /**
+     * @param move Move object.
+     *
+     * @return Squares which need to be vacant at castling.
+     */
     public Coord[] getFreeSqrs(Move move) {
         return freeSquares[index(move)];
     }
 
+    /**
+     * @param move Move object.
+     *
+     * @return Squares which must not be threatened at castling.
+     */
     public Coord[] getSafeSqrs(Move move) {
         return safeSquares[index(move)];
     }
 
+    /**
+     * @return String representation of castling options.
+     */
     @Override
     public String toString() {
         String str = "";
