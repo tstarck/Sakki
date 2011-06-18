@@ -1,35 +1,39 @@
 package sakki;
 
 /**
- * An implementation of The Game of Chess for two players.
+ * <p>An implementation of The Game of Chess for two players.</p>
  *
- * Standard Algebraic Notation (SAN) a.k.a. Algebraic chess notation
- * is used to describe the moves in a game of chess. Besides the
- * moves, this program uses SAN coordinate system for game board
- * ranks (1-8) and files (a-h).
+ * <p><i>Standard Algebraic Notation</i> (SAN) a.k.a. <i>Algebraic chess
+ * notation</i> is used to describe the moves in a game of chess. Besides
+ * the moves, this program uses SAN coordinate system for game board
+ * ranks (1-8) and files (a-h).</p>
  *
- * {@link http://en.wikipedia.org/wiki/Algebraic_chess_notation}
+ * <p>{@link http://en.wikipedia.org/wiki/Algebraic_chess_notation}</p>
  *
- * Forsyth-Edwards Notation (FEN) is a standard notation for
- * describing any particular position of a chess game. FEN is
+ * <p><i>Forsyth-Edwards Notation</i> (FEN) is a standard notation
+ * for describing any particular position of a chess game. FEN is
  * used extensively throughout this program and it can be used
- * to initialize a new game with arbitrary position.
+ * to initialize a new game with arbitrary position.</p>
  *
+ * <p>
  * FEN has six parts:
- * 1) Piece placement from 8th rank to 1st and from a file to h with
- *    '/' separating ranks. Pieces are marked following SAN (white
- *    pieces capitalized and black pieces lower case) and digits (1-8)
- *    mark the number of consecutive empty squares.
- * 2) Letter w (white) or b (black) depending on which side moves next.
- * 3) Letters K, Q (white), k and q (black) mark if castling is
- *    available to kingside or queenside. Character '-' marks the
- *    absence of any possibility.
- * 4) En passant target square or '-' if en passant is not available.
- * 5) Halfmove counter. Required for compliance with fifty-move rule.
- * 6) Fullmove counter.
+ * <ol>
+ * <li>Piece placement from 8th rank to 1st and from a file to h with
+ *     '/' separating ranks. Pieces are marked following SAN (white
+ *     pieces capitalized and black pieces lower case) and digits (1-8)
+ *     mark the number of consecutive empty squares.</li>
+ * <li>Letter w (white) or b (black) depending on which side moves next.</li>
+ * <li>Letters K, Q (white), k and q (black) mark if castling is
+ *     available to kingside or queenside. Character '-' marks the
+ *     absence of any possibility.</li>
+ * <li>En passant target square or '-' if en passant is not available.</li>
+ * <li>Halfmove counter. Required for compliance with fifty-move rule.</li>
+ * <li>Fullmove counter.</li>
+ * </ol>
+ * </p>
  *
- * {@link http://en.wikipedia.org/wiki/Forsyth-Edwards_Notation}
- * {@link http://en.wikipedia.org/wiki/Fifty-move_rule}
+ * <p>{@link http://en.wikipedia.org/wiki/Forsyth-Edwards_Notation}</p>
+ * <p>{@link http://en.wikipedia.org/wiki/Fifty-move_rule}</p>
  *
  * @see Move
  *
