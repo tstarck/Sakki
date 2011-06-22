@@ -1,16 +1,32 @@
 #!/usr/bin/perl
 
+# Copyright 2011 (c) Tuomas Starck
+# This script translates PGN books (such as the one Gnuchess
+# uses) to series of Sakki commands and moves. Useful when
+# wanting to create great amounts of input for testing and
+# profiling.
+
 use strict;
 
-my $pgn = {};
-
 sub Line($) {
-	my @a = split /\s+/;
-	foreach (@a) { s/\d+\.//; }
-	return @a;
+	my @ret;
+
+	foreach (split /\s+/) {
+		s/\d+\.//;
+		next if (/^$/ or /^\d/);
+		push @ret, $_;
+	}
+
+	return @ret;
 }
 
-sub Loop($) {
+sub Print($$) {
+	my ($nro, $rivi) = @_;
+	print "new\n";
+	foreach (@$rivi) { print "$_\n"; }
+}
+
+sub Main($) {
 	my ($kirja) = @_;
 
 	my $nro = 0;
@@ -34,7 +50,7 @@ sub Loop($) {
 		}
 		elsif ($tila == 1) {
 			if (/^\s*$/) {
-				$pgn->{$nro} = $rivi;
+				Print($nro, $rivi);
 				$rivi = [];
 				$tila = 0;
 			}
@@ -46,18 +62,7 @@ sub Loop($) {
 
 	close BOOK;
 
-	foreach my $i (keys %$pgn) {
-		print $i." [ ";
-		foreach (@{$pgn->{$i}}) {
-			print $_." ";
-		}
-		print "]\n";
-	}
-}
-
-sub Main() {
-	Loop("book.pgn");
 	return 0;
 }
 
-exit Main;
+exit Main(shift);
