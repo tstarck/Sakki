@@ -29,8 +29,7 @@ import java.util.regex.Pattern;
  * </ol>
  * </p>
  *
- * <p>Castlings 0-0 (kingside) and 0-0-0 (queenside) are written
- * with zeros.</p>
+ * <p>Castlings may be written either with 0 (zero) or O (big-o).</p>
  *
  * <p>{@link http://en.wikipedia.org/wiki/Algebraic_chess_notation}</p>
  *
@@ -42,7 +41,7 @@ class Move {
     public final int KINGSIDE = 1;
     public final int QUEENSIDE = 2;
 
-    private final String castlingregex ="0-0(-0)?([#+])?";
+    private final String castlingregex ="[0O]((-[0O]){1,2})([#+])?";
 
     private final String regularregex =
     "([NBRQK])?([1-8a-h]{1,2})?(x)?([a-h][1-8])(=([NBRQ]))?([#+])?[!?]*";
@@ -109,14 +108,14 @@ class Move {
             parseCheckMate(move.group(7));
         }
         else if (castle.matches()) {
-            /* Not strictly required, but helps to avoid NPE's */
+            /* Not strictly required, but for consistency */
             piece = resolvePiece("k", side);
 
             /* To which side to castle */
-            castling = (castle.group(1) == null)? KINGSIDE: QUEENSIDE;
+            castling = (castle.group(1).length() <3)? KINGSIDE: QUEENSIDE;
 
             /* Check or mate status */
-            parseCheckMate(castle.group(2));
+            parseCheckMate(castle.group(3));
         }
         else {
             throw new MoveException("Incomprehensible command");
