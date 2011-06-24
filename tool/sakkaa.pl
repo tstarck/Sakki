@@ -13,7 +13,7 @@ sub Line($) {
 
 	foreach (split /\s+/) {
 		s/\d+\.//;
-		next if (/^$/ or /^\d/);
+		next if (/^1/ or /^0-1/);
 		push @ret, $_;
 	}
 
