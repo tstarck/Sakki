@@ -17,10 +17,10 @@ class BlackPawn extends Piece {
     public void update(Type[][] status, Coord enpassant) {
         reset();
 
-        markIfMovable(loc.south(1), status);
-
-        if (loc.rank == INITIAL_RANK) {
-            markIfMovable(loc.south(2), status);
+        if (markIfMovable(loc.south(1), status)) {
+            if (loc.rank == INITIAL_RANK) {
+                markIfMovable(loc.south(2), status);
+            }
         }
 
         Coord se = loc.southeast(1);

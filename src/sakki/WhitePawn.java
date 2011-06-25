@@ -17,10 +17,10 @@ class WhitePawn extends Piece {
     public void update(Type[][] status, Coord enpassant) {
         reset();
 
-        markIfMovable(loc.north(1), status);
-
-        if (loc.rank == INITIAL_RANK) {
-            markIfMovable(loc.north(2), status);
+        if (markIfMovable(loc.north(1), status)) {
+            if (loc.rank == INITIAL_RANK) {
+                markIfMovable(loc.north(2), status);
+            }
         }
 
         Coord ne = loc.northeast(1);
