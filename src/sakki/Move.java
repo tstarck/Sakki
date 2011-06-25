@@ -22,8 +22,7 @@ import java.util.regex.Pattern;
  *     both). Required only if move would be ambiguous otherwise.</li>
  * <li>Character x if and only if this is capturing move.</li>
  * <li>Target square.</li>
- * <li>Used only if pawn is to be promoted. Character = followed
- *     by character of an officer.</li>
+ * <li>Optional = character followed by character of an officer.</li>
  * <li>Character + or # used to claim check or mate accordingly.</li>
  * <li>Optional ! or ? characters are silently discarded.</li>
  * </ol>
@@ -44,8 +43,8 @@ class Move {
     private final String castlingregex ="[0O]((-[0O]){1,2})([#+])?";
 
     private final String regularregex =
-    "([NBRQK])?([1-8a-h]{1,2})?(x)?([a-h][1-8])(=([NBRQ]))?([#+])?[!?]*";
-    /*1:piece   2:from         3:x  4:to         6:promo   7:act */
+    "([NBRQK])?([a-h]?[1-8]?)(x)?([a-h][1-8])(=?([NBRQ]))?([#+])?(ep)?[!?]*";
+    /*1:piece   2:from       3:x  4:to           6:promo   7:act */
 
     private Matcher move;
     private Matcher castle;
