@@ -169,46 +169,6 @@ public class Chess {
         }
     }
 
-    private String ordinal(int n) {
-        int tmp = n % 10;
-
-        if (n % 100 - tmp == 10) return "th";
-
-        switch (tmp) {
-            case 1: return "st";
-            case 2: return "nd";
-            case 3: return "rd";
-        }
-
-        return "th";
-    }
-
-    /**
-     * @return Current complete game situation in one string.
-     */
-    public String toFen() {
-        String ep = (enpassant == null)? "-": enpassant.toString();
-        return String.format("%s %s %s %s %d %d",
-            board, turn.name(), castling, ep, halfmove, fullmove);
-    }
-
-    /**
-     * @return Command query prompt.
-     *
-     * @fixme This functionality really should be refactored
-     * out of here and implemented again in user interface.
-     */
-    public String prompt() {
-        String fiftyMoveRule = "";
-
-        if (100 <= halfmove) {
-            fiftyMoveRule = "Fifty-move rule is active\n";
-        }
-
-        return String.format("\n%s%s's %d%s> ",
-            fiftyMoveRule, turn, fullmove, ordinal(fullmove));
-    }
-
     /**
      * Return the state of the board.
      *
@@ -241,36 +201,32 @@ public class Chess {
     }
 
     /**
-     * @return Game board and situation in a pretty string.
-     *
-     * @fixme This functionality really should be refactored
-     * out of here and implemented again in user interface.
+     * @return Game board material status.
      */
-    @Override
-    public String toString() {
-        String boardStr = "";
-        String fileLegend = "a b c d e f g h";
-        String enpassantStr = (enpassant == null)? "-": enpassant.toString();
-        Type[][] state = board.getState();
-        int[] material = board.getMaterial();
+    public int[] getMaterial() {
+        return board.getMaterial();
+    }
 
-        for (int i=0; i<state.length; i++) {
-            boardStr += "\n" + (8-i) + " ";
+    /**
+     * @return the target of en passant or a dash.
+     */
+    public String getEnpassant() {
+        return (enpassant == null)? "-": enpassant.toString();
+    }
 
-            for (Type file : state[i]) {
-                boardStr += " " + file;
-            }
+    /**
+     * @return a string of castling possibilities or a dash.
+     */
+    public String getCastling() {
+        return castling.toString();
+    }
 
-            if (i == 0) {
-                boardStr += "  " + material[Side.b.index];
-            }
-
-            if (i == 7) {
-                boardStr += "  " + material[Side.w.index];
-            }
-        }
-
-        return String.format("\n   %s  %s %s\n%s\n", fileLegend,
-            castling.toString(), enpassantStr, boardStr);
+    /**
+     * @return Current complete game situation in one string.
+     */
+    public String toFen() {
+        String ep = (enpassant == null)? "-": enpassant.toString();
+        return String.format("%s %s %s %s %d %d",
+            board, turn.name(), castling, ep, halfmove, fullmove);
     }
 }

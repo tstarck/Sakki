@@ -41,6 +41,63 @@ public class Sakki {
     }
 
     /**
+     * @param n Some integer.
+     *
+     * @return A string with English ordinal postfix.
+     */
+    private static String ordinal(int n) {
+        int tmp = n % 10;
+
+        if (n % 100 - tmp == 10) return "th";
+
+        switch (tmp) {
+            case 1: return "st";
+            case 2: return "nd";
+            case 3: return "rd";
+        }
+
+        return "th";
+    }
+
+    /**
+     * @return Nicely formatted query prompt.
+     */
+    private static String prompt(Chess game) {
+        String fiftyMoveRule = "";
+        int fullmove = game.getFullmove();
+
+        if (100 <= game.getHalfmove()) {
+            fiftyMoveRule = "Fifty-move rule is active\n";
+        }
+
+        return String.format("\n%s%s's %d%s> ",
+            fiftyMoveRule, game.getTurn(), fullmove, ordinal(fullmove));
+    }
+
+    /**
+     * @return Nicely drawn game board and status.
+     */
+    private static String draw(Chess game) {
+        String boardStr = "";
+        String fileLegend = "a b c d e f g h";
+
+        Type[][] state = game.getState();
+        int[] material = game.getMaterial();
+
+        for (int i=0; i<state.length; i++) {
+            boardStr += "\n" + (8-i) + " ";
+
+            for (Type file : state[i]) boardStr += " " + file;
+
+            if (i == 0) boardStr += "  " + material[Side.b.index];
+            if (i == 7) boardStr += "  " + material[Side.w.index];
+        }
+
+        return String.format("\n   %s  %s %s\n%s\n", fileLegend,
+            game.getCastling(), game.getEnpassant(), boardStr);
+    }
+
+    /**
      * @param argv An array of FEN primitives. Up to 6 array element
      * are handled even if more are given.
      *
@@ -74,14 +131,14 @@ public class Sakki {
             System.out.format("Interpretation:\n %s\n", game.toFen());
         }
 
-        System.out.print(game + game.prompt());
+        System.out.print(draw(game) + prompt(game));
 
         while (true) {
             current = game.toFen();
             input = read.nextLine().trim();
 
             if (input.isEmpty()) {
-                System.out.print(game.prompt());
+                System.out.print(prompt(game));
                 tryParsingFen = false;
                 continue;
             }
@@ -101,19 +158,19 @@ public class Sakki {
 
                 System.out.format("\nInput:\n %s\n", input);
                 System.out.format("Interpretation:\n %s\n", game.toFen());
-                System.out.print(game + game.prompt());
+                System.out.print(draw(game) + prompt(game));
                 continue;
             }
 
             if (input.equals("h")) {
                 help(H_MSG);
-                System.out.print(game.prompt());
+                System.out.print(prompt(game));
                 continue;
             }
 
             if (input.equals("help")) {
                 help(HELP_MSG);
-                System.out.print(game.prompt());
+                System.out.print(prompt(game));
                 continue;
             }
 
@@ -125,24 +182,24 @@ public class Sakki {
 
             if (input.equals("new")) {
                 game = new Chess();
-                System.out.print(game + game.prompt());
+                System.out.print(draw(game) + prompt(game));
                 continue;
             }
 
             if (input.equals("s") || input.equals("show")) {
                 System.out.println("\n" + current);
-                System.out.print(game + game.prompt());
+                System.out.print(draw(game) + prompt(game));
                 continue;
             }
 
             if (input.equals("u") || input.equals("undo")) {
                 if (!history.isEmpty()) {
                     game = new Chess(history.remove(0));
-                    System.out.print(game + game.prompt());
+                    System.out.print(draw(game) + prompt(game));
                 }
                 else {
                     System.out.println("\nNo available history");
-                    System.out.print(game.prompt());
+                    System.out.print(prompt(game));
                 }
 
                 continue;
@@ -158,7 +215,7 @@ public class Sakki {
             }
             catch (MoveException me) {
                 System.out.println("\n" + me);
-                System.out.print(game.prompt());
+                System.out.print(prompt(game));
 
                 /* If move went too far before failing, game is left
                  * in an inconsistent state and must be restored.
@@ -170,7 +227,7 @@ public class Sakki {
                 continue;
             }
 
-            System.out.print(game + game.prompt());
+            System.out.print(draw(game) + prompt(game));
         }
 
         System.out.println();

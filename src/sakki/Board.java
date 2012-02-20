@@ -435,7 +435,7 @@ class Board {
     }
 
     /**
-     * @return Material of game board.
+     * @return Game board material status.
      */
     public int[] getMaterial() {
         return material;
