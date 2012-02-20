@@ -224,7 +224,8 @@ public class Chess {
     /**
      * @return Current complete game situation in one string.
      */
-    public String toFen() {
+    @Override
+    public String toString() {
         String ep = (enpassant == null)? "-": enpassant.toString();
         return String.format("%s %s %s %s %d %d",
             board, turn.name(), castling, ep, halfmove, fullmove);

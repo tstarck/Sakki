@@ -128,13 +128,13 @@ public class Sakki {
 
         if (argv.length > 0) {
             System.out.format("\nInput:\n %s\n", fen.substring(1));
-            System.out.format("Interpretation:\n %s\n", game.toFen());
+            System.out.format("Interpretation:\n %s\n", game);
         }
 
         System.out.print(draw(game) + prompt(game));
 
         while (true) {
-            current = game.toFen();
+            current = game.toString();
             input = read.nextLine().trim();
 
             if (input.isEmpty()) {
@@ -157,7 +157,7 @@ public class Sakki {
                 }
 
                 System.out.format("\nInput:\n %s\n", input);
-                System.out.format("Interpretation:\n %s\n", game.toFen());
+                System.out.format("Interpretation:\n %s\n", game);
                 System.out.print(draw(game) + prompt(game));
                 continue;
             }
