@@ -220,6 +220,27 @@ public class Chess {
     }
 
     /**
+     * @return the Side which holds next move.
+     */
+    public Side getTurn() {
+        return turn;
+    }
+
+    /**
+     * @return the halfmove count.
+     */
+    public int getHalfmove() {
+        return halfmove;
+    }
+
+    /**
+     * @return the fullmove count.
+     */
+    public int getFullmove() {
+        return fullmove;
+    }
+
+    /**
      * @return Game board and situation in a pretty string.
      *
      * @fixme This functionality really should be refactored
