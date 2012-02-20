@@ -183,7 +183,7 @@ class Board {
      * @return List of pieces matching the hint. Hopefully just one!
      */
     private ArrayList<Piece> crop(ArrayList<Piece> array, String from) {
-        if (from.isEmpty()) return array;
+        if (from.length() == 0) return array;
 
         ArrayList<Piece> cropd = new ArrayList<Piece>();
 
