@@ -1,7 +1,7 @@
 package sakki;
 
+import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  * @author Tuomas Starck
@@ -34,7 +34,7 @@ public class ChessTest {
             game.move(move);
         }
 
-        assertEquals(exp, game.toFen());
+        assertEquals(exp, game.toString());
     }
 
     /**
@@ -50,7 +50,7 @@ public class ChessTest {
 
         for (String fen : fence) {
             Chess game = new Chess(fen);
-            String res = game.toFen();
+            String res = game.toString();
             assertEquals(fen, res);
         }
     }
@@ -64,7 +64,7 @@ public class ChessTest {
         String exp = "3brrb1/2N4B/8/2p4Q/2p2k2/5P2/4P1KR/2N2RB1 w - - 0 1";
 
         Chess game = new Chess(fen);
-        assertEquals(exp, game.toFen());
+        assertEquals(exp, game.toString());
     }
 
     /**
@@ -76,7 +76,7 @@ public class ChessTest {
         String exp = "6K1/pN2R1PQ/p7/r2k3r/N2n4/1P2p3/BB5p/2Rb2bQ w - - 0 1";
 
         Chess game = new Chess(fen);
-        assertEquals(exp, game.toFen());
+        assertEquals(exp, game.toString());
     }
 
     /**
@@ -111,8 +111,8 @@ public class ChessTest {
             g2.move(move);
         }
 
-        assertEquals(exp1, g1.toFen());
-        assertEquals(exp2, g2.toFen());
+        assertEquals(exp1, g1.toString());
+        assertEquals(exp2, g2.toString());
     }
 
     /**
@@ -147,7 +147,7 @@ public class ChessTest {
 
         for (int i=0; i<lim; i++) {
             game.move(moves[i]);
-            assertEquals(results[i], game.toFen());
+            assertEquals(results[i], game.toString());
         }
     }
 
@@ -161,7 +161,7 @@ public class ChessTest {
 
         Chess game = new Chess(fen);
         game.move("xc6");
-        assertEquals(exp, game.toFen());
+        assertEquals(exp, game.toString());
     }
 
     /**
@@ -204,6 +204,6 @@ public class ChessTest {
 
         Chess game = new Chess(fen);
         game.move("0-0+");
-        assertEquals(exp, game.toFen());
+        assertEquals(exp, game.toString());
     }
 }
