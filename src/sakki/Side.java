@@ -5,7 +5,7 @@ package sakki;
  *
  * @author Tuomas Starck
  */
-enum Side {
+public enum Side {
     w(0) {
         @Override
         public String toString() {

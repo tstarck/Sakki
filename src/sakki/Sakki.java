@@ -48,10 +48,10 @@ public class Sakki {
      */
     public static void main(String[] argv) {
         boolean tryParsingFen = false;
-        Chess game = null;
+        Chess game;
+        String input;
+        String current;
         String fen = "";
-        String input = null;
-        String current = null;
         ArrayList<String> history = new ArrayList<String>();
 
         try {

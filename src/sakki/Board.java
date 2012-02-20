@@ -312,8 +312,8 @@ class Board {
      * @throws MoveException If move cannot be executed.
      */
     public Rebound move(Move move, Coord enpassant) throws MoveException {
+        Rebound rebound;
         String castling = "";
-        Rebound rebound = null;
         Side turn = move.side();
 
         Piece piece = whichPiece(move);
@@ -369,7 +369,7 @@ class Board {
      * See Castle#safeSquares.
      */
     public Rebound castling(Move move, Castle castling) throws MoveException {
-        Rebound rebound = null;
+        Rebound rebound;
 
         if (!castling.isAllowed(move)) {
             throw new MoveException("Castling not possible");

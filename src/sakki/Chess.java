@@ -129,7 +129,7 @@ public class Chess {
      * @throws MoveException If move cannot be executed.
      */
     void move(String algebraic) throws MoveException {
-        Rebound rebound = null;
+        Rebound rebound;
 
         Move move = new Move(algebraic, turn);
 
@@ -207,6 +207,16 @@ public class Chess {
 
         return String.format("\n%s%s's %d%s> ",
             fiftyMoveRule, turn, fullmove, ordinal(fullmove));
+    }
+
+    /**
+     * Return the state of the board.
+     *
+     * @return Two dimensional array of type Type containing
+     * the state of the board.
+     */
+    public Type[][] getState() {
+        return board.getState();
     }
 
     /**

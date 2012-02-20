@@ -12,7 +12,7 @@ package sakki;
  *
  * @author Tuomas Starck
  */
-enum Type {
+public enum Type {
     /**
      * This value marks the absence of a piece.
      *
