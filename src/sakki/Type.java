@@ -19,51 +19,58 @@ public enum Type {
      * @fixme Might be smart (performance wise) to
      * replace this with null.
      */
-    empty(0, null) {
+    empty(0, 0, null) {
         @Override
         public String toString() {
             return "-";
         }
     },
 
-    movable(0, null) {
+    movable(0, 0, null) {
         @Override
         public String toString() {
             return "o";
         }
     },
 
-    capturable(0, null) {
+    capturable(0, 0, null) {
         @Override
         public String toString() {
             return "*";
         }
     },
 
-    checked(0, null) {
+    checked(0, 0, null) {
         @Override
         public String toString() {
             return "#";
         }
     },
 
-    p(1, Side.b), P(1, Side.w),
-    b(3, Side.b), B(3, Side.w),
-    n(3, Side.b), N(3, Side.w),
-    r(5, Side.b), R(5, Side.w),
-    q(9, Side.b), Q(9, Side.w),
-    k(0, Side.b), K(0, Side.w);
+    p(1, 1, Side.b), P(1, 1, Side.w),
+    b(2, 3, Side.b), B(2, 3, Side.w),
+    n(3, 3, Side.b), N(3, 3, Side.w),
+    r(4, 5, Side.b), R(4, 5, Side.w),
+    q(5, 9, Side.b), Q(5, 9, Side.w),
+    k(6, 0, Side.b), K(6, 0, Side.w);
 
+    private final int index;
     private final int value;
     private final Side side;
 
     /**
+     * @param i Arbitrary unique index.
      * @param v Value of this type of piece.
      * @param s Side of this type of piece.
      */
-    Type(int v, Side s) {
+    Type(int i, int v, Side s) {
+        index = i;
         value = v;
         side = s;
+    }
+
+    public int getIndex() {
+        return index;
     }
 
     public int getValue() {
