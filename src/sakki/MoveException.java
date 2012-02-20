@@ -5,7 +5,7 @@ package sakki;
  *
  * @author Tuomas Starck
  */
-class MoveException extends Exception {
+public class MoveException extends Exception {
     private String msg;
     private boolean dirty;
 

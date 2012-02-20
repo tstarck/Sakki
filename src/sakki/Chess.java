@@ -128,7 +128,7 @@ public class Chess {
      *
      * @throws MoveException If move cannot be executed.
      */
-    void move(String algebraic) throws MoveException {
+    public void move(String algebraic) throws MoveException {
         Rebound rebound;
 
         Move move = new Move(algebraic, turn);
