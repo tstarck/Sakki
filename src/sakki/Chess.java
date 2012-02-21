@@ -122,6 +122,27 @@ public class Chess {
     }
 
     /**
+     * See if given location has a piece which can be moved.
+     *
+     * @param loc SAN location.
+     *
+     * @return null or the type of the piece.
+     */
+    public Type moveableType(String loc) { //:D
+        Piece pc = board.pieceAt(new Coord(loc));
+
+        if (pc == null) return null;
+
+        Type tp = pc.type();
+
+        if (tp.getSide() == turn) {
+            return tp;
+        }
+
+        return null;
+    }
+
+    /**
      * Make a move.
      *
      * @param algebraic Move in Algebraic chess notation.
@@ -222,7 +243,7 @@ public class Chess {
     }
 
     /**
-     * @return Current complete game situation in one string.
+     * @return FEN a.k.a. current game situation in one string.
      */
     @Override
     public String toString() {
