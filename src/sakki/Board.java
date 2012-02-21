@@ -164,7 +164,7 @@ class Board {
      *
      * @return Piece or null.
      */
-    private Piece pieceAt(Coord target) {
+    Piece pieceAt(Coord target) {
         for (Piece piece : board) {
             if (piece.location().equals(target)) {
                 return piece;
@@ -284,7 +284,7 @@ class Board {
 
         /* After a move, ones king may not be checked */
         if (checked[side]) {
-            throw new MoveException("Illegal move", true);
+            throw new MoveException("Self check not allowed", true);
         }
 
         if (checked[otherside]) {

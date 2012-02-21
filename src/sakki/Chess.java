@@ -122,7 +122,13 @@ public class Chess {
     }
 
     /**
-     * See if given location has a piece which can be moved.
+     * Check if given location has a piece which has the turn to move.
+     *
+     * This method is for GUI interactions. When given a SAN string,
+     * check that there is a piece and that the piece is on side which
+     * holds the next move.
+     *
+     * Method name pun intended.
      *
      * @param loc SAN location.
      *

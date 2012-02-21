@@ -170,7 +170,7 @@ public class ChessTest {
     @Test
     public void checkAndMate() throws MoveException {
         String exception = null;
-        String expectation = "Illegal move";
+        String expectation = "Self check not allowed";
         String fen = "8/KN6/8/8/1k6/4B3/8/3Q4 w - -";
 
         Chess game = new Chess(fen);
