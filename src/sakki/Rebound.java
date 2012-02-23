@@ -5,7 +5,7 @@ package sakki;
  *
  * @author Tuomas Starck
  */
-class Rebound {
+public class Rebound {
     private boolean checked;
     private boolean promotion;
     private String castlings;
@@ -35,7 +35,7 @@ class Rebound {
         enpassant = co;
     }
 
-    boolean isKingChecked() {
+    public boolean isKingChecked() {
         return checked;
     }
 

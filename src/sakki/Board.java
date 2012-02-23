@@ -275,30 +275,24 @@ class Board {
      *
      * @param move Move object.
      *
-     * @throws MoveException If illegal move is requested or game
-     * status does not correlate with input.
+     * @return True if opponent is checked or false on there is no check.
+     *
+     * @throws MoveException If self checking move is made.
      */
-    private void checkCheck(Move move) throws MoveException {
+    private boolean checkCheck(Move move) throws MoveException {
         int side = move.side().index;
         int otherside = (side == 0)? 1: 0;
 
-        /* After a move, ones king may not be checked */
         if (checked[side]) {
+            /* After a move, ones king may not be checked */
             throw new MoveException("Self check not allowed", true);
         }
 
         if (checked[otherside]) {
-            if (!move.isChecking()) {
-                /* Check should not go undetected */
-                throw new MoveException("Check without notice", true);
-            }
+            return true;
         }
-        else {
-            if (move.isChecking()) {
-                /* Also check may not be claimed if there are none */
-                throw new MoveException("Lame check claim", true);
-            }
-        }
+
+        return false;
     }
 
     /**
@@ -348,7 +342,7 @@ class Board {
 
         update(rebound.getEnpassant());
 
-        checkCheck(move);
+        rebound.kingChecked(checkCheck(move));
 
         return rebound;
     }
@@ -393,7 +387,7 @@ class Board {
 
         update(null);
 
-        checkCheck(move);
+        rebound.kingChecked(checkCheck(move));
 
         return rebound;
     }
