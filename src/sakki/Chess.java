@@ -122,33 +122,6 @@ public class Chess {
     }
 
     /**
-     * Check if given location has a piece which has the turn to move.
-     *
-     * This method is for GUI interactions. When given a SAN string,
-     * check that there is a piece and that the piece is on side which
-     * holds the next move.
-     *
-     * Method name pun intended.
-     *
-     * @param loc SAN location.
-     *
-     * @return null or the type of the piece.
-     */
-    public Type moveableType(String loc) { //:D
-        Piece pc = board.pieceAt(new Coord(loc));
-
-        if (pc == null) return null;
-
-        Type tp = pc.type();
-
-        if (tp.getSide() == turn) {
-            return tp;
-        }
-
-        return null;
-    }
-
-    /**
      * Make a move.
      *
      * @param algebraic Move in Algebraic chess notation.
@@ -194,6 +167,21 @@ public class Chess {
         else {
             halfmove++;
         }
+    }
+
+    /**
+     * Return information about given square.
+     *
+     * @param loc Square location as a SAN string.
+     *
+     * @return null or the type of the piece.
+     */
+    public Type typeOfSquare(String loc) {
+        Piece piece = board.pieceAt(new Coord(loc));
+
+        if (piece == null) return null;
+
+        return piece.type();
     }
 
     /**
