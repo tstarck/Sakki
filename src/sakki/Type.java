@@ -13,12 +13,6 @@ package sakki;
  * @author Tuomas Starck
  */
 public enum Type {
-    /**
-     * This value marks the absence of a piece.
-     *
-     * @fixme Might be smart (performance wise) to
-     * replace this with null.
-     */
     empty(0, 0, null) {
         @Override
         public String toString() {

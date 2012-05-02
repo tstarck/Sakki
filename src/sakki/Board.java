@@ -6,9 +6,9 @@ import java.util.ArrayList;
  * Model of a chess board and pieces on it.
  *
  * This program uses standard chess board with 64 squares
- * in eight files and ranks.
+ * in eight (8) files and ranks.
  *
- * {@link http://en.wikipedia.org/wiki/Chessboard}
+ * <p>{@link http://en.wikipedia.org/wiki/Chessboard}</p>
  *
  * @author Tuomas Starck
  */

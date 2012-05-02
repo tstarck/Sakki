@@ -6,6 +6,8 @@ import java.util.Scanner;
 /**
  * Simple but effective UI for Sakki chess model.
  *
+ * @see Chess
+ *
  * @author Tuomas Starck
  */
 public class Sakki {

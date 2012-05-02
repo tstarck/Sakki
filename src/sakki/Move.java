@@ -13,22 +13,27 @@ import java.util.regex.Pattern;
  * <ol>
  * <li>Capitalized character of the piece to be moved. None if
  *     piece is pawn. Following common character set is used:
- *       K - king,
- *       Q - queen,
- *       R - rook,
- *       B - bishop,
- *       N - knight</li>
+ * <dl>
+ * <dt><tt>K</tt></dt><dd>king</dd>
+ * <dt><tt>Q</tt></dt><dd>queen</dd>
+ * <dt><tt>R</tt></dt><dd>rook</dd>
+ * <dt><tt>B</tt></dt><dd>bishop</dd>
+ * <dt><tt>N</tt></dt><dd>knight</dd>
+ * </dl></li>
  * <li>Optional hint of the square of departure (file, rank or
  *     both). Required only if move would be ambiguous otherwise.</li>
- * <li>Character x if and only if this is capturing move.</li>
- * <li>Target square.</li>
- * <li>Optional = character followed by character of an officer.</li>
- * <li>Character + or # used to claim check or mate accordingly.</li>
- * <li>Optional ! or ? characters are silently discarded.</li>
+ * <li>Character <tt>x</tt> if and only if this is capturing move.</li>
+ * <li>Target square file and rank.</li>
+ * <li>If promoting: optional <tt>=</tt> character followed by character
+ *     of an officer.</li>
+ * <li>Character <tt>+</tt> or <tt>#</tt> used to claim check or mate
+ *     accordingly.</li>
+ * <li>Characters <tt>!</tt> and <tt>?</tt> in the end are silently
+ *     discarded.</li>
  * </ol>
  * </p>
  *
- * <p>Castlings may be written either with 0 (zero) or O (big-o).</p>
+ * <p>Castlings may be written either with <tt>0</tt> (zero) or <tt>O</tt> (big-o).</p>
  *
  * <p>{@link http://en.wikipedia.org/wiki/Algebraic_chess_notation}</p>
  *

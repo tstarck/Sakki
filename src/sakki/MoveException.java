@@ -1,7 +1,7 @@
 package sakki;
 
 /**
- * Custom exception class for more exact error handling.
+ * Custom exception class for better error handling.
  *
  * @author Tuomas Starck
  */
