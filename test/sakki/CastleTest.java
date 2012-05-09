@@ -46,8 +46,10 @@ public class CastleTest {
     @Test
     public void testIndex() throws MoveException {
         Castle castle = new Castle();
+
         Move foo = new Move("0-0-0+", Side.w);
         Move bar = new Move("0-0", Side.b);
+
         assertTrue(castle.index(foo) == 1);
         assertTrue(castle.index(bar) == 2);
     }
@@ -56,19 +58,29 @@ public class CastleTest {
      * Basic castling integration test.
      */
     @Test
-    public void castlingIntegration() {
-        String expectation = "rnbq1rk1/pppp1ppp/5n2/2b5/3PPp2/3B1N2/PPP3PP/RNBQ1RK1 b - - 6 6";
+    public void basicCastling() throws MoveException {
+        String expect = "rnbq1rk1/pppp1ppp/5n2/2b5/3PPp2/3B1N2/PPP3PP/RNBQ1RK1 b - - 6 6";
         Chess game = new Chess("rnbqk2r/pppp1ppp/5n2/2b5/3PPp2/3B1N2/PPP3PP/RNBQK2R b KQkq - 4 5");
 
-        try {
-            game.move("0-0");
-            game.move("O-O");
-        }
-        catch (MoveException me) {
-            assertTrue(false);
-        }
+        game.move("0-0");
+        game.move("O-O");
 
-        assertEquals(expectation, game.toString());
+        assertEquals(expect, game.toString());
+    }
+
+    /**
+     * Rook effect test.
+     */
+    @Test
+    public void rookEffect() throws MoveException {
+        String expect = "3rkbnr/ppp1qppp/2np4/8/4Pp2/P2B1N1R/RPPP2P1/1NBQK3 b k - 2 8";
+        Chess game = new Chess("r3kbnr/ppp1qppp/2np4/8/4Pp2/P2B1N1b/1PPP2P1/RNBQK2R w KQkq - 0 7");
+
+        game.move("Rxh3");
+        game.move("Rd8");
+        game.move("Ra2");
+
+        assertEquals(expect, game.toString());
     }
 
     /**
