@@ -50,6 +50,7 @@ public class Chess {
     private Coord enpassant;
     private int halfmove;
     private int fullmove;
+    private boolean checked;
 
     /**
      * Constructs the initial position. Pieces and game settings
@@ -158,6 +159,8 @@ public class Chess {
 
         enpassant = rebound.getEnpassant();
 
+        checked = rebound.isKingChecked();
+
         /* The fifty-move rule: a player can claim a draw if no capture
          * has been made and no pawn has been moved in the last 50
          * consecutive moves.
@@ -240,6 +243,10 @@ public class Chess {
      */
     public String getCastling() {
         return castling.toString();
+    }
+
+    public boolean isChecked() {
+        return checked;
     }
 
     /**

@@ -82,6 +82,7 @@ public class Sakki {
     private static String draw(Chess game) {
         String boardStr = "";
         String fileLegend = "a b c d e f g h";
+        String checked = game.isChecked()? "*": " ";
 
         Type[][] state = game.getState();
         int[] material = game.getMaterial();
@@ -95,8 +96,9 @@ public class Sakki {
             if (i == 7) boardStr += "  " + material[Side.w.index];
         }
 
-        return String.format("\n   %s  %s %s\n%s\n", fileLegend,
-            game.getCastling(), game.getEnpassant(), boardStr);
+        return String.format("\n%s  %s  %s %s\n%s\n",
+            checked, fileLegend, game.getCastling(),
+            game.getEnpassant(), boardStr);
     }
 
     /**
