@@ -314,9 +314,9 @@ abstract class Piece {
     }
 
     /**
-     * Pretty print pieces view of the board.
+     * Pretty print piece's view of the board.
      *
-     * @return Pieces view of board.
+     * @return Piece's view of the board.
      */
     @Override
     public String toString() {
