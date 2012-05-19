@@ -25,17 +25,4 @@ public enum Side {
     Side(int i) {
         index = i;
     }
-
-    /**
-     * Return a valid side based on input.
-     *
-     * @param input Should be w or b.
-     *
-     * @return Valid side.
-     */
-    public Side valid(String input) {
-        if (input == null) return Side.w;
-        if (input.equals("b")) return Side.b;
-        return Side.w;
-    }
 }
