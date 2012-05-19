@@ -23,7 +23,7 @@ class Board {
      * standard start-of-game positions.
      */
     public Board() {
-        this("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", null);
+        this("rnbqkbnr/pppppppp/////PPPPPPPP/RNBQKBNR", null);
     }
 
     /**
@@ -31,20 +31,49 @@ class Board {
      *
      * @param fen First part of FEN string containing board outlook.
      * @param enpassant En passant target square (or null if none).
+     *
+     * @throws IllegalArgumentException If given FEN string could not be
+     * interpret in any way.
      */
     public Board(String fen, Coord enpassant) {
-        int file = 0;
-        int rank = 0;
-
         material = new int[2];
         checked = new boolean[2];
         state = new Type[8][8];
-        board = new ArrayList<Piece>();
+        board = parseFEN(fen);
 
-        /* FEN parsing here is permissive and uses best-effort
-         * approach. This loop may produce nonsensical results
-         * with bogus input.
+        /* If given FEN produced something silly,
+         * it will be caught and handled here.
          */
+        try {
+            update(enpassant);
+        }
+        catch (NullPointerException npe) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    /**
+     * Parse FEN.
+     *
+     * Parsing is done in a permissive manner and thus this method may
+     * return silly output which needs to be handled properly.
+     *
+     * Because of the permissive parsing, trailing number on any rank may
+     * be omitted. This violates the standard, but allows to write slightly
+     * more compact FEN string.
+     *
+     * @param fen First part of FEN string containing board outlook.
+     *
+     * @return List of pieces on the board.
+     *
+     * @throws IllegalArgumentException If given FEN string could not be
+     * interpret in any way.
+     */
+    private ArrayList<Piece> parseFEN(String fen) {
+        int file = 0;
+        int rank = 0;
+        ArrayList<Piece> pieces = new ArrayList<Piece>();
+
         for (char chr : fen.toCharArray()) {
             Coord co = null;
 
@@ -61,7 +90,7 @@ class Board {
                 file += Character.digit(chr, 10);
             }
             else if (Character.isLetter(chr)) {
-                board.add(createByName(chr, co));
+                pieces.add(createByName(chr, co));
                 file++;
             }
             else {
@@ -69,15 +98,7 @@ class Board {
             }
         }
 
-        /* If given input produced nonsensical results, it will
-         * be caught by update and handled here.
-         */
-        try {
-            update(enpassant);
-        }
-        catch (NullPointerException npe) {
-            throw new IllegalArgumentException();
-        }
+        return pieces;
     }
 
     /**
@@ -128,12 +149,16 @@ class Board {
         material = new int[2];
         checked = new boolean[2];
 
+        /* Reset state.
+         */
         for (int i=0; i<8; i++) {
             for (int j=0; j<8; j++) {
                 state[i][j] = Type.empty;
             }
         }
 
+        /* Write new board state.
+         */
         for (Piece piece : board) {
             if (piece == null) throw new NullPointerException();
 
@@ -142,6 +167,8 @@ class Board {
             state[loc.rank][loc.file] = piece.type();
         }
 
+        /* Update the views of the pieces.
+         */
         for (Piece piece : board) {
             piece.update(state, enpassant);
 
