@@ -84,21 +84,35 @@ public class CastleTest {
     }
 
     /**
-     * Checked king test.
+     * Checked or threatened king test.
      */
-    @Test(expected = MoveException.class)
-    public void checkedKing() throws MoveException {
-        Chess game = new Chess("r3k2r/p1p2ppp/1pn5/4Nb1q/4BB2/2NQ4/PPP3PP/R3K2R w KQkq - 5 13");
-        game.move("O-O-O");
-    }
+    @Test
+    public void threatenedPassage() {
+        Chess game;
 
-    /**
-     * Threatened passage test.
-     */
-    @Test(expected = MoveException.class)
-    public void threatenedPassage() throws MoveException {
-        Chess game = new Chess("r3k2r/p1p2ppp/1pn5/4Nb1q/4BB2/2NQ4/PPP3PP/R3K2R w KQkq - 5 13");
-        game.move("Bxc6");
-        game.move("0-0");
+        String msg = "King must have safe passage";
+
+        String[] cases = {
+            "r3k2r/p1p2ppp/1pB/4Nb1q/5B/2NQ3n/PPP4P/R3K2R w",
+            "r3k2r/p1p2ppp/1pB/4Nb1q/5B/2NQ3n/PPP4P/R3K2R b"
+        };
+
+        String[] moves = {
+            "0-0", "0-0-0"
+        };
+
+        for (String test : cases) {
+            game = new Chess(test);
+
+            for (String move : moves) {
+                try {
+                    game.move(move);
+                    assertTrue(false);
+                }
+                catch (MoveException me) {
+                    assertEquals(msg, me.toString());
+                }
+            }
+        }
     }
 }
