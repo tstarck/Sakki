@@ -383,11 +383,6 @@ class Board {
      * @return Feedback of the new game status.
      *
      * @throws MoveException If castling cannot be executed.
-     *
-     * @fixme Castling rules require that king must have safe
-     * passage (i.e. all three squares must not be threatened).
-     * Current implementation lacks checking of this condition.
-     * See Castle#safeSquares.
      */
     public Rebound castling(Move move, Castle castling) throws MoveException {
         Rebound rebound;
@@ -399,6 +394,12 @@ class Board {
         for (Coord co : castling.getFreeSqrs(move)) {
             if (state[co.rank][co.file] != Type.empty) {
                 throw new MoveException("Castling requires vacant squares");
+            }
+        }
+
+        for (Piece piece : board) {
+            if (piece.isThreatening(move.piece(), castling.getSafeSqrs(move))) {
+                throw new MoveException("King must have safe passage");
             }
         }
 

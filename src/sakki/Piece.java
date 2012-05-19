@@ -294,6 +294,26 @@ abstract class Piece {
     }
 
     /**
+     * See if the piece is threatening certain squares.
+     *
+     * @param shouldBeSafe List of coordinates.
+     *
+     * @return True if the piece threatens any of the given
+     * squares. False otherwise.
+     */
+    public boolean isThreatening(Type piece, Coord[] shouldBeSafe) {
+        if (piece.isEnemy(me)) {
+            for (Coord co : shouldBeSafe) {
+                if (view[co.rank][co.file] != Type.empty) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Pretty print pieces view of the board.
      *
      * @return Pieces view of board.
