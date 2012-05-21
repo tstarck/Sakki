@@ -1,3 +1,4 @@
+tmp/
 build/
 nbproject/private
 nbproject/build-impl.xml

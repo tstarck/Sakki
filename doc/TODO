@@ -1,0 +1,12 @@
+
+Opened: 2012-05-15 19:21:48
+	^D =>
+	White's 1st> Exception in thread "main" java.util.NoSuchElementException: No line found
+        at java.util.Scanner.nextLine(Scanner.java:1533)
+        at sakki.Sakki.main(Sakki.java:142)
+
+Opened: 2012-05-19 15:20:01
+	Test cases for compact and invalid forms of FENs.
+
+Opened: 2012-05-21 18:12:15
+	Add Javadoc to isChecked().
