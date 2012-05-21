@@ -185,12 +185,9 @@ public class Chess {
      *
      * @return null or the type of the piece.
      */
-    public Type typeOfSquare(String loc) {
+    public Type typeAt(String loc) {
         Piece piece = board.pieceAt(new Coord(loc));
-
-        if (piece == null) return null;
-
-        return piece.type();
+        return (piece == null)? null: piece.getType();
     }
 
     /**
