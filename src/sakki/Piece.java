@@ -6,7 +6,7 @@ package sakki;
  * @author Tuomas Starck
  */
 abstract class Piece {
-    protected Type me;
+    protected Type type;
     protected Coord loc;
     protected Type[][] view;
     protected Side checked;
@@ -16,15 +16,18 @@ abstract class Piece {
      * Create a new piece. This constructor is usually
      * called from specific subclass.
      *
-     * @param type Type of piece.
+     * @param t Type of piece.
      * @param birthplace Location of piece.
+     *
+     * @throws IllegalArgumentException Most likely
+     * a result of invalid user given FEN string.
      */
-    public Piece(Type type, Coord birthplace) {
-        if (type == null || birthplace == null) {
+    public Piece(Type t, Coord birthplace) {
+        if (t == null || birthplace == null) {
             throw new IllegalArgumentException();
         }
 
-        me = type;
+        type = t;
         loc = birthplace;
         view = new Type[8][8];
         checked = null;
@@ -34,7 +37,7 @@ abstract class Piece {
     }
 
     /**
-     * Reset status for update.
+     * Reset before update.
      */
     protected final void reset() {
         for (int i=0; i<8; i++) {
@@ -43,60 +46,13 @@ abstract class Piece {
             }
         }
 
-        view[loc.rank][loc.file] = me;
-
+        view[loc.rank][loc.file] = type;
         checked = null;
     }
 
     /**
-     * @return Type of piece.
-     */
-    public Type type() {
-        return me;
-    }
-
-    /**
-     * @return Location of piece.
-     */
-    public Coord location() {
-        return loc;
-    }
-
-    /**
-     * @return Side which is being checked.
-     */
-    public Side isChecking() {
-        return checked;
-    }
-
-    /**
-     * @return Pieces effect on castling.
-     */
-    public String castlingEffect() {
-        return castlingEffect;
-    }
-
-    /**
-     * @param co Square on board.
-     *
-     * @return Pieces view on given square.
-     */
-    public Type viewAt(Coord co) {
-        return view[co.rank][co.file];
-    }
-
-    /**
-     * This method must always be implemented in subclass.
-     *
-     * @param status Board status.
-     * @param enpassant En passant target.
-     */
-    public void update(Type[][] status, Coord enpassant) {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    /**
-     * Execute move by changing pieces location.
+     * Change piece's location. This method effectively
+     * moves the piece to the target location.
      *
      * @param target Target location.
      *
@@ -108,7 +64,7 @@ abstract class Piece {
     }
 
     /**
-     * Execute move by changing pieces location.
+     * Execute a move with side effects.
      *
      * @param move Move object.
      *
@@ -119,6 +75,16 @@ abstract class Piece {
         rebound.disableCastling(castlingEffect);
         move(move.to());
         return rebound;
+    }
+
+    /**
+     * This method MUST ALWAYS be implemented in subclass.
+     *
+     * @param status Board status.
+     * @param enpassant En passant target.
+     */
+    public void update(Type[][] status, Coord enpassant) {
+        throw new UnsupportedOperationException("Missing update()");
     }
 
     /**
@@ -141,10 +107,11 @@ abstract class Piece {
     }
 
     /**
-     * If piece can capture at target square, mark is to pieces view.
+     * If piece can capture the target square, make
+     * a mark to pieces view.
      *
-     * Also if capturable piece happens to be opponents king, make
-     * a note of it.
+     * Also if capturable piece happens to be opponents
+     * king, make a note of it too.
      *
      * @param sqr Target square.
      * @param status Status of the board.
@@ -154,7 +121,7 @@ abstract class Piece {
 
         Type target = status[sqr.rank][sqr.file];
 
-        if (me.isEnemy(target)) {
+        if (type.isEnemy(target)) {
             if (target == Type.K) {
                 checked = Side.w;
                 view[sqr.rank][sqr.file] = Type.checked;
@@ -294,23 +261,38 @@ abstract class Piece {
     }
 
     /**
-     * See if the piece is threatening certain squares.
-     *
-     * @param shouldBeSafe List of coordinates.
-     *
-     * @return True if the piece threatens any of the given
-     * squares. False otherwise.
+     * @return Type of piece.
      */
-    public boolean isThreatening(Type piece, Coord[] shouldBeSafe) {
-        if (piece.isEnemy(me)) {
-            for (Coord co : shouldBeSafe) {
-                if (view[co.rank][co.file] != Type.empty) {
-                    return true;
-                }
-            }
-        }
+    public Type getType() {
+        return type;
+    }
 
-        return false;
+    /**
+     * @return Location of piece.
+     */
+    public Coord getLocation() {
+        return loc;
+    }
+
+    /**
+     * @return Side that is being checked.
+     */
+    public Side isChecking() {
+        return checked;
+    }
+
+    /**
+     * @return Pieces effect on castling.
+     */
+    public String castlingEffect() {
+        return castlingEffect;
+    }
+
+    /**
+     * @return Pieces view on given square.
+     */
+    public Type viewAt(Coord co) {
+        return view[co.rank][co.file];
     }
 
     /**

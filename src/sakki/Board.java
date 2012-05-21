@@ -162,9 +162,9 @@ class Board {
         for (Piece piece : board) {
             if (piece == null) throw new NullPointerException();
 
-            Coord loc = piece.location();
+            Coord loc = piece.getLocation();
 
-            state[loc.rank][loc.file] = piece.type();
+            state[loc.rank][loc.file] = piece.getType();
         }
 
         /* Update the views of the pieces.
@@ -172,7 +172,7 @@ class Board {
         for (Piece piece : board) {
             piece.update(state, enpassant);
 
-            Type type = piece.type();
+            Type type = piece.getType();
             Side side = type.getSide();
             Side target = piece.isChecking();
 
@@ -193,7 +193,7 @@ class Board {
      */
     Piece pieceAt(Coord target) {
         for (Piece piece : board) {
-            if (piece.location().equals(target)) {
+            if (piece.getLocation().equals(target)) {
                 return piece;
             }
         }
@@ -215,7 +215,7 @@ class Board {
         ArrayList<Piece> cropd = new ArrayList<Piece>();
 
         for (Piece piece : array) {
-            if (piece.location().toString().indexOf(from) != -1) {
+            if (piece.getLocation().toString().indexOf(from) != -1) {
                 cropd.add(piece);
             }
         }
@@ -237,7 +237,7 @@ class Board {
         ArrayList<Piece> options = new ArrayList<Piece>();
 
         for (Piece piece : board) {
-            if (piece.type() == move.piece()) {
+            if (piece.getType() == move.piece()) {
                 if (move.isCapturing()) {
                     if (piece.viewAt(move.to()) == Type.capturable) {
                         options.add(piece);
@@ -398,8 +398,12 @@ class Board {
         }
 
         for (Piece piece : board) {
-            if (piece.isThreatening(move.piece(), castling.getSafeSqrs(move))) {
-                throw new MoveException("King must have safe passage");
+            for (Coord co : castling.getSafeSqrs(move)) {
+                if (piece.getType().isEnemy(move.piece())) {
+                    if (piece.viewAt(co) != Type.empty) {
+                        throw new MoveException("King must have safe passage");
+                    }
+                }
             }
         }
 
