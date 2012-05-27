@@ -88,7 +88,7 @@ abstract class Piece {
     }
 
     /**
-     * If piece can move to target square, mark it to the pieces view.
+     * If piece can move to target square, mark it to the piece's view.
      *
      * @param sqr Target square.
      * @param status Status of the board.
@@ -107,11 +107,10 @@ abstract class Piece {
     }
 
     /**
-     * If piece can capture the target square, make
-     * a mark to pieces view.
+     * If piece can capture the target square, make a mark to piece's view.
      *
-     * Also if capturable piece happens to be opponents
-     * king, make a note of it too.
+     * Also if capturable piece happens to be opponents king, make a note
+     * of it too.
      *
      * @param sqr Target square.
      * @param status Status of the board.
@@ -282,14 +281,14 @@ abstract class Piece {
     }
 
     /**
-     * @return Pieces effect on castling.
+     * @return Piece's effect on castling.
      */
     public String castlingEffect() {
         return castlingEffect;
     }
 
     /**
-     * @return Pieces view on given square.
+     * @return Piece's view on the given square.
      */
     public Type viewAt(Coord co) {
         return view[co.rank][co.file];
@@ -298,7 +297,7 @@ abstract class Piece {
     /**
      * Pretty print piece's view of the board.
      *
-     * @return Piece's view of the board.
+     * @return A pretty string.
      */
     @Override
     public String toString() {
