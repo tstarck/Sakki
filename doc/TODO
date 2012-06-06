@@ -10,3 +10,17 @@ Opened: 2012-05-19 15:20:01
 
 Opened: 2012-05-21 18:12:15
 	Add Javadoc to isChecked().
+
+Opened: 2012-05-21 21:46:59
+	Move.isChecking() is used nowhere.
+
+Opened: 2012-05-22 02:36:53
+	Chess.move() returns the Rebound object and thus isChecked()
+	and possibly some other stuff are completely redundant.
+
+Opened: 2012-06-06 14:11:20
+	rnbqkbnr/pppppppp/8/1B6/8/8/PPPPPPPP/RNBQK1NR w + Bxd7 =>
+	Exception in thread "main" java.lang.NullPointerException
+		at sakki.Sakki.draw(Sakki.java:85)
+		at sakki.Sakki.main(Sakki.java:238)
+	Possible reason: No valid moves except for capture
