@@ -185,23 +185,6 @@ class Board {
     }
 
     /**
-     * Select a piece based on its location.
-     *
-     * @param target Location of piece.
-     *
-     * @return Piece or null.
-     */
-    Piece pieceAt(Coord target) {
-        for (Piece piece : board) {
-            if (piece.getLocation().equals(target)) {
-                return piece;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Select only pieces which match given information.
      *
      * @param array List of pieces.
@@ -425,6 +408,44 @@ class Board {
     }
 
     /**
+     * Select a piece based on its location.
+     *
+     * @param target Location of piece.
+     *
+     * @return Piece or null.
+     */
+    Piece pieceAt(Coord target) {
+        for (Piece piece : board) {
+            if (piece.getLocation().equals(target)) {
+                return piece;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @return All the pieces.
+     */
+    ArrayList<Piece> getPieces() {
+        return board;
+    }
+
+    /**
+     * @return Game board state.
+     */
+    public Type[][] getState() {
+        return state;
+    }
+
+    /**
+     * @return Game material status.
+     */
+    public int[] getMaterial() {
+        return material;
+    }
+
+    /**
      * @param rank Array of Type object.
      *
      * @return FEN string of one rank.
@@ -451,20 +472,6 @@ class Board {
         }
 
         return "/" + str;
-    }
-
-    /**
-     * @return Game board state.
-     */
-    public Type[][] getState() {
-        return state;
-    }
-
-    /**
-     * @return Game board material status.
-     */
-    public int[] getMaterial() {
-        return material;
     }
 
     /**

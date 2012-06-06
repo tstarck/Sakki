@@ -91,4 +91,8 @@ public enum Type {
         return ((this.isWhite() && that.isBlack()) ||
                 (this.isBlack() && that.isWhite()));
     }
+
+    public String nameToSan() {
+        return (value == 1)? "": this.name().toUpperCase();
+    }
 }

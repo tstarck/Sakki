@@ -1,5 +1,7 @@
 package sakki;
 
+import java.util.ArrayList;
+
 /**
  * Abstraction and common operations for various Chess pieces.
  *
@@ -11,6 +13,7 @@ abstract class Piece {
     protected Type[][] view;
     protected Side checked;
     protected String castlingEffect;
+    protected ArrayList<String> moves;
 
     /**
      * Create a new piece. This constructor is usually
@@ -30,7 +33,6 @@ abstract class Piece {
         type = t;
         loc = birthplace;
         view = new Type[8][8];
-        checked = null;
         castlingEffect = null;
 
         reset();
@@ -46,8 +48,9 @@ abstract class Piece {
             }
         }
 
-        view[loc.rank][loc.file] = type;
         checked = null;
+        view[loc.rank][loc.file] = type;
+        moves = new ArrayList<String>();
     }
 
     /**
@@ -90,16 +93,17 @@ abstract class Piece {
     /**
      * If piece can move to target square, mark it to the piece's view.
      *
-     * @param sqr Target square.
+     * @param co Target square.
      * @param status Status of the board.
      *
      * @return True if target was movable.
      */
-    protected boolean markIfMovable(Coord sqr, Type[][] status) {
-        if (sqr == null) return false;
+    protected boolean markIfMovable(Coord co, Type[][] status) {
+        if (co == null) return false;
 
-        if (status[sqr.rank][sqr.file] == Type.empty) {
-            view[sqr.rank][sqr.file] = Type.movable;
+        if (status[co.rank][co.file] == Type.empty) {
+            view[co.rank][co.file] = Type.movable;
+            moves.add(type.nameToSan() + co.toString());
             return true;
         }
 
@@ -112,25 +116,25 @@ abstract class Piece {
      * Also if capturable piece happens to be opponents king, make a note
      * of it too.
      *
-     * @param sqr Target square.
+     * @param co Target square.
      * @param status Status of the board.
      */
-    protected void markIfCapturable(Coord sqr, Type[][] status) {
-        if (sqr == null) return;
+    protected void markIfCapturable(Coord co, Type[][] status) {
+        if (co == null) return;
 
-        Type target = status[sqr.rank][sqr.file];
+        Type target = status[co.rank][co.file];
 
         if (type.isEnemy(target)) {
             if (target == Type.K) {
                 checked = Side.w;
-                view[sqr.rank][sqr.file] = Type.checked;
+                view[co.rank][co.file] = Type.checked;
             }
             else if (target == Type.k) {
                 checked = Side.b;
-                view[sqr.rank][sqr.file] = Type.checked;
+                view[co.rank][co.file] = Type.checked;
             }
             else {
-                view[sqr.rank][sqr.file] = Type.capturable;
+                view[co.rank][co.file] = Type.capturable;
             }
         }
     }
@@ -262,36 +266,50 @@ abstract class Piece {
     /**
      * @return Type of piece.
      */
-    public Type getType() {
+    Type getType() {
         return type;
     }
 
     /**
      * @return Location of piece.
      */
-    public Coord getLocation() {
+    Coord getLocation() {
         return loc;
     }
 
     /**
      * @return Side that is being checked.
      */
-    public Side isChecking() {
+    Side isChecking() {
         return checked;
     }
 
     /**
      * @return Piece's effect on castling.
      */
-    public String castlingEffect() {
+    String castlingEffect() {
         return castlingEffect;
     }
 
     /**
      * @return Piece's view on the given square.
      */
-    public Type viewAt(Coord co) {
+    Type viewAt(Coord co) {
         return view[co.rank][co.file];
+    }
+
+    /**
+     * @return The side the piece is playing.
+     */
+    Side getSide() {
+        return type.getSide();
+    }
+
+    /**
+     * @return All the moves available.
+     */
+    ArrayList<String> getMoves() {
+        return moves;
     }
 
     /**
