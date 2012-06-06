@@ -24,6 +24,10 @@ class ChessTree implements Iterable<ChessTree> {
         nodes = new ArrayList<ChessTree>();
     }
 
+    ChessNode getNode() {
+        return game;
+    }
+
     int getValue() {
         return game.getValue();
     }
@@ -39,5 +43,10 @@ class ChessTree implements Iterable<ChessTree> {
         }
 
         return nodes.iterator();
+    }
+
+    @Override
+    public String toString() {
+        return game.toString();
     }
 }
