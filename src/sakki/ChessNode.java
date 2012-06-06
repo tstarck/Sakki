@@ -2,7 +2,6 @@ package sakki;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Random;
 
 /**
  * Chess game tree node (todo: with an evaluation of game status).
@@ -25,7 +24,7 @@ class ChessNode extends Chess implements Iterable<ChessNode>, Iterator<ChessNode
     }
 
     int getValue() {
-        return new Random().nextInt(1000);
+        return 3;
     }
 
     @Override
