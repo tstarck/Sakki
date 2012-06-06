@@ -1,7 +1,7 @@
 package sakki;
 
 /**
- * <p>An implementation of The Game of Chess for two players.</p>
+ * <p>An implementation of The Game of Chess.</p>
  *
  * <p><b>SAN</b> a.k.a. <i>Standard Algebraic Notation</i> a.k.a. <i>Algebraic
  * chess notation</i> is used to describe the moves in a game of chess. Besides
@@ -44,7 +44,7 @@ package sakki;
  * @author Tuomas Starck
  */
 public class Chess {
-    private Board board;
+    protected Board board;
     private Side turn;
     private Castle castling;
     private Coord enpassant;
