@@ -23,7 +23,7 @@ class AI {
 
     Chess move() {
         int tmp = minimax(tree, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
-        System.out.println("Minimaxattu: " + mm_laskuri + "  Pruunattu: " + pr_laskuri);
+        System.out.println(mm_laskuri + " <- minimax | pruned -> " + pr_laskuri);
         System.out.println("<<<" +  tmp + ">>>");
         return node;
     }
@@ -46,38 +46,30 @@ class AI {
                 alpha = Math.max(alpha, minimax(child, depth+1, alpha, beta));
 
                 if (beta <= alpha) {
-                    // System.out.println("Pruning");
-                    pr_laskuri++;
+                    pr_laskuri += 30 * (MAX_DEPTH - depth);
                     break;
                 }
             }
 
             if (depth == 1) {
                 node = tree.getNode();
-                // System.out.println(" 0 << 1 alpha: " + alpha);
             }
-
-            // System.out.println(" <= MAX (" + depth + ") out with " + alpha);
 
             return alpha;
         }
         else {
             for (ChessTree child : tree) {
-                beta  = Math.min(beta,  minimax(child, depth+1, alpha, beta));
+                beta = Math.min(beta, minimax(child, depth+1, alpha, beta));
 
                 if (beta <= alpha) {
-                    // System.out.println("Pruning");
-                    pr_laskuri++;
+                    pr_laskuri += 30 * (MAX_DEPTH - depth);
                     break;
                 }
             }
 
             if (depth == 1) {
                 node = tree.getNode();
-                // System.out.println(" 0 << 1 beta: " + beta);
             }
-
-            // System.out.println(" <= MIN (" + depth + ") out with " + beta);
 
             return beta;
         }
