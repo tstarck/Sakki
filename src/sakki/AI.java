@@ -9,21 +9,33 @@ class AI {
     private final int MAX_DEPTH = 4;
 
     private ChessTree tree;
+    private ChessNode node;
+
+    private int mm_laskuri;
+    private int pr_laskuri;
 
     AI(ChessTree t) {
         tree = t;
+        node = null;
+        mm_laskuri = 0;
+        pr_laskuri = 0;
     }
 
     Chess move() {
-        System.out.println("<<<" + minimax(tree, 0, Integer.MIN_VALUE, Integer.MAX_VALUE) + ">>>");
-        return null;
+        int tmp = minimax(tree, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        System.out.println("Minimaxattu: " + mm_laskuri + "  Pruunattu: " + pr_laskuri);
+        System.out.println("<<<" +  tmp + ">>>");
+        return node;
     }
 
     /**
      * Minimax algorithm with alpha-beta pruning.
      */
     private int minimax(ChessTree tree, int depth, int alpha, int beta) {
-        System.out.println("Minimax @depth " + depth + " with [" + alpha + ", " + beta + "]");
+        // System.out.println("Minimax @depth " + depth + " with [" + alpha + ", " + beta + "]");
+        // System.out.println("  " + tree.toString());
+
+        mm_laskuri++;
 
         if (depth >= MAX_DEPTH) {
             return tree.getValue();
@@ -34,12 +46,18 @@ class AI {
                 alpha = Math.max(alpha, minimax(child, depth+1, alpha, beta));
 
                 if (beta <= alpha) {
-                    System.out.println("Pruning");
+                    // System.out.println("Pruning");
+                    pr_laskuri++;
                     break;
                 }
             }
 
-            System.out.println("Max out with " + alpha);
+            if (depth == 1) {
+                node = tree.getNode();
+                // System.out.println(" 0 << 1 alpha: " + alpha);
+            }
+
+            // System.out.println(" <= MAX (" + depth + ") out with " + alpha);
 
             return alpha;
         }
@@ -48,15 +66,20 @@ class AI {
                 beta  = Math.min(beta,  minimax(child, depth+1, alpha, beta));
 
                 if (beta <= alpha) {
-                    System.out.println("Pruning");
+                    // System.out.println("Pruning");
+                    pr_laskuri++;
                     break;
                 }
             }
 
-            System.out.println("Min out with " + beta);
+            if (depth == 1) {
+                node = tree.getNode();
+                // System.out.println(" 0 << 1 beta: " + beta);
+            }
+
+            // System.out.println(" <= MIN (" + depth + ") out with " + beta);
 
             return beta;
         }
-
     }
 }

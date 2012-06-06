@@ -44,7 +44,7 @@ package sakki;
  * @author Tuomas Starck
  */
 public class Chess {
-    private Board board;
+    protected Board board;
     private Side turn;
     private Castle castling;
     private Coord enpassant;
