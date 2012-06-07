@@ -13,51 +13,55 @@ package fi.starck.sakki.board;
  * @author Tuomas Starck
  */
 public enum Type {
-    empty(0, 0, null) {
+    empty(0, 0, false) {
         @Override
         public String toString() {
             return "-";
         }
     },
 
-    movable(0, 0, null) {
+    movable(0, 0, false) {
         @Override
         public String toString() {
             return "o";
         }
     },
 
-    capturable(0, 0, null) {
+    capturable(0, 0, false) {
         @Override
         public String toString() {
             return "*";
         }
     },
 
-    checked(0, 0, null) {
+    checked(0, 0, false) {
         @Override
         public String toString() {
             return "#";
         }
     },
 
-    p(1, 1, Side.b), P(1, 1, Side.w),
-    b(2, 3, Side.b), B(2, 3, Side.w),
-    n(3, 3, Side.b), N(3, 3, Side.w),
-    r(4, 5, Side.b), R(4, 5, Side.w),
-    q(5, 9, Side.b), Q(5, 9, Side.w),
-    k(6, 0, Side.b), K(6, 0, Side.w);
+    p(1, 1, false), P(1, 1, true),
+    b(2, 3, false), B(2, 3, true),
+    n(3, 3, false), N(3, 3, true),
+    r(4, 5, false), R(4, 5, true),
+    q(5, 9, false), Q(5, 9, true),
+    k(6, 0, false), K(6, 0, true);
 
     private final int index;
     private final int value;
-    private final Side side;
+    private final boolean side;
 
     /**
      * @param i Arbitrary unique index.
-     * @param v Value of this type of piece.
-     * @param s Side of this type of piece.
+     *
+     * @param v Value of this type of piece. Values conform
+     *          to old Modenese School standard.
+     *
+     * @param s Side of this type of piece. True or false
+     *          are white or black accordingly.
      */
-    Type(int i, int v, Side s) {
+    Type(int i, int v, boolean s) {
         index = i;
         value = v;
         side = s;
@@ -71,7 +75,7 @@ public enum Type {
         return value;
     }
 
-    public Side getSide() {
+    public boolean getSide() {
         return side;
     }
 
@@ -79,20 +83,19 @@ public enum Type {
         return (value == 1);
     }
 
-    public boolean isWhite() {
-        return (side == Side.w);
-    }
-
-    public boolean isBlack() {
-        return (side == Side.b);
-    }
-
     public boolean isEnemy(Type that) {
-        return ((this.isWhite() && that.isBlack()) ||
-                (this.isBlack() && that.isWhite()));
+        return this.side != that.side;
     }
 
+    /**
+     * SAN move compatible name.
+     *
+     * While type names work well as they are with FEN strings,
+     * this method provides type strings which abide SAN moves.
+     *
+     * @return a SAN move compatible name of this type.
+     */
     public String nameToSan() {
-        return (value == 1)? "": this.name().toUpperCase();
+        return this.isPawn()? "": this.name().toUpperCase();
     }
 }
