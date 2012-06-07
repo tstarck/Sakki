@@ -172,15 +172,15 @@ public class Board {
         for (Piece piece : board) {
             piece.update(state, enpassant);
 
-            Type type = piece.getType();
-            Side side = type.getSide();
+            Type type   = piece.getType();
+            int  side   = type.getSide()? 0: 1;
             Side target = piece.isChecking();
 
             if (target != null) {
                 checked[target.index] = true;
             }
 
-            material[side.index] += type.getValue();
+            material[side] += type.getValue();
         }
     }
 
@@ -290,7 +290,7 @@ public class Board {
      * @throws MoveException If self checking move is made.
      */
     private boolean checkCheck(Move move) throws MoveException {
-        int side = move.side().index;
+        int side = move.getSide()? 0: 1;
         int otherside = (side == 0)? 1: 0;
 
         if (checked[side]) {
@@ -318,7 +318,7 @@ public class Board {
     public Rebound move(Move move, Coord enpassant) throws MoveException {
         Rebound rebound;
         String castling = "";
-        Side turn = move.side();
+        boolean turn = move.getSide();
 
         Piece piece = whichPiece(move);
 
@@ -326,10 +326,10 @@ public class Board {
          * so check if this is such a move.
          */
         if (move.piece().isPawn() && move.to().equals(enpassant)) {
-            if (turn == Side.w) {
+            if (turn) {
                 capture(enpassant.south(1), move.isCapturing());
             }
-            else /* turn == Side.b */ {
+            else {
                 capture(enpassant.north(1), move.isCapturing());
             }
         }
@@ -426,18 +426,18 @@ public class Board {
 
     /**
      * @param side White or Black.
-     * 
+     *
      * @return All the valid moves for the aforementioned player.
      */
     public ArrayList<String> getAllMoves(Side side) {
         ArrayList<String> moves = new ArrayList<String>();
-        
+
         for (Piece piece : board) {
             if (piece.getSide() == side) {
                 moves.addAll(piece.getMoves());
             }
         }
-        
+
         return moves;
     }
 

@@ -45,7 +45,7 @@ package fi.starck.sakki.board;
  */
 public class Chess {
     protected Board board;
-    private Side turn;
+    private boolean turn;
     private Castle castling;
     private Coord enpassant;
     private int halfmove;
@@ -83,7 +83,7 @@ public class Chess {
      * are discarded if provided.
      */
     public Chess(String[] fenArray) {
-        turn = Side.w;
+        turn = true;
         enpassant = null;
         halfmove = 0;
         fullmove = 1;
@@ -104,7 +104,7 @@ public class Chess {
 
         if (fenArray.length >= 2) {
             if (fenArray[1].equals("b")) {
-                turn = Side.b;
+                turn = false;
             }
         }
 
@@ -147,11 +147,11 @@ public class Chess {
             rebound = board.move(move, enpassant);
         }
 
-        if (turn == Side.w) {
-            turn = Side.b;
+        if (turn) {
+            turn = false;
         }
         else {
-            turn = Side.w;
+            turn = true;
             fullmove++;
         }
 
@@ -201,9 +201,9 @@ public class Chess {
     }
 
     /**
-     * @return the Side which holds next move.
+     * @return True if white holds the next move. False otherwise.
      */
-    public Side getTurn() {
+    public boolean getTurn() {
         return turn;
     }
 
@@ -252,7 +252,9 @@ public class Chess {
     @Override
     public String toString() {
         String ep = (enpassant == null)? "-": enpassant.toString();
+        String side = turn? "w": "b";
+
         return String.format("%s %s %s %s %d %d",
-            board, turn.name(), castling, ep, halfmove, fullmove);
+            board, side, castling, ep, halfmove, fullmove);
     }
 }

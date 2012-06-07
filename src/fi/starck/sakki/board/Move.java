@@ -54,7 +54,7 @@ class Move {
     private Matcher move;
     private Matcher castle;
 
-    private Side side;
+    private boolean side;
     private Coord to;
     private Type piece;
     private Type promote;
@@ -68,11 +68,11 @@ class Move {
      * Parse SAN.
      *
      * @param str SAN string.
-     * @param turn Which side hold move.
+     * @param turn Which side hold move (true for white and vise versa).
      *
      * @throws MoveException If SAN cannot be parsed.
      */
-    public Move(String str, Side turn) throws MoveException {
+    public Move(String str, boolean turn) throws MoveException {
         move = Pattern.compile(regularregex).matcher(str);
         castle = Pattern.compile(castlingregex).matcher(str);
 
@@ -88,7 +88,7 @@ class Move {
 
         if (move.matches()) {
             /* 1: Piece which is to be moved */
-            piece = resolvePiece(move.group(1), side);
+            piece = resolvePiece(move.group(1));
 
             /* 2: From (square hint) */
             if (move.group(2) != null) {
@@ -105,7 +105,7 @@ class Move {
 
             /* 6: Officer to which pawn is to be promoted */
             if (move.group(6) != null) {
-                promote = resolvePiece(move.group(6), side);
+                promote = resolvePiece(move.group(6));
             }
 
             /* 7: Check or mate status */
@@ -113,7 +113,7 @@ class Move {
         }
         else if (castle.matches()) {
             /* Not strictly required, but for consistency */
-            piece = resolvePiece("k", side);
+            piece = resolvePiece("k");
 
             /* To which side to castle */
             castling = (castle.group(1).length() <3)? KINGSIDE: QUEENSIDE;
@@ -130,17 +130,16 @@ class Move {
      * Resolve input to a type of piece.
      *
      * @param input Character of the piece.
-     * @param side Side of piece.
      *
      * @return Piece type.
      */
-    private Type resolvePiece(String input, Side side) {
+    private Type resolvePiece(String input) {
         String str = (input == null)? "p": input;
 
-        if (side == Side.w) {
+        if (side) {
             return Type.valueOf(str.toUpperCase());
         }
-        else /* side == Side.b */ {
+        else {
             return Type.valueOf(str.toLowerCase());
         }
     }
@@ -161,9 +160,9 @@ class Move {
     }
 
     /**
-     * @return Side of piece.
+     * @return The side of piece.
      */
-    public Side side() {
+    public boolean getSide() {
         return side;
     }
 
