@@ -174,10 +174,10 @@ public class Board {
 
             Type type   = piece.getType();
             int  side   = type.getSide()? 0: 1;
-            Side target = piece.isChecking();
+            int  target = piece.isChecking();
 
-            if (target != null) {
-                checked[target.index] = true;
+            if (target != -1) {
+                checked[target] = true;
             }
 
             material[side] += type.getValue();
@@ -429,7 +429,7 @@ public class Board {
      *
      * @return All the valid moves for the aforementioned player.
      */
-    public ArrayList<String> getAllMoves(Side side) {
+    public ArrayList<String> getAllMoves(boolean side) {
         ArrayList<String> moves = new ArrayList<String>();
 
         for (Piece piece : board) {

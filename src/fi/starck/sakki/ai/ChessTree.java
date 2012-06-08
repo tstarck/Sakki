@@ -1,7 +1,6 @@
 package fi.starck.sakki.ai;
 
 import fi.starck.sakki.board.Chess;
-import fi.starck.sakki.board.Side;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -35,7 +34,7 @@ class ChessTree implements Iterable<ChessTree> {
     }
 
     boolean getPlayer() {
-        return game.getTurn() == Side.w;
+        return game.getTurn();
     }
 
     @Override

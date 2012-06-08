@@ -136,10 +136,10 @@ class Castle {
      * @return Index number.
      */
     public int index(Move move) {
-        if (move.side() == Side.w) {
+        if (move.getSide()) {
             return (move.castling() == move.KINGSIDE)? 0: 1;
         }
-        else /* move.side() == Side.b */ {
+        else {
             return (move.castling() == move.KINGSIDE)? 2: 3;
         }
     }
@@ -150,7 +150,7 @@ class Castle {
      * @return Square where king ought to be.
      */
     public Coord getKingsSqr(Move move) {
-        return kingsSquares[(move.side() == Side.w)? 0: 1];
+        return kingsSquares[move.getSide()? 0: 1];
     }
 
     /**

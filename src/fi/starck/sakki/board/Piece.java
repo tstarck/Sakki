@@ -11,7 +11,7 @@ abstract class Piece {
     protected Type type;
     protected Coord loc;
     protected Type[][] view;
-    protected Side checked;
+    protected int checked;
     protected String castlingEffect;
     protected ArrayList<String> moves;
 
@@ -48,7 +48,7 @@ abstract class Piece {
             }
         }
 
-        checked = null;
+        checked = -1;
         view[loc.rank][loc.file] = type;
         moves = new ArrayList<String>();
     }
@@ -111,10 +111,11 @@ abstract class Piece {
     }
 
     /**
-     * If piece can capture the target square, make a mark to piece's view.
+     * If piece can capture the target square, make a mark to
+     * piece's view.
      *
-     * Also if capturable piece happens to be opponents king, make a note
-     * of it too.
+     * Also if capturable piece happens to be opponents king, make
+     * a note of it too.
      *
      * @param co Target square.
      * @param status Status of the board.
@@ -124,13 +125,13 @@ abstract class Piece {
 
         Type target = status[co.rank][co.file];
 
-        if (type.isEnemy(target)) {
+        if (target.isEnemy(type)) {
             if (target == Type.K) {
-                checked = Side.w;
+                checked = 0;
                 view[co.rank][co.file] = Type.checked;
             }
             else if (target == Type.k) {
-                checked = Side.b;
+                checked = 1;
                 view[co.rank][co.file] = Type.checked;
             }
             else {
@@ -280,7 +281,7 @@ abstract class Piece {
     /**
      * @return Side that is being checked.
      */
-    Side isChecking() {
+    int isChecking() {
         return checked;
     }
 
@@ -301,7 +302,7 @@ abstract class Piece {
     /**
      * @return The side the piece is playing.
      */
-    Side getSide() {
+    boolean getSide() {
         return type.getSide();
     }
 

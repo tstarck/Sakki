@@ -3,7 +3,6 @@ package fi.starck.sakki.main;
 import fi.starck.sakki.ai.AI;
 import fi.starck.sakki.board.Chess;
 import fi.starck.sakki.board.MoveException;
-import fi.starck.sakki.board.Side;
 import fi.starck.sakki.board.Type;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -97,8 +96,8 @@ public class Sakki {
 
             for (Type file : state[i]) boardStr += " " + file;
 
-            if (i == 0) boardStr += "  " + material[Side.b.index];
-            if (i == 7) boardStr += "  " + material[Side.w.index];
+            if (i == 0) boardStr += "  " + material[1];
+            if (i == 7) boardStr += "  " + material[0];
         }
 
         return String.format("\n%s  %s  %s %s\n%s\n",
@@ -237,7 +236,7 @@ public class Sakki {
             }
 
             System.out.print(draw(game) + prompt(game));
-            
+
             game = new AI(game).doMove();
 
             // game = new AI(new ChessTree(game)).move();
