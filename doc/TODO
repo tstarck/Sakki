@@ -24,3 +24,6 @@ Opened: 2012-06-06 14:11:20
 		at sakki.Sakki.draw(Sakki.java:85)
 		at sakki.Sakki.main(Sakki.java:238)
 	Possible reason: No valid moves except for capture
+
+Opened: 2012-06-08 01:48:38
+	Type.getIndex() has perhaps never been used. Get rid of it.
