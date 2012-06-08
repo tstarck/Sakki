@@ -1,10 +1,5 @@
 package fi.starck.sakki.board;
 
-import fi.starck.sakki.board.Chess;
-import fi.starck.sakki.board.Side;
-import fi.starck.sakki.board.Move;
-import fi.starck.sakki.board.Castle;
-import fi.starck.sakki.board.MoveException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
@@ -52,8 +47,8 @@ public class CastleTest {
     public void testIndex() throws MoveException {
         Castle castle = new Castle();
 
-        Move foo = new Move("0-0-0+", Side.w);
-        Move bar = new Move("0-0", Side.b);
+        Move foo = new Move("0-0-0+", true);
+        Move bar = new Move("0-0", false);
 
         assertTrue(castle.index(foo) == 1);
         assertTrue(castle.index(bar) == 2);

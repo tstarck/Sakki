@@ -1,10 +1,5 @@
 package fi.starck.sakki.board;
 
-import fi.starck.sakki.board.Side;
-import fi.starck.sakki.board.Coord;
-import fi.starck.sakki.board.Move;
-import fi.starck.sakki.board.Type;
-import fi.starck.sakki.board.MoveException;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -17,7 +12,7 @@ public class MoveTest {
 
     @Test
     public void simpleMove() throws MoveException {
-        Move foo = new Move("e4", Side.w);
+        Move foo = new Move("e4", true);
         Coord bar = new Coord(4,4);
 
         assertEquals(foo.piece(), Type.P);
@@ -27,7 +22,7 @@ public class MoveTest {
 
     @Test
     public void capturingMove() throws MoveException {
-        Move foo = new Move("Nexd5", Side.w);
+        Move foo = new Move("Nexd5", true);
         Coord bar = new Coord(3,3);
 
         assertEquals(foo.piece(), Type.N);
@@ -37,7 +32,7 @@ public class MoveTest {
 
     @Test
     public void nontrivialMove() throws MoveException {
-        Move foo = new Move("b1=Q+", Side.b);
+        Move foo = new Move("b1=Q+", false);
         Coord bar = new Coord(1,7);
 
         assertEquals(foo.piece(), Type.p);
@@ -47,8 +42,8 @@ public class MoveTest {
 
     @Test
     public void castlingMove() throws MoveException {
-        Move kingside = new Move("0-0", Side.b);
-        Move queenside = new Move("0-0-0+", Side.w);
+        Move kingside = new Move("0-0", false);
+        Move queenside = new Move("0-0-0+", true);
         assertTrue(kingside.castling() == kingside.KINGSIDE);
         assertFalse(kingside.castling() == kingside.QUEENSIDE);
         assertTrue(queenside.castling() == queenside.QUEENSIDE);
@@ -57,6 +52,6 @@ public class MoveTest {
 
     @Test(expected = MoveException.class)
     public void invalidMove() throws MoveException {
-        Move fail = new Move("Nf9", Side.w);
+        Move fail = new Move("Nf9", true);
     }
 }
