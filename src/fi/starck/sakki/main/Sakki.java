@@ -69,15 +69,11 @@ public class Sakki {
      * @return Nicely formatted query prompt.
      */
     private static String prompt(Chess game) {
-        String fiftyMoveRule = "";
+        String side = game.getTurn()? "White": "Black";
         int fullmove = game.getFullmove();
 
-        if (100 <= game.getHalfmove()) {
-            fiftyMoveRule = "Fifty-move rule is active\n";
-        }
-
-        return String.format("\n%s%s's %d%s> ",
-            fiftyMoveRule, game.getTurn(), fullmove, ordinal(fullmove));
+        return String.format("\n%s's %d%s> ",
+            side, fullmove, ordinal(fullmove));
     }
 
     /**
@@ -235,11 +231,11 @@ public class Sakki {
                 continue;
             }
 
-            System.out.print(draw(game) + prompt(game));
+            System.out.print(draw(game));
 
             game = new AI(game).doMove();
 
-            // game = new AI(new ChessTree(game)).move();
+            System.out.print(draw(game) + prompt(game));
         }
 
         System.out.println();
