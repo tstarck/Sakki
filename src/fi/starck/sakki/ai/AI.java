@@ -15,7 +15,7 @@ public class AI {
 
     private int mm_laskuri;
     private int pr_laskuri;
-    
+
     public AI(Chess game) {
         tree = new ChessTree(game);
         node = null;

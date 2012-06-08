@@ -236,8 +236,6 @@ public class Sakki {
             game = new AI(game).doMove();
 
             System.out.print(draw(game) + prompt(game));
-
-            game = new AI(new ChessTree(game)).move();
         }
 
         System.out.println();
