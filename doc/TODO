@@ -1,29 +1,36 @@
 
 Opened: 2012-05-15 19:21:48
-	^D =>
-	White's 1st> Exception in thread "main" java.util.NoSuchElementException: No line found
-        at java.util.Scanner.nextLine(Scanner.java:1533)
-        at sakki.Sakki.main(Sakki.java:142)
+  ^D =>
+  White's 1st> Exception in thread "main" java.util.NoSuchElementException: No line found
+    at java.util.Scanner.nextLine(Scanner.java:1533)
+    at sakki.Sakki.main(Sakki.java:142)
 
 Opened: 2012-05-19 15:20:01
-	Test cases for compact and invalid forms of FENs.
+  Test cases for compact and invalid forms of FENs.
 
 Opened: 2012-05-21 18:12:15
-	Add Javadoc to isChecked().
+  Add Javadoc to isChecked().
 
 Opened: 2012-05-21 21:46:59
-	Move.isChecking() is used nowhere.
+  Move.isChecking() is used nowhere.
 
 Opened: 2012-05-22 02:36:53
-	Chess.move() returns the Rebound object and thus isChecked()
-	and possibly some other stuff are completely redundant.
+  Chess.move() returns the Rebound object and thus isChecked()
+  and possibly some other stuff are completely redundant.
 
 Opened: 2012-06-06 14:11:20
-	rnbqkbnr/pppppppp/8/1B6/8/8/PPPPPPPP/RNBQK1NR w + Bxd7 =>
-	Exception in thread "main" java.lang.NullPointerException
-		at sakki.Sakki.draw(Sakki.java:85)
-		at sakki.Sakki.main(Sakki.java:238)
-	Possible reason: No valid moves except for capture
+  rnbqkbnr/pppppppp/8/1B6/8/8/PPPPPPPP/RNBQK1NR w + Bxd7 =>
+  Exception in thread "main" java.lang.NullPointerException
+    at sakki.Sakki.draw(Sakki.java:85)
+    at sakki.Sakki.main(Sakki.java:238)
+  Possible reason: No valid moves except for capture
 
 Opened: 2012-06-08 01:48:38
-	Type.getIndex() has perhaps never been used. Get rid of it.
+  Type.getIndex() has perhaps never been used. Get rid of it.
+
+Opened: 2012-06-09 22:10:52
+  Possible book locations:
+    $HOME/.sakki/book.dat
+    /usr/share/games/gnuchess/book.dat
+    /usr/share/gnuchess/book.bin
+    /usr/lib/games/gnuchess/book.dat
