@@ -55,6 +55,8 @@ public class Chess {
     /**
      * Constructs the initial position. Pieces and game settings
      * are created and set to their standard start-of-game values.
+     *
+     * @see #Chess(String)
      */
     public Chess() {
         this("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
@@ -63,10 +65,15 @@ public class Chess {
     /**
      * Constructs a new game by parsing given string as FEN.
      *
+     * Any useless input (null, empty string, bogus data) will lead
+     * to using default values.
+     *
+     * @see #Chess(String[])
+     *
      * @param fenString FEN to be used to initialize a game.
      */
     public Chess(String fenString) {
-        this(fenString.split(" "));
+        this(fenString == null? new String[]{}: fenString.split(" "));
     }
 
     /**
