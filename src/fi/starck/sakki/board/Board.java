@@ -80,7 +80,7 @@ public class Board {
             try {
                 co = new Coord(file, rank);
             }
-            catch (IllegalArgumentException pass) {}
+            catch (Exception pass) {}
 
             if (chr == '/') {
                 file = 0;

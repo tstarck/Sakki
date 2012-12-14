@@ -99,7 +99,7 @@ public class Chess {
             try {
                 enpassant = new Coord(fenArray[3]);
             }
-            catch (IllegalArgumentException pass) {}
+            catch (Exception pass) {}
         }
 
         if (fenArray.length >= 1) {
@@ -190,11 +190,16 @@ public class Chess {
      *
      * @param loc Square location as a SAN string.
      *
-     * @return null or the type of the piece.
+     * @return The type of the piece or null.
      */
     public Type typeAt(String loc) {
-        Piece piece = board.pieceAt(new Coord(loc));
-        return (piece == null)? null: piece.getType();
+        try {
+            Piece piece = board.pieceAt(new Coord(loc));
+            return (piece == null)? null: piece.getType();
+        }
+        catch (Exception pass) {}
+
+        return null;
     }
 
     /**

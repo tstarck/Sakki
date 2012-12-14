@@ -6,8 +6,8 @@ import java.util.ArrayList;
  * Translates game board coordinate between different notations.
  *
  * SAN uses letter-digit notation for file and rank. This program
- * uses internally two dimensional arrays with integer indexes an
- * origin at SAN square a8.
+ * uses internally two dimensional arrays with integer indices
+ * with origin at SAN square a8.
  *
  * @author Tuomas Starck
  *
@@ -22,12 +22,14 @@ class Coord {
     private static final String[] lookupTable = {"a", "b", "c", "d", "e", "f", "g", "h"};
 
     /**
-     * Create new coordinate object from two indexes.
+     * Create new coordinate object from two indices.
      *
      * @param f File index.
      * @param r Rank index.
+     *
+     * @throws Exception If indices are out of bounds.
      */
-    public Coord(int f, int r) {
+    public Coord(int f, int r) throws Exception {
         file = verify(f);
         rank = verify(r);
         readable = lookupTable[f] + String.valueOf(8-r);
@@ -37,28 +39,31 @@ class Coord {
      * Create new coordinate from SAN square string.
      *
      * @param loc SAN square string.
+     *
+     * @throws Exception If input is invalid.
      */
-    public Coord(String loc) {
+    public Coord(String loc) throws Exception {
         if (loc == null) {
-            throw new NullPointerException();
+            throw new Exception("Null pointer");
         }
 
         if (loc.matches(regex)) {
             readable = loc;
 
-            String fileIndex = String.valueOf(loc.charAt(0));
-            int rankIndex = Character.getNumericValue(loc.charAt(1));
+            String rawFile = loc.substring(0, 1);
+            int    rawRank = Character.getNumericValue(loc.charAt(1));
 
             for (int i=0; i<8; i++) {
-                if (fileIndex.equals(lookupTable[i])) {
-                    file = verify(i);
+                if (rawFile.equals(lookupTable[i])) {
+                    file = i;
+                    break;
                 }
             }
 
-            rank = 7 - verify(--rankIndex);
+            rank = 8 - rawRank;
         }
         else {
-            throw new IllegalArgumentException();
+            throw new Exception("Parse error");
         }
     }
 
@@ -67,11 +72,11 @@ class Coord {
      *
      * @return Valid index.
      *
-     * @throws IllegalArgumentException If index is not valid.
+     * @throws Exception If index is not valid.
      */
-    private int verify(int x) {
+    private int verify(int x) throws Exception {
         if (x < 0 || 8 <= x) {
-            throw new IllegalArgumentException();
+            throw new Exception("Out of bounds value");
         }
         return x;
     }
@@ -90,7 +95,7 @@ class Coord {
         try {
             ret = new Coord(file+fDelta, rank+rDelta);
         }
-        catch (IllegalArgumentException pass) {}
+        catch (Exception pass) {}
 
         return ret;
     }
