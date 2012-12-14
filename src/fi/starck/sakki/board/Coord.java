@@ -43,6 +43,48 @@ class Coord {
      * @throws Exception If input is invalid.
      */
     public Coord(String loc) throws Exception {
+        parse(loc);
+    }
+
+    /**
+     * Unsafe create coordinate. This constructor only throws
+     * unchecked exceptions and is meant to be used internally
+     * only.
+     *
+     * @param loc SAN square string.
+     * @param any Ignored.
+     */
+    Coord(String loc, boolean any) {
+        try {
+            parse(loc);
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    /**
+     * @param x Index.
+     *
+     * @return Valid index.
+     *
+     * @throws Exception If index is not valid.
+     */
+    private int verify(int x) throws Exception {
+        if (x < 0 || 8 <= x) {
+            throw new Exception("Out of bounds value");
+        }
+        return x;
+    }
+
+    /**
+     * Parse SAN square string and initialize this object.
+     *
+     * @param loc SAN square string.
+     *
+     * @throws Exception If input is invalid.
+     */
+    private void parse(String loc) throws Exception {
         if (loc == null) {
             throw new Exception("Null pointer");
         }
@@ -65,20 +107,6 @@ class Coord {
         else {
             throw new Exception("Parse error");
         }
-    }
-
-    /**
-     * @param x Index.
-     *
-     * @return Valid index.
-     *
-     * @throws Exception If index is not valid.
-     */
-    private int verify(int x) throws Exception {
-        if (x < 0 || 8 <= x) {
-            throw new Exception("Out of bounds value");
-        }
-        return x;
     }
 
     /**

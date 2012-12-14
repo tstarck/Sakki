@@ -101,7 +101,12 @@ class Move {
             }
 
             /* 4: To (target square) */
-            to = new Coord(move.group(4));
+            try {
+                to = new Coord(move.group(4));
+            }
+            catch (Exception e) {
+                throw new MoveException("Impossible error");
+            }
 
             /* 6: Officer to which pawn is to be promoted */
             if (move.group(6) != null) {

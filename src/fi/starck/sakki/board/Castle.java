@@ -14,36 +14,36 @@ class Castle {
     private final String valid = "KQkq";
 
     private final Coord[] kingsSquares = {
-        new Coord("e1"), new Coord("e8")
+        new Coord("e1", true), new Coord("e8", true)
     };
 
     private final Coord[] kingsTargets = {
-        new Coord("g1"), new Coord("c1"),
-        new Coord("g8"), new Coord("c8")
+        new Coord("g1", true), new Coord("c1", true),
+        new Coord("g8", true), new Coord("c8", true)
     };
 
     private final Coord[] rooksSquares = {
-        new Coord("h1"), new Coord("a1"),
-        new Coord("h8"), new Coord("a8")
+        new Coord("h1", true), new Coord("a1", true),
+        new Coord("h8", true), new Coord("a8", true)
     };
 
     private final Coord[] rooksTargets = {
-        new Coord("f1"), new Coord("d1"),
-        new Coord("f8"), new Coord("d8")
+        new Coord("f1", true), new Coord("d1", true),
+        new Coord("f8", true), new Coord("d8", true)
     };
 
     private final Coord[][] freeSquares = {
-        {new Coord("f1"), new Coord("g1")},
-        {new Coord("b1"), new Coord("c1"), new Coord("d1")},
-        {new Coord("f8"), new Coord("g8")},
-        {new Coord("b8"), new Coord("c8"), new Coord("d8")}
+        {new Coord("f1", true), new Coord("g1", true)},
+        {new Coord("b1", true), new Coord("c1", true), new Coord("d1", true)},
+        {new Coord("f8", true), new Coord("g8", true)},
+        {new Coord("b8", true), new Coord("c8", true), new Coord("d8", true)}
     };
 
     private final Coord[][] safeSquares = {
-        {new Coord("e1"), new Coord("f1"), new Coord("g1")},
-        {new Coord("c1"), new Coord("d1"), new Coord("e1")},
-        {new Coord("e8"), new Coord("f8"), new Coord("g8")},
-        {new Coord("c8"), new Coord("d8"), new Coord("e8")}
+        {new Coord("e1", true), new Coord("f1", true), new Coord("g1", true)},
+        {new Coord("c1", true), new Coord("d1", true), new Coord("e1", true)},
+        {new Coord("e8", true), new Coord("f8", true), new Coord("g8", true)},
+        {new Coord("c8", true), new Coord("d8", true), new Coord("e8", true)}
     };
 
     private HashSet<Character> castling;
