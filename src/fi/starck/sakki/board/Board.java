@@ -15,6 +15,7 @@ import java.util.ArrayList;
 class Board {
     private int[] material;
     private boolean[] checked;
+    private Coord[] kings;
     private Type[][] state;
     private ArrayList<Piece> board;
 
@@ -38,6 +39,7 @@ class Board {
     Board(String fen, Coord enpassant) {
         material = new int[2];
         checked = new boolean[2];
+        kings = new Coord[2];
         state = new Type[8][8];
         board = parseFEN(fen);
 
@@ -178,6 +180,10 @@ class Board {
 
             if (target != -1) {
                 checked[target] = true;
+            }
+
+            if (type == Type.K || type == Type.k) {
+                kings[side] = piece.getLocation();
             }
 
             material[side] += type.getValue();
@@ -456,6 +462,17 @@ class Board {
      */
     int[] getMaterial() {
         return material;
+    }
+
+    /**
+     * @param turn Player of the next move.
+     *
+     * @return Coordinate of a checked king or null.
+     */
+    Coord isChecked(boolean turn) {
+        int index = turn? 0: 1;
+        if (checked[index]) return kings[index];
+        return null;
     }
 
     /**

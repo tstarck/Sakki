@@ -1,6 +1,5 @@
 package fi.starck.sakki.main;
 
-import fi.starck.sakki.ai.AI;
 import fi.starck.sakki.board.Chess;
 import fi.starck.sakki.board.MoveException;
 import fi.starck.sakki.board.Type;
@@ -82,7 +81,7 @@ public class Sakki {
     private static String draw(Chess game) {
         String boardStr = "";
         String fileLegend = "a b c d e f g h";
-        String checked = game.isChecked()? "*": " ";
+        String checked = game.isChecked() == null? " ": "*";
 
         Type[][] state = game.getState();
         int[] material = game.getMaterial();
@@ -230,10 +229,6 @@ public class Sakki {
 
                 continue;
             }
-
-            System.out.print(draw(game));
-
-            game = new AI(game).doMove();
 
             System.out.print(draw(game) + prompt(game));
         }

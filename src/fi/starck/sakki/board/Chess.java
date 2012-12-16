@@ -141,7 +141,7 @@ public class Chess {
      *
      * @throws MoveException If move cannot be executed.
      */
-    public boolean move(String algebraic) throws MoveException {
+    public void move(String algebraic) throws MoveException {
         Rebound rebound;
 
         Move move = new Move(algebraic, turn);
@@ -182,8 +182,6 @@ public class Chess {
         else {
             halfmove++;
         }
-
-        return rebound.isKingChecked();
     }
 
     /**
@@ -255,8 +253,13 @@ public class Chess {
         return castling.toString();
     }
 
-    public boolean isChecked() {
-        return checked;
+    /**
+     * Reveal the location of checked king.
+     *
+     * @return Coordinate or null, if none are checked.
+     */
+    public Coord isChecked() {
+        return board.isChecked(turn);
     }
 
     /**
