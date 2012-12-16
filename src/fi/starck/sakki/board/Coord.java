@@ -13,7 +13,7 @@ import java.util.ArrayList;
  *
  * @see Chess
  */
-class Coord {
+public class Coord {
     int file;
     int rank;
     private String readable;
@@ -128,35 +128,35 @@ class Coord {
         return ret;
     }
 
-    public Coord north(int dist) {
+    Coord north(int dist) {
         return relativeCoord(0, -1*dist);
     }
 
-    public Coord northeast(int dist) {
+    Coord northeast(int dist) {
         return relativeCoord(dist, -1*dist);
     }
 
-    public Coord east(int dist) {
+    Coord east(int dist) {
         return relativeCoord(dist, 0);
     }
 
-    public Coord southeast(int dist) {
+    Coord southeast(int dist) {
         return relativeCoord(dist, dist);
     }
 
-    public Coord south(int dist) {
+    Coord south(int dist) {
         return relativeCoord(0, dist);
     }
 
-    public Coord southwest(int dist) {
+    Coord southwest(int dist) {
         return relativeCoord(-1*dist, dist);
     }
 
-    public Coord west(int dist) {
+    Coord west(int dist) {
         return relativeCoord(-1*dist, 0);
     }
 
-    public Coord northwest(int dist) {
+    Coord northwest(int dist) {
         return relativeCoord(-1*dist, -1*dist);
     }
 
@@ -166,7 +166,7 @@ class Coord {
      *
      * @return List of coordinates.
      */
-    public ArrayList<Coord> knightsCoords() {
+    ArrayList<Coord> knightsCoords() {
         int[] x = {1, 2, 2, 1, -1, -2, -2, -1};
         int[] y = {2, 1, -1, -2, -2, -1, 1, 2};
 
@@ -188,7 +188,7 @@ class Coord {
      *
      * @return True if this and that coordinates match.
      */
-    public boolean equals(Coord that) {
+    boolean equals(Coord that) {
         if (that == null) return false;
         return (this.file == that.file && this.rank == that.rank);
     }
@@ -198,9 +198,16 @@ class Coord {
      *
      * @return True if this and that coordinates match.
      */
-    public boolean equals(String str) {
+    boolean equals(String str) {
         if (str == null) return false;
         return (readable.equals(str));
+    }
+
+    /**
+     * @return File and rank as an integer array.
+     */
+    public int[] toInts() {
+        return new int[]{file, rank};
     }
 
     /**
