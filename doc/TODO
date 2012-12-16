@@ -34,3 +34,11 @@ Opened: 2012-06-09 22:10:52
     /usr/share/games/gnuchess/book.dat
     /usr/share/gnuchess/book.bin
     /usr/lib/games/gnuchess/book.dat
+
+Opened: 2012-12-15 16:27:19
+	Recognize castling instead of leaving it to frontend.
+Closed: 2012-12-16 17:36:48
+
+Opened: 2012-12-16 13:22:32
+	Recognize en passant instead of leaving it to frontend.
+Closed: 2012-12-16 17:46:09

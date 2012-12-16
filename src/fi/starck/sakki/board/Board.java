@@ -207,29 +207,33 @@ public class Board {
     }
 
     /**
-     * Choose a piece, which ought to be moved.
+     * Choose a piece, which ought to be moved. Some effort is required to
+     * be put into this, because SAN does not carry explicit identifier of
+     * the moving piece.
      *
      * @param move Move object.
+     * @param enpassant Target of en passant.
      *
      * @return Piece to be moved.
      *
      * @throws MoveException If given information does not
      * explicitly and exclusively define a single piece.
      */
-    private Piece whichPiece(Move move) throws MoveException {
+    private Piece whichPiece(Move move, Coord enpassant) throws MoveException {
         ArrayList<Piece> options = new ArrayList<Piece>();
 
         for (Piece piece : board) {
             if (piece.getType() == move.piece()) {
-                if (move.isCapturing()) {
-                    if (piece.viewAt(move.to()) == Type.capturable) {
-                        options.add(piece);
-                    }
+                Type target = piece.viewAt(move.to());
+
+                if (move.isCapturing() && target == Type.capturable) {
+                    options.add(piece);
                 }
-                else {
-                    if (piece.viewAt(move.to()) == Type.movable) {
-                        options.add(piece);
-                    }
+                else if (!move.isCapturing() && target == Type.movable) {
+                    options.add(piece);
+                }
+                else if (piece.viewAt(enpassant) == Type.capturable) {
+                    options.add(piece);
                 }
             }
         }
@@ -252,28 +256,28 @@ public class Board {
     /**
      * Capture a opponents piece if required.
      *
-     * @param target Target square.
-     * @param capturable True if capture was claimed.
+     * @param coord Target square.
+     * @param capture True if capture was claimed.
      *
      * @return Capture of some pieces affect the availability
      * of castling. Such information must be returned.
      *
      * @throws MoveException If capture cannot be executed.
      */
-    private String capture(Coord target, boolean capturable) throws MoveException {
+    private String capture(Coord coord, boolean capture) throws MoveException {
         String effect = "";
-        Piece piece = pieceAt(target);
+        Piece target = pieceAt(coord);
 
-        if (piece != null) {
-            if (capturable) {
-                effect = piece.castlingEffect;
-                board.remove(piece);
+        if (target != null) {
+            if (capture) {
+                effect = target.castlingEffect;
+                board.remove(target);
             }
             else {
                 throw new MoveException("Unclaimed capture");
             }
         }
-        else if (capturable) {
+        else if (capture) {
             throw new MoveException("Capture claimed in vain");
         }
 
@@ -320,18 +324,17 @@ public class Board {
         String castling = "";
         boolean turn = move.getSide();
 
-        Piece piece = whichPiece(move);
+        Piece piece = whichPiece(move, enpassant);
 
-        /* En passant moves require additional logic,
-         * so check if this is such a move.
+        /* En passant moves require additional logic, so check
+         * if this is such a move.
          */
         if (move.piece().isPawn() && move.to().equals(enpassant)) {
-            if (turn) {
-                capture(enpassant.south(1), move.isCapturing());
-            }
-            else {
-                capture(enpassant.north(1), move.isCapturing());
-            }
+            /* This seems like en passant, so deduce the target
+             * and capture it.
+             */
+            Coord coord = turn? enpassant.south(1): enpassant.north(1);
+            capture(coord, true);
         }
         else {
             castling = capture(move.to(), move.isCapturing());

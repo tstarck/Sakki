@@ -293,10 +293,10 @@ abstract class Piece {
     }
 
     /**
-     * @return Piece's view on the given square.
+     * @return Piece's view on the given square or null.
      */
     Type viewAt(Coord co) {
-        return view[co.rank][co.file];
+        return co == null? null: view[co.rank][co.file];
     }
 
     /**
