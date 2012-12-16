@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author Tuomas Starck
  */
-public class Board {
+class Board {
     private int[] material;
     private boolean[] checked;
     private Type[][] state;
@@ -22,7 +22,7 @@ public class Board {
      * Constructs the initial position. Pieces are placed to their
      * standard start-of-game positions.
      */
-    public Board() {
+    Board() {
         this("rnbqkbnr/pppppppp/////PPPPPPPP/RNBQKBNR", null);
     }
 
@@ -35,7 +35,7 @@ public class Board {
      * @throws IllegalArgumentException If given FEN string could not be
      * interpret in any way.
      */
-    public Board(String fen, Coord enpassant) {
+    Board(String fen, Coord enpassant) {
         material = new int[2];
         checked = new boolean[2];
         state = new Type[8][8];
@@ -319,7 +319,7 @@ public class Board {
      *
      * @throws MoveException If move cannot be executed.
      */
-    public Rebound move(Move move, Coord enpassant) throws MoveException {
+    Rebound move(Move move, Coord enpassant) throws MoveException {
         Rebound rebound;
         String castling = "";
         boolean turn = move.getSide();
@@ -370,7 +370,7 @@ public class Board {
      *
      * @throws MoveException If castling cannot be executed.
      */
-    public Rebound castling(Move move, Castle castling) throws MoveException {
+    Rebound castling(Move move, Castle castling) throws MoveException {
         Rebound rebound;
 
         if (!castling.isAllowed(move)) {
@@ -447,14 +447,14 @@ public class Board {
     /**
      * @return Game board state.
      */
-    public Type[][] getState() {
+    Type[][] getState() {
         return state;
     }
 
     /**
      * @return Game material status.
      */
-    public int[] getMaterial() {
+    int[] getMaterial() {
         return material;
     }
 
