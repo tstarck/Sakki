@@ -140,7 +140,7 @@ public class Chess {
      *
      * @throws MoveException If move cannot be executed.
      */
-    public Rebound move(String algebraic) throws MoveException {
+    public boolean move(String algebraic) throws MoveException {
         Rebound rebound;
 
         Move move = new Move(algebraic, turn);
@@ -182,7 +182,7 @@ public class Chess {
             halfmove++;
         }
 
-        return rebound;
+        return rebound.isKingChecked();
     }
 
     /**
